@@ -7,7 +7,7 @@
 
 namespace EasyContact\Tests;
 
-use EasyContact\State;
+use EasyContact\Submissions\State;
 
 /**
  * Counters are bounded, keyed and never store the raw identity.

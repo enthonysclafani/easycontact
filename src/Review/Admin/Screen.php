@@ -10,7 +10,7 @@ namespace EasyContact\Review\Admin;
 use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Plugin;
 use EasyContact\Review\Review;
-use EasyContact\Submission;
+use EasyContact\Submissions\Submission;
 use WP_Error;
 use WP_Post;
 use WP_Query;

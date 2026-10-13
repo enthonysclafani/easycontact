@@ -9,7 +9,7 @@ namespace EasyContact\AntiSpam;
 
 use EasyContact\Phone\Phone;
 use EasyContact\Settings\Settings;
-use EasyContact\State;
+use EasyContact\Submissions\State;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;

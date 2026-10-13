@@ -136,10 +136,15 @@ Fasi 0 e 1.
 ### Fase 3 — Struttura
 
 - [x] 3.1 `src/autoload.php` PSR-4, `src/Plugin.php` con `register()`; bootstrap in `easycontact.php` ridotto
-- [ ] 3.2 Una cartella per funzionalità (ipotesi: `Forms/`, `Submissions/`, `Delivery/`, `AntiSpam/`, `Phone/`,
+- [x] 3.2 Una cartella per funzionalità (ipotesi: `Forms/`, `Submissions/`, `Delivery/`, `AntiSpam/`, `Phone/`,
       `Review/`, `Privacy/`, `Settings/`), classi admin in `*/Admin/`; un PR per funzionalità, comportamento
       invariato e coperto dai test della Fase 0
-      _Fatto: `Phone/`, `Privacy/`, `AntiSpam/`, `Delivery/`, `Review/` (con `Review/Admin/Screen.php`), `Settings/` (con `Settings/Admin/Page.php`), `Forms/` (definizione, `Schema`, `Renderer`, `Admin/Editor.php`)._
+      _Fatto: `Phone/`, `Privacy/`, `AntiSpam/`, `Delivery/`, `Review/` (con `Review/Admin/Screen.php`),
+      `Settings/` (con `Settings/Admin/Page.php`), `Forms/` (definizione, `Schema`, `Renderer`,
+      `Admin/Editor.php`), `Submissions/` (`Submission`, `Endpoint`, `Entries`, `State`,
+      `Admin/EntryScreen.php`) e `Admin/Admin.php` per menu, asset e pagina di supporto condivisi. In `Plugin`
+      restano post type, attivazione e la retention `cleanup()`, che pianifica un evento: si sposta in
+      `Submissions/` con la Fase 4.1, senza aggiungere file all'allowlist del cron._
 - [ ] 3.3 Hook solo dentro `register()`; niente metodi statici usati come registro globale dove non serve
 - [ ] 3.4 `register_setting()` con schema completo per `easycontact_settings`; `register_post_meta()` con schema
       e `auth_callback` per i meta dei moduli

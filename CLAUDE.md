@@ -51,16 +51,16 @@ blocca la CI. Ogni file ammesso in un'allowlist ha un commento con il motivo o c
 
 1. **Zero tabelle custom** (A). Mai `CREATE TABLE`, `ALTER TABLE`, `DROP TABLE`, `dbDelta()`. I dati vanno in Options
    API, post meta, post type non pubblici, tassonomie nascoste, transient.
-2. **`$wpdb` solo in allowlist** (A), sempre con `$wpdb->prepare()`. Solo due file: `src/State.php` (lock atomici e
-   pulizia dei lock scaduti, D6; con una cache a oggetti persistente i contatori non usano lock) e `uninstall.php`
-   (ricerca per prefisso dei nomi dinamici, una volta sola). Nessun file nuovo nell'allowlist senza approvazione.
+2. **`$wpdb` solo in allowlist** (A), sempre con `$wpdb->prepare()`. Solo due file: `src/Submissions/State.php`
+   (lock atomici e pulizia dei lock scaduti, D6; con una cache a oggetti persistente i contatori non usano lock) e
+   `uninstall.php` (ricerca per prefisso dei nomi dinamici, una volta sola). Nessun file nuovo nell'allowlist senza approvazione.
 3. **Niente cron, con una sola eccezione** (D1). Retention e pulizie si fanno a lotti, pigre, su `admin_init` e dopo
    un invio, con il cursore in un'option. L'unico evento ammesso è `easycontact_retry_delivery` (singolo) per i nuovi
    tentativi di consegna. Finché la Fase 4.1 non è fatta, gli eventi attuali restano nei file in allowlist (A);
    nessun evento nuovo.
 4. **Asset nel frontend solo al rendering di un modulo** (A per i file, test per il comportamento) (D2).
-   `wp_enqueue_*` solo in `src/Forms/Renderer.php` (al rendering) e `src/Admin.php` (schermate del plugin). Nessun JS o
-   CSS inline (A per `style="…"`). Una pagina senza modulo non carica niente del plugin: `tests/QueriesTest.php`.
+   `wp_enqueue_*` solo in `src/Forms/Renderer.php` (al rendering) e `src/Admin/Admin.php` (schermate del plugin).
+   Nessun JS o CSS inline (A per `style="…"`). Una pagina senza modulo non carica niente del plugin: `tests/QueriesTest.php`.
 5. **HTTP solo nei file in allowlist** (A), con le API di WordPress (A: niente cURL, `fopen`/`file_get_contents` su
    URL, socket) (D3). Mai durante il rendering di una pagina, solo nella richiesta di invio e in admin; timeout ≤ 15 s; `WP_Error` e codici HTTP
    sempre gestiti; ogni servizio elencato in "External services" di `readme.txt`.

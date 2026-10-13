@@ -5,7 +5,7 @@
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\Submissions;
 
 defined( 'ABSPATH' ) || exit;
 

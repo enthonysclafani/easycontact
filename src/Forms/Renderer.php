@@ -7,9 +7,9 @@
 
 namespace EasyContact\Forms;
 
-use EasyContact\Frontend;
 use EasyContact\Phone\Phone;
 use EasyContact\Settings\Settings;
+use EasyContact\Submissions\Endpoint;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -35,7 +35,7 @@ final class Renderer {
 	public static function shortcode( $attributes ): string {
 		$attributes = shortcode_atts( array( 'id' => 0 ), $attributes, 'easycontact' );
 		$id         = absint( $attributes['id'] );
-		if ( ! Frontend::available( $id ) ) {
+		if ( ! Endpoint::available( $id ) ) {
 			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'Pubblica un modulo valido prima di usare lo shortcode.', 'easycontact' ) . '</p>' : '';
 		}
 		return self::render( $id, Forms::definition( $id ) );
@@ -85,7 +85,7 @@ final class Renderer {
 				'uncertain'          => __( 'Non è stato possibile confermare l’invio. Contatta il sito prima di inviare di nuovo il messaggio.', 'easycontact' ),
 			),
 		);
-		$tokens   = Frontend::issue( $id );
+		$tokens   = Endpoint::issue( $id );
 		ob_start();
 		if ( did_action( 'wp_head' ) && ! wp_style_is( 'easycontact-frontend', 'done' ) ) {
 			wp_print_styles( 'easycontact-frontend' );
