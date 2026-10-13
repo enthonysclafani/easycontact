@@ -38,7 +38,7 @@ final class Page {
 	 * @return void
 	 */
 	public static function menu(): void {
-		add_submenu_page( 'edit.php?post_type=' . Plugin::FORM, __( 'Impostazioni', 'easycontact' ), __( 'Impostazioni', 'easycontact' ), 'manage_options', 'easycontact-settings', array( self::class, 'settings_page' ) );
+		add_submenu_page( 'edit.php?post_type=' . Plugin::FORM, __( 'Settings', 'easycontact' ), __( 'Settings', 'easycontact' ), 'manage_options', 'easycontact-settings', array( self::class, 'settings_page' ) );
 	}
 
 	/**
@@ -60,31 +60,31 @@ final class Page {
 			)
 		);
 		foreach ( array(
-			'privacy'      => __( 'Privacy dei moduli', 'easycontact' ),
-			'antispam'     => __( 'Anti-spam e telefono internazionale', 'easycontact' ),
+			'privacy'      => __( 'Form privacy', 'easycontact' ),
+			'antispam'     => __( 'Anti-spam and international phone', 'easycontact' ),
 			'integrations' => __( 'MailerLite', 'easycontact' ),
 			'captcha'      => 'CAPTCHA · Cloudflare Turnstile',
-			'uninstall'    => __( 'Disinstallazione', 'easycontact' ),
+			'uninstall'    => __( 'Uninstall', 'easycontact' ),
 		) as $section => $title ) {
 			add_settings_section( 'easycontact-' . $section, $title, '__return_false', 'easycontact-settings' );
 		}
 		$items = array(
-			'antispam_level'      => array( 'antispam', __( 'Livello predefinito', 'easycontact' ), 'level', __( 'Consigliato: 2 — Equilibrato. I moduli esistenti mantengono il livello 1 finché non viene modificato nelle loro opzioni.', 'easycontact' ) ),
-			'antispam_observe'    => array( 'antispam', __( 'Modalità osservazione', 'easycontact' ), 'checkbox', __( 'Registra i segnali euristici senza fermare gli invii. Per esaminare i risultati, attiva l’archivio. L’honeypot resta attivo.', 'easycontact' ) ),
-			'quarantine_entries'  => array( 'antispam', __( 'Quarantena con archivio disattivato', 'easycontact' ), 'checkbox', __( 'Conserva spam e sospetti per la revisione anche senza archivio normale; notifiche e integrazioni restano sospese.', 'easycontact' ) ),
-			'spam_retention_days' => array( 'antispam', __( 'Conservazione di spam e sospetti', 'easycontact' ), 'number', __( 'Giorni prima della cancellazione automatica di spam e probabile spam. Minimo 1; gli invii accettati seguono la conservazione normale.', 'easycontact' ) ),
-			'quarantine_limit'    => array( 'antispam', __( 'Limite giornaliero della quarantena', 'easycontact' ), 'number', __( 'Numero massimo di nuovi invii sospetti archiviabili in una finestra di 24 ore. Oltre il limite vengono rifiutati.', 'easycontact' ) ),
-			'email_dns_check'     => array( 'antispam', __( 'Controllo DNS delle email', 'easycontact' ), 'checkbox', __( 'Controlla il dominio tramite il resolver del server, con cache e tolleranza agli errori temporanei. Non verifica la casella.', 'easycontact' ) ),
-			'phone_country'       => array( 'antispam', __( 'Paese iniziale del telefono', 'easycontact' ), 'country', __( 'La selezione automatica segue la lingua del sito. Il visitatore può sempre cambiare paese.', 'easycontact' ) ),
-			'disposable_domains'  => array( 'antispam', __( 'Lista domini temporanei', 'easycontact' ), 'disposable', __( 'Usata nei livelli 2 e 3. Sincronizza su richiesta le fonti pubbliche e conserva la copia locale se una fonte non è disponibile. Nessun aggiornamento automatico.', 'easycontact' ) ),
-			'spam_phrases'        => array( 'antispam', __( 'Frasi sospette', 'easycontact' ), 'textarea', __( 'Una frase per riga, da 4 a 150 caratteri. Aumenta il sospetto; usa frasi specifiche, evitando parole generiche.', 'easycontact' ) ),
-			'store_entries'       => array( 'privacy', __( 'Archivio degli invii', 'easycontact' ), 'checkbox', __( 'Salva gli invii locali per impostazione predefinita. Ogni modulo può cambiare questa scelta.', 'easycontact' ) ),
-			'retention_days'      => array( 'privacy', __( 'Conservazione', 'easycontact' ), 'number', __( 'Giorni di conservazione. 0 mantiene gli invii fino alla cancellazione manuale. La pulizia avviene a lotti quando un amministratore apre la bacheca o dopo un invio, una volta al giorno.', 'easycontact' ) ),
-			'allow_erasure'       => array( 'privacy', __( 'Richieste di cancellazione', 'easycontact' ), 'checkbox', __( 'Consenti agli strumenti privacy di WordPress di eliminare gli invii associati all’indirizzo email confermato.', 'easycontact' ) ),
-			'mailerlite_token'    => array( 'integrations', __( 'Token API', 'easycontact' ), 'password', __( 'Token della versione attuale di MailerLite. Lascia vuoto per mantenere il token salvato.', 'easycontact' ) ),
-			'turnstile_site_key'  => array( 'captcha', __( 'Site key', 'easycontact' ), 'text', __( 'Il CAPTCHA si attiva nelle opzioni di ciascun modulo.', 'easycontact' ) ),
-			'turnstile_secret'    => array( 'captcha', __( 'Secret key', 'easycontact' ), 'password', __( 'Lascia vuoto per mantenere la chiave salvata.', 'easycontact' ) ),
-			'delete_on_uninstall' => array( 'uninstall', __( 'Rimuovi i dati', 'easycontact' ), 'checkbox', __( 'Alla disinstallazione elimina definitivamente moduli, invii, impostazioni e credenziali del plugin. La sola disattivazione conserva i dati.', 'easycontact' ) ),
+			'antispam_level'      => array( 'antispam', __( 'Default level', 'easycontact' ), 'level', __( 'Recommended: 2 — Balanced. Existing forms keep level 1 until it is changed in their options.', 'easycontact' ) ),
+			'antispam_observe'    => array( 'antispam', __( 'Observation mode', 'easycontact' ), 'checkbox', __( 'Record heuristic signals without stopping submissions. To review the results, turn on the archive. The honeypot stays on.', 'easycontact' ) ),
+			'quarantine_entries'  => array( 'antispam', __( 'Quarantine with the archive off', 'easycontact' ), 'checkbox', __( 'Keep spam and suspicious submissions for review even without the normal archive; notifications and integrations stay held.', 'easycontact' ) ),
+			'spam_retention_days' => array( 'antispam', __( 'Spam and suspicious retention', 'easycontact' ), 'number', __( 'Days before spam and likely spam are deleted automatically. Minimum 1; accepted submissions follow the normal retention.', 'easycontact' ) ),
+			'quarantine_limit'    => array( 'antispam', __( 'Daily quarantine limit', 'easycontact' ), 'number', __( 'Maximum number of new suspicious submissions that can be archived in a 24-hour window. Beyond the limit they are rejected.', 'easycontact' ) ),
+			'email_dns_check'     => array( 'antispam', __( 'Email DNS check', 'easycontact' ), 'checkbox', __( 'Check the domain through the server\'s resolver, with caching and tolerance of temporary errors. It does not check the mailbox.', 'easycontact' ) ),
+			'phone_country'       => array( 'antispam', __( 'Initial phone country', 'easycontact' ), 'country', __( 'Automatic selection follows the site language. Visitors can always change the country.', 'easycontact' ) ),
+			'disposable_domains'  => array( 'antispam', __( 'Disposable domain list', 'easycontact' ), 'disposable', __( 'Used at levels 2 and 3. Synchronize the public sources on request; the local copy is kept if a source is unavailable. No automatic updates.', 'easycontact' ) ),
+			'spam_phrases'        => array( 'antispam', __( 'Suspicious phrases', 'easycontact' ), 'textarea', __( 'One phrase per line, 4 to 150 characters. Raises suspicion; use specific phrases and avoid generic words.', 'easycontact' ) ),
+			'store_entries'       => array( 'privacy', __( 'Submission archive', 'easycontact' ), 'checkbox', __( 'Save submissions locally by default. Each form can change this choice.', 'easycontact' ) ),
+			'retention_days'      => array( 'privacy', __( 'Retention', 'easycontact' ), 'number', __( 'Days to keep submissions. 0 keeps them until deleted manually. Cleanup runs in batches when an administrator opens the dashboard or after a submission, once a day.', 'easycontact' ) ),
+			'allow_erasure'       => array( 'privacy', __( 'Erasure requests', 'easycontact' ), 'checkbox', __( 'Let the WordPress privacy tools delete the submissions linked to the confirmed email address.', 'easycontact' ) ),
+			'mailerlite_token'    => array( 'integrations', __( 'API token', 'easycontact' ), 'password', __( 'Token for the current MailerLite version. Leave empty to keep the saved token.', 'easycontact' ) ),
+			'turnstile_site_key'  => array( 'captcha', __( 'Site key', 'easycontact' ), 'text', __( 'Turn on the CAPTCHA in each form\'s options.', 'easycontact' ) ),
+			'turnstile_secret'    => array( 'captcha', __( 'Secret key', 'easycontact' ), 'password', __( 'Leave empty to keep the saved key.', 'easycontact' ) ),
+			'delete_on_uninstall' => array( 'uninstall', __( 'Remove data', 'easycontact' ), 'checkbox', __( 'On uninstall, permanently delete the plugin\'s forms, submissions, settings and credentials. Deactivating alone keeps the data.', 'easycontact' ) ),
 		);
 		foreach ( $items as $key => $item ) {
 			add_settings_field(
@@ -117,22 +117,22 @@ final class Page {
 		if ( 'disposable' === $type ) {
 			$status = DisposableDomains::status();
 			/* translators: %s: number of domains. */
-			echo '<div id="easycontact-disposable-domains"><p><strong>' . esc_html( sprintf( __( '%s domini nella lista locale', 'easycontact' ), number_format_i18n( $status['count'] ) ) ) . '</strong></p>';
+			echo '<div id="easycontact-disposable-domains"><p><strong>' . esc_html( sprintf( __( '%s domains in the local list', 'easycontact' ), number_format_i18n( $status['count'] ) ) ) . '</strong></p>';
 			/* translators: %s: date and time of the synchronization, or date of the bundled snapshot. */
-			$label = $status['synced'] ? __( 'Ultima sincronizzazione: %s', 'easycontact' ) : __( 'Copia inclusa nel plugin, aggiornata al %s', 'easycontact' );
+			$label = $status['synced'] ? __( 'Last synchronization: %s', 'easycontact' ) : __( 'Copy included in the plugin, updated on %s', 'easycontact' );
 			echo '<p>' . esc_html( sprintf( $label, wp_date( get_option( 'date_format' ) . ( $status['synced'] ? ' ' . get_option( 'time_format' ) : '' ), $status['updated_at'] ) ) ) . '</p><ul>';
 			foreach ( DisposableDomains::sources() as $source ) {
 				echo '<li><a href="' . esc_url( $source['project'] ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $source['name'] ) . '</a></li>';
 			}
-			echo '</ul><p><button type="submit" class="button" id="easycontact-setting-disposable_domains" form="easycontact-disposable-sync">' . esc_html__( 'Sincronizza lista', 'easycontact' ) . '</button></p><p class="description">' . esc_html( $args['help'] ) . '</p></div>';
+			echo '</ul><p><button type="submit" class="button" id="easycontact-setting-disposable_domains" form="easycontact-disposable-sync">' . esc_html__( 'Synchronize list', 'easycontact' ) . '</button></p><p class="description">' . esc_html( $args['help'] ) . '</p></div>';
 			return;
 		}
 		if ( 'level' === $type ) {
 			echo '<input type="hidden" name="' . esc_attr( Settings::OPTION . '[antispam_present]' ) . '" value="1"><select id="easycontact-setting-' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '">';
 			foreach ( array(
-				1 => __( '1 — Base', 'easycontact' ),
-				2 => __( '2 — Equilibrato', 'easycontact' ),
-				3 => __( '3 — Rigoroso', 'easycontact' ),
+				1 => __( '1 — Basic', 'easycontact' ),
+				2 => __( '2 — Balanced', 'easycontact' ),
+				3 => __( '3 — Strict', 'easycontact' ),
 			) as $level => $label ) {
 				echo '<option value="' . (int) $level . '" ' . selected( $settings[ $key ], $level, false ) . '>' . esc_html( $label ) . '</option>';
 			}
@@ -140,7 +140,7 @@ final class Page {
 			return;
 		}
 		if ( 'country' === $type ) {
-			CountrySelect::render( $name, $settings[ $key ], 'easycontact-setting-' . $key, __( 'Automatico dalla lingua del sito', 'easycontact' ) );
+			CountrySelect::render( $name, $settings[ $key ], 'easycontact-setting-' . $key, __( 'Automatic from the site language', 'easycontact' ) );
 			echo '<p class="description">' . esc_html( $args['help'] ) . '</p>';
 			return;
 		}
@@ -154,14 +154,14 @@ final class Page {
 		} else {
 			echo ' class="regular-text" value="' . esc_attr( 'password' === $type ? '' : (string) $settings[ $key ] ) . '"';
 			if ( 'password' === $type ) {
-				echo ' autocomplete="new-password" placeholder="' . esc_attr( $settings[ $key ] ? __( 'Configurato', 'easycontact' ) : '' ) . '"';
+				echo ' autocomplete="new-password" placeholder="' . esc_attr( $settings[ $key ] ? __( 'Configured', 'easycontact' ) : '' ) . '"';
 			} elseif ( 'number' === $type ) {
 				echo ' min="' . ( in_array( $key, array( 'spam_retention_days', 'quarantine_limit' ), true ) ? '1' : '0' ) . '" max="' . ( 'quarantine_limit' === $key ? '5000' : '3650' ) . '" step="1"';
 			}
 		}
 		echo '><p class="description">' . esc_html( $args['help'] ) . '</p>';
 		if ( 'password' === $type ) {
-			echo '<p><label><input type="checkbox" name="' . esc_attr( Settings::OPTION . '[clear_' . $key . ']' ) . '" value="1"> ' . esc_html__( 'Rimuovi la credenziale salvata', 'easycontact' ) . '</label></p>';
+			echo '<p><label><input type="checkbox" name="' . esc_attr( Settings::OPTION . '[clear_' . $key . ']' ) . '" value="1"> ' . esc_html__( 'Remove the saved credential', 'easycontact' ) . '</label></p>';
 		}
 	}
 
@@ -192,7 +192,7 @@ final class Page {
 				$settings[ $key ] = (int) $value;
 			} else {
 				$settings[ $key ] = $previous[ $key ];
-				add_settings_error( Settings::OPTION, $key, __( 'Un valore anti-spam non è valido; è stato mantenuto quello precedente.', 'easycontact' ) );
+				add_settings_error( Settings::OPTION, $key, __( 'An anti-spam value is not valid; the previous one was kept.', 'easycontact' ) );
 			}
 		}
 		$country                   = $input['phone_country'] ?? $previous['phone_country'];
@@ -201,19 +201,19 @@ final class Page {
 		$result                    = is_string( $value ) ? AntiSpam::phrase_list( $value ) : new WP_Error( 'type' );
 		$settings['spam_phrases']  = is_wp_error( $result ) ? $previous['spam_phrases'] : $result;
 		if ( is_wp_error( $result ) ) {
-			add_settings_error( Settings::OPTION, 'spam_phrases', __( 'Una lista anti-spam non è valida; è stata mantenuta quella precedente.', 'easycontact' ) );
+			add_settings_error( Settings::OPTION, 'spam_phrases', __( 'An anti-spam list is not valid; the previous one was kept.', 'easycontact' ) );
 		}
 		$settings['turnstile_site_key'] = isset( $input['turnstile_site_key'] ) && is_string( $input['turnstile_site_key'] ) ? sanitize_text_field( $input['turnstile_site_key'] ) : '';
 		if ( strlen( $settings['turnstile_site_key'] ) > 256 || ! preg_match( '/^[A-Za-z0-9_-]*$/D', $settings['turnstile_site_key'] ) ) {
 			$settings['turnstile_site_key'] = $previous['turnstile_site_key'];
-			add_settings_error( Settings::OPTION, 'turnstile_site_key', __( 'La site key non è valida; è stata mantenuta quella precedente.', 'easycontact' ) );
+			add_settings_error( Settings::OPTION, 'turnstile_site_key', __( 'The site key is not valid; the previous one was kept.', 'easycontact' ) );
 		}
 		foreach ( array( 'mailerlite_token', 'turnstile_secret' ) as $key ) {
 			$value            = isset( $input[ $key ] ) && is_string( $input[ $key ] ) ? trim( $input[ $key ] ) : '';
 			$settings[ $key ] = ! empty( $input[ 'clear_' . $key ] ) ? '' : ( '' !== $value ? $value : $previous[ $key ] );
 			if ( preg_match( '/[\x00-\x20\x7f]/', $settings[ $key ] ) || strlen( $settings[ $key ] ) > 2000 ) {
 				$settings[ $key ] = $previous[ $key ];
-				add_settings_error( Settings::OPTION, $key, __( 'La credenziale contiene caratteri non validi; è stata mantenuta quella precedente.', 'easycontact' ) );
+				add_settings_error( Settings::OPTION, $key, __( 'The credential contains invalid characters; the previous one was kept.', 'easycontact' ) );
 			}
 		}
 		// Every branch above keeps the schema; this guard catches a previous value or a future bound that drifts from
@@ -221,7 +221,7 @@ final class Page {
 		foreach ( Settings::properties() as $key => $property ) {
 			if ( true !== rest_validate_value_from_schema( $settings[ $key ], $property, $key ) ) {
 				$settings[ $key ] = $property['default'];
-				add_settings_error( Settings::OPTION, $key, __( 'Un valore non era valido ed è stato riportato a quello predefinito.', 'easycontact' ) );
+				add_settings_error( Settings::OPTION, $key, __( 'A value was not valid and was reset to its default.', 'easycontact' ) );
 			}
 		}
 		return $settings;
@@ -236,7 +236,7 @@ final class Page {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
 		}
-		echo '<div class="wrap"><h1>EasyContact · ' . esc_html__( 'Impostazioni', 'easycontact' ) . '</h1>';
+		echo '<div class="wrap"><h1>EasyContact · ' . esc_html__( 'Settings', 'easycontact' ) . '</h1>';
 		settings_errors();
 		$notice_key = 'easycontact_disposable_notice_' . get_current_user_id();
 		$notice     = get_transient( $notice_key );
@@ -258,13 +258,13 @@ final class Page {
 	 */
 	public static function sync_disposable_domains(): void {
 		if ( ! current_user_can( 'manage_options' ) || 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' ) ) {
-			wp_die( esc_html__( 'Operazione non consentita.', 'easycontact' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'Action not allowed.', 'easycontact' ), '', array( 'response' => 403 ) );
 		}
 		check_admin_referer( 'easycontact_sync_disposable_domains' );
 		$result = DisposableDomains::sync();
 		$error  = is_wp_error( $result );
 		/* translators: %s: number of domains. */
-		$message = $error ? $result->get_error_message() : sprintf( __( 'Sincronizzazione completata: %s domini nella lista locale.', 'easycontact' ), number_format_i18n( $result['count'] ) );
+		$message = $error ? $result->get_error_message() : sprintf( __( 'Synchronization complete: %s domains in the local list.', 'easycontact' ), number_format_i18n( $result['count'] ) );
 		set_transient(
 			'easycontact_disposable_notice_' . get_current_user_id(),
 			array(

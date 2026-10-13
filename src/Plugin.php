@@ -112,11 +112,16 @@ final class Plugin {
 	}
 
 	/**
-	 * Register private post types and initialize each site lazily.
+	 * Load translations, register private post types and initialize each site lazily.
 	 *
 	 * @return void
 	 */
 	public static function init(): void {
+		// The Italian translation ships with the plugin (D9); files in wp-content/languages still take precedence.
+		// Registering the folder only when it has the current locale spares other sites a lookup on every string.
+		if ( is_readable( plugin_dir_path( EASYCONTACT_FILE ) . 'languages/easycontact-' . determine_locale() . '.mo' ) ) {
+			load_plugin_textdomain( 'easycontact', false, dirname( plugin_basename( EASYCONTACT_FILE ) ) . '/languages' );
+		}
 		$capabilities = array_fill_keys( array( 'edit_post', 'read_post', 'delete_post', 'edit_posts', 'edit_others_posts', 'publish_posts', 'read_private_posts', 'delete_posts', 'delete_private_posts', 'delete_published_posts', 'delete_others_posts', 'edit_private_posts', 'edit_published_posts', 'create_posts' ), 'manage_options' );
 		$shared       = array(
 			'public'              => false,
@@ -136,12 +141,12 @@ final class Plugin {
 				$shared,
 				array(
 					'labels'    => array(
-						'name'          => __( 'Moduli', 'easycontact' ),
-						'singular_name' => __( 'Modulo', 'easycontact' ),
+						'name'          => __( 'Forms', 'easycontact' ),
+						'singular_name' => __( 'Form', 'easycontact' ),
 						'menu_name'     => 'EasyContact',
-						'add_new_item'  => __( 'Aggiungi un modulo', 'easycontact' ),
-						'edit_item'     => __( 'Modifica modulo', 'easycontact' ),
-						'all_items'     => __( 'Moduli', 'easycontact' ),
+						'add_new_item'  => __( 'Add a form', 'easycontact' ),
+						'edit_item'     => __( 'Edit form', 'easycontact' ),
+						'all_items'     => __( 'Forms', 'easycontact' ),
 					),
 					'menu_icon' => 'dashicons-email',
 					'supports'  => array( 'title' ),
@@ -155,10 +160,10 @@ final class Plugin {
 				$shared,
 				array(
 					'labels'       => array(
-						'name'          => __( 'Invii', 'easycontact' ),
-						'singular_name' => __( 'Invio', 'easycontact' ),
-						'edit_item'     => __( 'Dettaglio invio', 'easycontact' ),
-						'all_items'     => __( 'Invii', 'easycontact' ),
+						'name'          => __( 'Submissions', 'easycontact' ),
+						'singular_name' => __( 'Submission', 'easycontact' ),
+						'edit_item'     => __( 'Submission details', 'easycontact' ),
+						'all_items'     => __( 'Submissions', 'easycontact' ),
 					),
 					'show_in_menu' => 'edit.php?post_type=' . self::FORM,
 					'capabilities' => $capabilities,

@@ -137,13 +137,13 @@ final class DisposableDomains {
 			$parsed   = ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ? self::parse( wp_remote_retrieve_body( $response ) ) : new WP_Error( 'disposable_download' );
 			if ( is_wp_error( $parsed ) ) {
 				/* translators: %s: public domain-list source name. */
-				return new WP_Error( 'disposable_sync', sprintf( __( 'La fonte %s non è disponibile o ha restituito una lista incompleta o non valida. La lista precedente è stata mantenuta.', 'easycontact' ), $source['name'] ) );
+				return new WP_Error( 'disposable_sync', sprintf( __( 'The %s source is unavailable or returned an incomplete or invalid list. The previous list was kept.', 'easycontact' ), $source['name'] ) );
 			}
 			$counts[ $key ] = count( $parsed );
 			$domains       += $parsed;
 		}
 		if ( count( $domains ) > self::MAX_DOMAINS ) {
-			return new WP_Error( 'disposable_size', __( 'La lista ricevuta è troppo grande. La lista precedente è stata mantenuta.', 'easycontact' ) );
+			return new WP_Error( 'disposable_size', __( 'The received list is too large. The previous list was kept.', 'easycontact' ) );
 		}
 		$list = array_keys( $domains );
 		sort( $list, SORT_STRING );
@@ -156,7 +156,7 @@ final class DisposableDomains {
 			'sources'    => $counts,
 		);
 		if ( strlen( $snapshot['domains'] ) >= self::MAX_BYTES || ( ! update_option( self::OPTION, $snapshot, false ) && get_option( self::OPTION ) !== $snapshot ) ) {
-			return new WP_Error( 'disposable_save', __( 'Non è stato possibile salvare la lista. La lista precedente è stata mantenuta.', 'easycontact' ) );
+			return new WP_Error( 'disposable_save', __( 'The list could not be saved. The previous list was kept.', 'easycontact' ) );
 		}
 		unset( self::$lists[ get_current_blog_id() ] );
 		return self::status();

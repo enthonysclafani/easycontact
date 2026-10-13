@@ -36,7 +36,7 @@ final class Renderer {
 		$attributes = shortcode_atts( array( 'id' => 0 ), $attributes, 'easycontact' );
 		$id         = absint( $attributes['id'] );
 		if ( ! Endpoint::available( $id ) ) {
-			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'Pubblica un modulo valido prima di usare lo shortcode.', 'easycontact' ) . '</p>' : '';
+			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'Publish a valid form before using the shortcode.', 'easycontact' ) . '</p>' : '';
 		}
 		return self::render( $id, Forms::definition( $id ) );
 	}
@@ -76,13 +76,13 @@ final class Renderer {
 			'mode'       => $config['conditions_match'],
 			'preview'    => $preview,
 			'messages'   => array(
-				'sending'            => __( 'Invio in corso…', 'easycontact' ),
-				'error'              => __( 'Invio non riuscito. Riprova.', 'easycontact' ),
-				'network'            => __( 'Connessione interrotta. Riprova senza ricaricare la pagina per verificare questo invio.', 'easycontact' ),
-				'expired'            => __( 'La sessione è scaduta. I campi compilati sono stati mantenuti: riprova.', 'easycontact' ),
-				'captcha'            => __( 'Completa la verifica CAPTCHA.', 'easycontact' ),
-				'captchaUnavailable' => __( 'La verifica CAPTCHA non è disponibile. Riprova più tardi.', 'easycontact' ),
-				'uncertain'          => __( 'Non è stato possibile confermare l’invio. Contatta il sito prima di inviare di nuovo il messaggio.', 'easycontact' ),
+				'sending'            => __( 'Sending…', 'easycontact' ),
+				'error'              => __( 'Sending failed. Try again.', 'easycontact' ),
+				'network'            => __( 'Connection lost. Try again without reloading the page to verify this submission.', 'easycontact' ),
+				'expired'            => __( 'The session has expired. Your entries were kept: try again.', 'easycontact' ),
+				'captcha'            => __( 'Complete the CAPTCHA.', 'easycontact' ),
+				'captchaUnavailable' => __( 'The CAPTCHA is not available. Try again later.', 'easycontact' ),
+				'uncertain'          => __( 'The submission could not be confirmed. Contact the site before sending the message again.', 'easycontact' ),
 			),
 		);
 		$tokens   = Endpoint::issue( $id );
@@ -120,7 +120,7 @@ final class Renderer {
 				)
 			) . '>';
 		}
-		$html .= '<div class="easycontact-honeypot" aria-hidden="true"><label>' . esc_html__( 'Lascia vuoto questo campo', 'easycontact' ) . '<input type="text" name="honeypot[' . esc_attr( $tokens['honeypot'] ) . ']" data-easycontact-trap="' . esc_attr( $tokens['honeypot'] ) . '" tabindex="-1" autocomplete="off" maxlength="512"></label></div>';
+		$html .= '<div class="easycontact-honeypot" aria-hidden="true"><label>' . esc_html__( 'Leave this field empty', 'easycontact' ) . '<input type="text" name="honeypot[' . esc_attr( $tokens['honeypot'] ) . ']" data-easycontact-trap="' . esc_attr( $tokens['honeypot'] ) . '" tabindex="-1" autocomplete="off" maxlength="512"></label></div>';
 		foreach ( $definition['schema']['items'] as $item ) {
 			if ( 'row' === $item['type'] ) {
 				$html .= '<div class="easycontact-row">';
@@ -139,7 +139,7 @@ final class Renderer {
 					'data-sitekey'             => $settings['turnstile_site_key'],
 					'data-action'              => 'easycontact_form_' . $id,
 				)
-			) . '></div><input type="hidden" name="captcha" value=""><noscript><p>' . esc_html__( 'Attiva JavaScript per completare il CAPTCHA e inviare il modulo.', 'easycontact' ) . '</p></noscript>';
+			) . '></div><input type="hidden" name="captcha" value=""><noscript><p>' . esc_html__( 'Turn on JavaScript to complete the CAPTCHA and send the form.', 'easycontact' ) . '</p></noscript>';
 		}
 		$html   .= '<button ' . self::attributes(
 			array(
@@ -153,7 +153,7 @@ final class Renderer {
 			$message = $config['success_message'];
 		}
 		if ( ! $preview && isset( $_GET['easycontact_held'] ) && is_scalar( $_GET['easycontact_held'] ) && absint( $_GET['easycontact_held'] ) === $id ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Display-only confirmation.
-			$message = __( 'Il messaggio è stato ricevuto ed è in attesa di verifica.', 'easycontact' );
+			$message = __( 'Your message has been received and is awaiting review.', 'easycontact' );
 		}
 		return $html . '<p class="easycontact-result" role="status" aria-live="polite" tabindex="-1">' . esc_html( $message ) . '</p></form>';
 	}
@@ -192,7 +192,7 @@ final class Renderer {
 				)
 			) . '></textarea>';
 		} elseif ( 'select' === $field['type'] ) {
-			$html .= '<select ' . self::attributes( $attributes ) . '><option value="">' . esc_html__( 'Seleziona…', 'easycontact' ) . '</option>';
+			$html .= '<select ' . self::attributes( $attributes ) . '><option value="">' . esc_html__( 'Select…', 'easycontact' ) . '</option>';
 			foreach ( $field['options'] as $option ) {
 				$html .= '<option ' . self::attributes( array( 'value' => $option ) ) . '>' . esc_html( $option ) . '</option>';
 			}
@@ -200,8 +200,8 @@ final class Renderer {
 		} elseif ( 'tel' === $field['type'] ) {
 			$country = Phone::default_country( $config, $field );
 			/* translators: %s: telephone field label. */
-			$country_label = sprintf( __( 'Paese per %s', 'easycontact' ), $field['label'] );
-			$html         .= '<div class="easycontact-phone"><div class="easycontact-phone-country"><input type="search" class="easycontact-country-search" data-easycontact-country-search placeholder="' . esc_attr__( 'Cerca paese…', 'easycontact' ) . '" aria-label="' . esc_attr__( 'Cerca un paese', 'easycontact' ) . '" autocomplete="off" hidden><select id="' . esc_attr( $id . '-country' ) . '" name="countries[' . esc_attr( $field['name'] ) . ']" data-easycontact-country aria-label="' . esc_attr( $country_label ) . '" aria-describedby="' . esc_attr( $id . '-error' ) . '"><option value="">' . esc_html__( 'Seleziona paese', 'easycontact' ) . '</option>';
+			$country_label = sprintf( __( 'Country for %s', 'easycontact' ), $field['label'] );
+			$html         .= '<div class="easycontact-phone"><div class="easycontact-phone-country"><input type="search" class="easycontact-country-search" data-easycontact-country-search placeholder="' . esc_attr__( 'Search country…', 'easycontact' ) . '" aria-label="' . esc_attr__( 'Search for a country', 'easycontact' ) . '" autocomplete="off" hidden><select id="' . esc_attr( $id . '-country' ) . '" name="countries[' . esc_attr( $field['name'] ) . ']" data-easycontact-country aria-label="' . esc_attr( $country_label ) . '" aria-describedby="' . esc_attr( $id . '-error' ) . '"><option value="">' . esc_html__( 'Select country', 'easycontact' ) . '</option>';
 			$countries     = Phone::countries();
 			uasort( $countries, static fn( $first, $second ) => strcasecmp( $first['name'], $second['name'] ) );
 			foreach ( $countries as $region => $data ) {
@@ -235,7 +235,7 @@ final class Renderer {
 		if ( $check ) {
 			$html .= $label;
 			if ( 'acceptance' === $field['type'] && get_privacy_policy_url() ) {
-				$html .= ' <a href="' . esc_url( get_privacy_policy_url() ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr__( 'Informativa privacy (si apre in una nuova finestra)', 'easycontact' ) . '">' . esc_html__( 'Informativa privacy', 'easycontact' ) . '</a>';
+				$html .= ' <a href="' . esc_url( get_privacy_policy_url() ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr__( 'Privacy policy (opens in a new window)', 'easycontact' ) . '">' . esc_html__( 'Privacy policy', 'easycontact' ) . '</a>';
 			}
 		}
 		return $html . '<span class="easycontact-error" id="' . esc_attr( $id . '-error' ) . '"></span></div>';
@@ -268,9 +268,9 @@ final class Renderer {
 		$html = self::render( $id, Forms::definition( $id, true ), true );
 		echo '<!doctype html><html ';
 		language_attributes();
-		echo '><head><meta charset="' . esc_attr( get_option( 'blog_charset' ) ) . '"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . esc_html__( 'Anteprima modulo', 'easycontact' ) . '</title>';
+		echo '><head><meta charset="' . esc_attr( get_option( 'blog_charset' ) ) . '"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . esc_html__( 'Form preview', 'easycontact' ) . '</title>';
 		wp_print_styles( array( 'easycontact-frontend' ) );
-		echo '</head><body class="easycontact-preview-body"><h1>' . esc_html( get_the_title( $id ) ) . '</h1><p>' . esc_html__( 'Anteprima della versione salvata. L’invio e le integrazioni sono disattivati.', 'easycontact' ) . '</p>';
+		echo '</head><body class="easycontact-preview-body"><h1>' . esc_html( get_the_title( $id ) ) . '</h1><p>' . esc_html__( 'Preview of the saved version. Sending and integrations are disabled.', 'easycontact' ) . '</p>';
 		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by self::render().
 		wp_print_scripts( array( 'easycontact-frontend' ) );
 		echo '</body></html>';

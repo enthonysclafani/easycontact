@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: EasyContact
- * Description: Moduli con anti-spam locale, telefoni internazionali, campi condizionali, MailerLite, Slack e Turnstile.
+ * Description: Contact forms with local anti-spam, international phone numbers, conditional fields, MailerLite, Slack and Turnstile.
  * Version: 1.0.0
  * Requires at least: 6.4
  * Requires PHP: 8.1

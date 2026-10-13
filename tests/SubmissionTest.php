@@ -440,8 +440,8 @@ class SubmissionTest extends TestCase {
 		$suspect    = Entries::store( $id, $definition, $this->values(), $this->assessment( 'suspect' ) );
 
 		$export = wp_json_encode( Privacy::export( 'Maria+preventivo@example.org' ) );
-		$this->assertStringContainsString( 'Classificazione anti-spam', $export, 'Privacy export includes category' );
-		$this->assertStringContainsString( 'Punteggio anti-spam', $export, 'Privacy export includes assessment' );
+		$this->assertStringContainsString( 'Anti-spam category', $export, 'Privacy export includes category' );
+		$this->assertStringContainsString( 'Anti-spam score', $export, 'Privacy export includes assessment' );
 
 		$taxonomy = get_taxonomy( Review::TAXONOMY );
 		$this->assertFalse( post_type_supports( Plugin::ENTRY, 'editor' ) || post_type_supports( Plugin::ENTRY, 'title' ), 'Archived contact details have no content editor' );

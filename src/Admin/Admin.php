@@ -34,7 +34,7 @@ final class Admin {
 	 */
 	public static function menu(): void {
 		remove_submenu_page( 'edit.php?post_type=' . Plugin::FORM, 'post-new.php?post_type=' . Plugin::FORM );
-		add_submenu_page( 'edit.php?post_type=' . Plugin::FORM, __( 'Supporto', 'easycontact' ), __( 'Supporto', 'easycontact' ), 'manage_options', 'easycontact-support', array( self::class, 'support_page' ) );
+		add_submenu_page( 'edit.php?post_type=' . Plugin::FORM, __( 'Support', 'easycontact' ), __( 'Support', 'easycontact' ), 'manage_options', 'easycontact-support', array( self::class, 'support_page' ) );
 	}
 
 	/**
@@ -56,8 +56,8 @@ final class Admin {
 			'easycontact-admin',
 			'easycontactAdmin',
 			array(
-				'optionOne' => __( 'Opzione 1', 'easycontact' ),
-				'optionTwo' => __( 'Opzione 2', 'easycontact' ),
+				'optionOne' => __( 'Option 1', 'easycontact' ),
+				'optionTwo' => __( 'Option 2', 'easycontact' ),
 			)
 		);
 	}
@@ -73,17 +73,17 @@ final class Admin {
 		}
 		?>
 		<div class="wrap easycontact-support">
-			<h1>EasyContact · <?php esc_html_e( 'Supporto', 'easycontact' ); ?></h1>
-			<h2><?php esc_html_e( 'Sintassi ed esempi', 'easycontact' ); ?></h2>
-			<p><?php esc_html_e( 'Separa i campi sulla stessa riga con | per affiancarli in colonne di uguale larghezza. Vai a capo per iniziare una nuova riga. L’asterisco rende il campo obbligatorio. Salva il modulo per aggiornare i campi disponibili nelle regole.', 'easycontact' ); ?></p>
-			<p><?php esc_html_e( 'Due colonne (50% ciascuna):', 'easycontact' ); ?></p>
-			<pre><?php echo esc_html( '[text* nome "Nome"] | [email* email "Email"]' ); ?></pre>
-			<p><?php esc_html_e( 'Tre colonne (33,33% ciascuna):', 'easycontact' ); ?></p>
-			<pre><?php echo esc_html( '[text* nome "Nome"] | [text* cognome "Cognome"] | [email* email "Email"]' ); ?></pre>
-			<p><?php esc_html_e( 'Le larghezze tengono conto dello spazio tra le colonne. Su schermi piccoli i campi si dispongono uno sotto l’altro. Note e pulsante devono restare separati.', 'easycontact' ); ?></p>
-			<pre><?php echo esc_html( '[select motivo "Motivo" "Informazioni" "Preventivo"]' . "\n" . '[number budget "Budget" min:0 max:100000 step:1]' . "\n" . '[checkbox newsletter "Desidero ricevere la newsletter"]' . "\n" . '[acceptance* privacy "Ho letto l’informativa privacy"]' . "\n" . '[note "Una breve indicazione"]' . "\n" . '[submit "Invia"]' ); ?></pre>
-			<pre><?php echo esc_html( '[tel telefono "Telefono"]' . "\n" . '[tel* cellulare "Cellulare" mobile country:IT]' . "\n" . '[tel recapito "Recapito" allow-repeated]' ); ?></pre>
-			<p><?php esc_html_e( 'Il telefono include il selettore del paese. country:IT imposta il paese iniziale del campo, mobile richiede un cellulare e allow-repeated consente numeri interamente ripetitivi. Sono disponibili anche email, textarea e url. Usa nomi unici in minuscolo.', 'easycontact' ); ?></p>
+			<h1>EasyContact · <?php esc_html_e( 'Support', 'easycontact' ); ?></h1>
+			<h2><?php esc_html_e( 'Syntax and examples', 'easycontact' ); ?></h2>
+			<p><?php esc_html_e( 'Separate fields on the same line with | to place them in equal-width columns. Start a new line for a new row. An asterisk makes the field required. Save the form to update the fields available in the rules.', 'easycontact' ); ?></p>
+			<p><?php esc_html_e( 'Two columns (50% each):', 'easycontact' ); ?></p>
+			<pre><?php /* translators: Example form syntax: translate only the labels in quotes. */ echo esc_html__( '[text* name "Name"] | [email* email "Email"]', 'easycontact' ); ?></pre>
+			<p><?php esc_html_e( 'Three columns (33.33% each):', 'easycontact' ); ?></p>
+			<pre><?php /* translators: Example form syntax: translate only the labels in quotes. */ echo esc_html__( '[text* name "Name"] | [text* surname "Surname"] | [email* email "Email"]', 'easycontact' ); ?></pre>
+			<p><?php esc_html_e( 'Widths account for the space between columns. On small screens fields stack vertically. Notes and the button must stay on their own line.', 'easycontact' ); ?></p>
+			<pre><?php /* translators: Example form syntax, one tag per line: translate only the labels in quotes. */ echo esc_html__( "[select reason \"Reason\" \"Information\" \"Quote\"]\n[number budget \"Budget\" min:0 max:100000 step:1]\n[checkbox newsletter \"I would like to receive the newsletter\"]\n[acceptance* privacy \"I have read the privacy policy\"]\n[note \"A short hint\"]\n[submit \"Send\"]", 'easycontact' ); ?></pre>
+			<pre><?php /* translators: Example form syntax, one tag per line: translate only the labels in quotes. */ echo esc_html__( "[tel phone \"Phone\"]\n[tel* cell \"Mobile\" mobile country:IT]\n[tel contact \"Contact number\" allow-repeated]", 'easycontact' ); ?></pre>
+			<p><?php esc_html_e( 'The phone field includes a country selector. country:IT sets the initial country, mobile requires a mobile number and allow-repeated accepts fully repetitive numbers. email, textarea and url are also available. Use unique lowercase names.', 'easycontact' ); ?></p>
 		</div>
 		<?php
 	}

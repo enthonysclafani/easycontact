@@ -20,7 +20,7 @@ solo in questo file. Quando una decisione viene presa: si scrive la data e il mo
 | D6 | Lock atomici in `wp_options` | presa | Fase 2.2, `WPDB_ALLOWLIST` |
 | D7 | Requisiti minimi | presa (già così) | |
 | D8 | Nomi dei dati | presa | |
-| D9 | Lingua delle stringhe sorgente | presa | Fase 5.3 |
+| D9 | Lingua delle stringhe sorgente | presa, fatta | Fase 5.3, `languages/easycontact-it_IT.po` |
 
 ## Prese
 

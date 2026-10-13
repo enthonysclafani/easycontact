@@ -24,27 +24,27 @@ final class Outcomes {
 			'mail'       => 'Email',
 			'mailerlite' => 'MailerLite',
 			'slack'      => 'Slack',
-			'archive'    => __( 'Archivio', 'easycontact' ),
+			'archive'    => __( 'Archive', 'easycontact' ),
 		);
 		echo '<ul>';
 		foreach ( $outcomes as $adapter => $outcome ) {
 			if ( 'sent' === $outcome ) {
-				$label = 'mail' === $adapter ? __( 'Accettata dal servizio email', 'easycontact' ) : __( 'Inviato', 'easycontact' );
+				$label = 'mail' === $adapter ? __( 'Accepted by the mail service', 'easycontact' ) : __( 'Sent', 'easycontact' );
 			} elseif ( 'saved' === $outcome ) {
-				$label = __( 'Salvato', 'easycontact' );
+				$label = __( 'Saved', 'easycontact' );
 			} elseif ( 'held' === $outcome ) {
-				$label = __( 'Inoltro sospeso in attesa di approvazione', 'easycontact' );
+				$label = __( 'Delivery held pending approval', 'easycontact' );
 			} elseif ( 'disabled' === $outcome ) {
-				$label = __( 'Destinazione disattivata', 'easycontact' );
+				$label = __( 'Destination disabled', 'easycontact' );
 			} elseif ( 'skipped' === $outcome ) {
-				$label = __( 'Non inviato: consenso non selezionato', 'easycontact' );
+				$label = __( 'Not sent: consent not selected', 'easycontact' );
 			} elseif ( str_ends_with( $outcome, '_uncertain' ) ) {
-				$label = __( 'Esito non confermato; verifica la destinazione prima di reinviare', 'easycontact' );
+				$label = __( 'Outcome not confirmed; check the destination before sending again', 'easycontact' );
 			} elseif ( preg_match( '/_http_(\d+)$/D', $outcome, $match ) ) {
 				/* translators: %s: HTTP response code from an external integration. */
-				$label = sprintf( __( 'Errore del servizio (HTTP %s)', 'easycontact' ), $match[1] );
+				$label = sprintf( __( 'Service error (HTTP %s)', 'easycontact' ), $match[1] );
 			} else {
-				$label = __( 'Invio non riuscito; controlla le impostazioni', 'easycontact' );
+				$label = __( 'Delivery failed; check the settings', 'easycontact' );
 			}
 			echo '<li><strong>' . esc_html( $names[ $adapter ] ?? $adapter ) . '</strong>: ' . esc_html( $label ) . '</li>';
 		}

@@ -191,6 +191,6 @@ final class Phone {
 	 * The single message shown for any invalid number.
 	 */
 	private static function error(): WP_Error {
-		return new WP_Error( 'phone', __( 'Controlla il numero e il paese selezionato.', 'easycontact' ) );
+		return new WP_Error( 'phone', __( 'Check the number and the selected country.', 'easycontact' ) );
 	}
 }

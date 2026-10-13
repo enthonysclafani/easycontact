@@ -111,7 +111,7 @@ final class AntiSpam {
 	public static function phrase_list( string $value ) {
 		$lines = preg_split( '/[\r\n]+/', sanitize_textarea_field( $value ) );
 		if ( strlen( $value ) > 5000 || count( $lines ) > 30 ) {
-			return new WP_Error( 'phrases', __( 'Inserisci al massimo 30 frasi brevi, una per riga.', 'easycontact' ) );
+			return new WP_Error( 'phrases', __( 'Enter at most 30 short phrases, one per line.', 'easycontact' ) );
 		}
 		$phrases = array();
 		foreach ( $lines as $line ) {
@@ -120,7 +120,7 @@ final class AntiSpam {
 				continue;
 			}
 			if ( mb_strlen( $line, 'UTF-8' ) < 4 || mb_strlen( $line, 'UTF-8' ) > 150 ) {
-				return new WP_Error( 'phrases', __( 'Ogni frase deve contenere da 4 a 150 caratteri.', 'easycontact' ) );
+				return new WP_Error( 'phrases', __( 'Each phrase must be 4 to 150 characters long.', 'easycontact' ) );
 			}
 			$phrases[] = $line;
 		}
@@ -257,19 +257,19 @@ final class AntiSpam {
 	 */
 	public static function reason_labels(): array {
 		return array(
-			'honeypot'         => __( 'Campo anti-bot compilato', 'easycontact' ),
-			'fast'             => __( 'Compilazione estremamente rapida', 'easycontact' ),
-			'disposable'       => __( 'Dominio email temporaneo', 'easycontact' ),
-			'blocked_domain'   => __( 'Dominio email bloccato nelle impostazioni', 'easycontact' ),
-			'alias_pattern'    => __( 'Email con sequenza ripetitiva', 'easycontact' ),
-			'email_frequency'  => __( 'Molti invii dalla stessa email', 'easycontact' ),
-			'phone_frequency'  => __( 'Molti invii dallo stesso telefono', 'easycontact' ),
-			'repetitive_phone' => __( 'Numero telefonico interamente ripetitivo', 'easycontact' ),
-			'repetitive_text'  => __( 'Testo composto da ripetizioni', 'easycontact' ),
-			'links'            => __( 'Elevata presenza di collegamenti', 'easycontact' ),
-			'promotion'        => __( 'Schema promozionale ricorrente', 'easycontact' ),
-			'custom_phrase'    => __( 'Frase segnalata nelle regole del modulo', 'easycontact' ),
-			'duplicate'        => __( 'Contenuto ripetuto in più invii', 'easycontact' ),
+			'honeypot'         => __( 'Anti-bot field filled in', 'easycontact' ),
+			'fast'             => __( 'Extremely fast completion', 'easycontact' ),
+			'disposable'       => __( 'Disposable email domain', 'easycontact' ),
+			'blocked_domain'   => __( 'Email domain blocked in the settings', 'easycontact' ),
+			'alias_pattern'    => __( 'Email with a repetitive pattern', 'easycontact' ),
+			'email_frequency'  => __( 'Many submissions from the same email', 'easycontact' ),
+			'phone_frequency'  => __( 'Many submissions from the same phone', 'easycontact' ),
+			'repetitive_phone' => __( 'Fully repetitive phone number', 'easycontact' ),
+			'repetitive_text'  => __( 'Text made of repetitions', 'easycontact' ),
+			'links'            => __( 'High number of links', 'easycontact' ),
+			'promotion'        => __( 'Recurring promotional pattern', 'easycontact' ),
+			'custom_phrase'    => __( 'Phrase flagged in the form rules', 'easycontact' ),
+			'duplicate'        => __( 'Content repeated across submissions', 'easycontact' ),
 		);
 	}
 }

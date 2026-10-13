@@ -48,7 +48,16 @@ final class Forms {
 	 * @return string Result of this operation.
 	 */
 	public static function default_template(): string {
-		return '[text* nome "Nome"]' . "\n" . '[email* email "Email"]' . "\n" . '[select* motivo "Motivo" "Informazioni" "Preventivo"]' . "\n" . '[number budget "Budget indicativo" min:0 step:1]' . "\n" . '[textarea* messaggio "Messaggio"]' . "\n" . '[checkbox newsletter "Desidero ricevere la newsletter"]' . "\n" . '[acceptance* privacy "Ho letto l’informativa sulla privacy"]' . "\n" . '[submit "Invia messaggio"]';
+		// Field names stay fixed; only the labels follow the site language. Quotes would end a label early.
+		$label = static fn( string $text ): string => '"' . str_replace( array( '"', '[', ']' ), '', $text ) . '"';
+		return '[text* nome ' . $label( __( 'Name', 'easycontact' ) ) . ']' . "\n"
+			. '[email* email ' . $label( __( 'Email', 'easycontact' ) ) . ']' . "\n"
+			. '[select* motivo ' . $label( __( 'Reason', 'easycontact' ) ) . ' ' . $label( __( 'Information', 'easycontact' ) ) . ' ' . $label( __( 'Quote', 'easycontact' ) ) . ']' . "\n"
+			. '[number budget ' . $label( __( 'Estimated budget', 'easycontact' ) ) . ' min:0 step:1]' . "\n"
+			. '[textarea* messaggio ' . $label( __( 'Message', 'easycontact' ) ) . ']' . "\n"
+			. '[checkbox newsletter ' . $label( __( 'I would like to receive the newsletter', 'easycontact' ) ) . ']' . "\n"
+			. '[acceptance* privacy ' . $label( __( 'I have read the privacy policy', 'easycontact' ) ) . ']' . "\n"
+			. '[submit ' . $label( __( 'Send message', 'easycontact' ) ) . ']';
 	}
 
 	/**
@@ -60,7 +69,7 @@ final class Forms {
 		return array(
 			'mail_enabled'       => true,
 			'mail_to'            => get_option( 'admin_email' ),
-			'mail_subject'       => __( 'Nuovo messaggio: [form]', 'easycontact' ),
+			'mail_subject'       => __( 'New message: [form]', 'easycontact' ),
 			'mail_reply_to'      => 'email',
 			'mail_body'          => '[fields]',
 			'store_entries'      => 'inherit',
@@ -80,7 +89,7 @@ final class Forms {
 			'slack_enabled'      => false,
 			'slack_webhook'      => '',
 			'slack_fields'       => 'nome,email,messaggio',
-			'success_message'    => __( 'Grazie, il messaggio è stato acquisito.', 'easycontact' ),
+			'success_message'    => __( 'Thank you, your message has been received.', 'easycontact' ),
 		);
 	}
 
