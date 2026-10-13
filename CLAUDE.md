@@ -60,10 +60,11 @@ blocca la CI. Ogni file ammesso in un'allowlist ha un commento con il motivo o c
    `src/Submissions/Submission.php`; `src/Plugin.php` toglie soltanto gli eventi (A). Nessun evento nuovo.
 4. **Asset nel frontend solo al rendering di un modulo** (A per i file, test per il comportamento) (D2).
    `wp_enqueue_*` solo in `src/Forms/Renderer.php` (al rendering) e `src/Admin/Admin.php` (schermate del plugin).
-   Nessun JS o CSS inline (A per `style="…"`). Una pagina senza modulo non carica niente del plugin: `tests/QueriesTest.php`.
+   Nessun JS o CSS inline (A per `style="…"`). Solo due fogli di stile, `assets/admin.css` e `assets/frontend.css`,
+   con ogni selettore sotto una classe o un ID `easycontact` (A). Una pagina senza modulo non carica niente del plugin: `tests/QueriesTest.php`.
 5. **HTTP solo nei file in allowlist** (A), con le API di WordPress (A: niente cURL, `fopen`/`file_get_contents` su
    URL, socket) (D3). Mai durante il rendering di una pagina, solo nella richiesta di invio e in admin; timeout ≤ 15 s; `WP_Error` e codici HTTP
-   sempre gestiti; ogni servizio elencato in "External services" di `readme.txt`.
+   sempre gestiti; ogni servizio elencato in "External services" di `readme.txt`. Lo verifica `tests/HttpTest.php`.
 6. **Dipendenze PHP a runtime**: solo quelle già incluse in `includes/vendor/` (libphonenumber e polyfill mbstring),
    aggiornate con `tools/bundle-phone.php` (D4). libphonenumber è l'unica eccezione dichiarata; il polyfill si toglie
    se `ext-mbstring` diventa requisito. `vendor/` di Composer contiene solo strumenti di sviluppo

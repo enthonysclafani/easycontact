@@ -1,0 +1,8 @@
+.easycontact-toolbar {
+	display: flex;
+}
+
+.wrap h1,
+.easycontact-ok {
+	margin: 0;
+}
