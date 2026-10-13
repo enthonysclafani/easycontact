@@ -50,7 +50,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
 | Query sul percorso caldo | zero in più, verificato da test | ❌ 3 letture a ogni richiesta | ✅ zero, verificato da test | |
 | Struttura `src/` PSR-4, `register()` | ✅ | ❌ classi statiche in `includes/` | ✅ una cartella per funzionalità, hook verificati da `hooks-in-register` | Fasi 3.1–3.3 |
 | `register_setting()` / `register_post_meta()` con schema | ✅ | ❌ | ✅ schema delle impostazioni senza REST (contengono segreti), meta dei moduli registrati | Fase 3.4 |
-| `args` tipizzati sulle route REST | ✅ | 🟡 | 🟡 | Fase 3.5 |
+| `args` tipizzati sulle route REST | ✅ | 🟡 | ✅ tipi e lunghezze, `__return_true` motivato | Fase 3.5 |
 | Disinstallazione completa e testata | ✅ | 🟡 completa, non testata | ✅ testata anche in multisito | D5 |
 | Stringhe sorgente in inglese | ✅ | ❌ italiano | ❌ | D9 |
 | Un solo foglio di stile admin | ✅ | 🟡 `admin.css` + `admin.js` | 🟡 | Fase 5.1 |

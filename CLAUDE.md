@@ -99,8 +99,8 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
   firmato, rate limit per indirizzo, limite di 50 KB sul corpo, idempotenza per ticket. Ogni modifica a questo
   percorso ha un test in `tests/SubmissionTest.php` o `tests/RestTest.php`.
 - **REST**: le route pubbliche (`token`, `submit`) accettano solo moduli pubblicati; la risposta di `token` non va
-  in cache (`Cache-Control: no-store`). I post type del plugin non sono
-  esposti nel REST del core.
+  in cache (`Cache-Control: no-store`). Ogni parametro ha `args` con tipo e limiti; `__return_true` come
+  `permission_callback` va motivato accanto alla route. I post type del plugin non sono esposti nel REST del core.
 - **Input**: sanitizza all'ingresso con la funzione più stretta (`absint`, `sanitize_key`, `sanitize_text_field`,
   `esc_url_raw`). Mai `$_GET`/`$_POST`/`$_REQUEST`/`$_SERVER` senza `wp_unslash()` e sanitizzazione; nei form classici
   verifica il nonce.

@@ -157,8 +157,12 @@ Fasi 0 e 1.
       verifica chiave per chiave prima di salvare; l'option resta fuori dal REST perché contiene il token di
       MailerLite e la chiave segreta di Turnstile (diversamente da EasyRankly). `Forms::register_meta()` registra
       `_easycontact_definition` e `_easycontact_last_delivery` su `init`. Test: `tests/SettingsTest.php`._
-- [ ] 3.5 REST: `args` con `type`, `sanitize_callback`, `validate_callback` per le route pubbliche; motivazione
+- [x] 3.5 REST: `args` con `type`, `sanitize_callback`, `validate_callback` per le route pubbliche; motivazione
       scritta del `__return_true` (moduli pubblici) e test con utente anonimo
+      _Fatto: `Endpoint::routes()` dichiara `id` (intero ≥ 1) e i parametri del corpo (stringhe con lunghezza
+      massima, oggetti per campi, paesi e honeypot) con `rest_validate_request_arg` e `rest_sanitize_request_arg`;
+      un tipo sbagliato riceve 400 prima del callback. Nonce, ticket, honeypot e orologio restano verificati da
+      `submit()`, comune all'invio classico. Test con utente anonimo in `tests/RestTest.php`._
 
 ### Fase 4 — Cron, asset, HTTP (secondo D1–D3)
 

@@ -32,7 +32,12 @@ final class Endpoint {
 	}
 
 	/**
-	 * Register anonymous form REST routes with validation in their callbacks.
+	 * Register the two anonymous form routes.
+	 *
+	 * Both are public by design: a published form is shown to visitors who are not logged in, so
+	 * `permission_callback` is `__return_true`. The callbacks accept only published forms and check the rate limit,
+	 * the nonce, the signed ticket, the honeypot and the clock; `args` declare the shape of each parameter, and the
+	 * body is still validated by `submit()`, shared with the classic POST fallback.
 	 *
 	 * @return void
 	 */
@@ -42,8 +47,14 @@ final class Endpoint {
 			'/forms/(?P<id>\d+)/token',
 			array(
 				'methods'             => 'GET',
+				// Public forms: anonymous visitors need a ticket. See the method docblock.
 				'permission_callback' => '__return_true',
 				'callback'            => array( self::class, 'rest_token' ),
+				'args'                => array(
+					'id'    => self::arg( 'integer', array( 'minimum' => 1 ), true ),
+					// Signed start time of a form already shown; an invalid one is replaced.
+					'clock' => self::arg( 'string', array( 'maxLength' => 200 ) ),
+				),
 			)
 		);
 		register_rest_route(
@@ -51,10 +62,39 @@ final class Endpoint {
 			'/forms/(?P<id>\d+)/submit',
 			array(
 				'methods'             => 'POST',
+				// Public forms: anonymous visitors submit them. See the method docblock.
 				'permission_callback' => '__return_true',
 				'callback'            => array( self::class, 'rest_submit' ),
+				'args'                => array(
+					'id'        => self::arg( 'integer', array( 'minimum' => 1 ), true ),
+					// Missing or wrong values are answered by submit(), as for the classic POST.
+					'nonce'     => self::arg( 'string', array( 'maxLength' => 64 ) ),
+					'ticket'    => self::arg( 'string', array( 'maxLength' => 200 ) ),
+					'clock'     => self::arg( 'string', array( 'maxLength' => 200 ) ),
+					'captcha'   => self::arg( 'string' ),
+					'fields'    => self::arg( 'object' ),
+					'countries' => self::arg( 'object' ),
+					'honeypot'  => self::arg( 'object' ),
+				),
 			)
 		);
+	}
+
+	/**
+	 * Schema of one route parameter, validated and sanitized by the REST API.
+	 *
+	 * @param string               $type     JSON schema type.
+	 * @param array<string, mixed> $schema   Extra schema keywords.
+	 * @param bool                 $required Whether the parameter is required.
+	 * @return array<string, mixed> Result of this operation.
+	 */
+	private static function arg( string $type, array $schema = array(), bool $required = false ): array {
+		return array(
+			'type'              => $type,
+			'required'          => $required,
+			'validate_callback' => 'rest_validate_request_arg',
+			'sanitize_callback' => 'rest_sanitize_request_arg',
+		) + $schema;
 	}
 
 	/**
