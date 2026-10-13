@@ -1,0 +1,120 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - Refactory
+
+permissions:
+  contents: read
+
+# Every action is pinned to a full commit SHA, with its release in a comment: a moved tag
+# cannot change what runs here. Same SHAs as EasyRankly (read with `git ls-remote --tags`
+# in October 2026); Dependabot (.github/dependabot.yml) proposes updates.
+
+jobs:
+  static:
+    name: Architecture, PHPCS, PHPStan (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.1', '8.4']
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - uses: ramsey/composer-install@a8d0d959dab41457692a5e2041bd9b757a119e3f # 3.2.1
+
+      - run: composer architecture
+      - run: composer lint
+
+      # Point 0.9 of docs/piano-standard.md: the existing code has no PHPStan baseline yet
+      # (PHPStan cannot be installed in cloud sessions). The result is reported without
+      # blocking until the baseline is committed; then this line goes away.
+      - run: composer analyse
+        continue-on-error: true
+
+  test:
+    name: PHPUnit (WordPress ${{ matrix.wp }}, PHP ${{ matrix.php }}${{ matrix.multisite && ', multisite' || '' }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # The declared minimum (Requires at least: 6.4, Requires PHP: 8.1): an API added later fails here.
+          - php: '8.1'
+            wp: '6.4.9'
+            multisite: false
+          - php: '8.1'
+            wp: '7.1.0'
+            multisite: false
+          - php: '8.4'
+            wp: '7.1.0'
+            multisite: false
+          - php: '8.4'
+            wp: '7.1.0'
+            multisite: true
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: wordpress_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, intl, mbstring, mysqli, xml
+          coverage: none
+
+      - uses: ramsey/composer-install@a8d0d959dab41457692a5e2041bd9b757a119e3f # 3.2.1
+
+      - name: Install the WordPress test suite
+        run: tools/install-wp-tests.sh wordpress_test root '' 127.0.0.1 ${{ matrix.wp }}
+
+      - name: Run tests
+        env:
+          WP_TESTS_DIR: /tmp/wordpress-develop/tests/phpunit
+          WP_MULTISITE: ${{ matrix.multisite && '1' || '' }}
+        run: composer test -- --testdox
+
+  plugin-check:
+    name: Plugin Check (distributable)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Build the distributable
+        run: |
+          tools/build-dist.sh
+          mkdir -p dist-extracted
+          unzip -q .dist/easycontact.zip -d dist-extracted
+          test -f dist-extracted/easycontact/easycontact.php
+          test -f dist-extracted/easycontact/includes/data/countries.json
+          test ! -e dist-extracted/easycontact/tests
+          test ! -e dist-extracted/easycontact/tools
+          test ! -e dist-extracted/easycontact/docs
+          test ! -e dist-extracted/easycontact/composer.json
+
+      - uses: wordpress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1.1.9
+        with:
+          build-dir: ./dist-extracted/easycontact
+          slug: easycontact
+          ignore-warnings: true
+          categories: |
+            plugin_repo
