@@ -57,7 +57,7 @@ Sotto ogni decisione la riga "Decisione" dice cosa è stato scelto e cosa resta 
 **D3 — Chiamate HTTP.** EasyRankly: mai nel frontend, solo admin/REST/WP-CLI.
 - Stato attuale: chiamate solo nella richiesta di invio (Turnstile, MailerLite, Slack, DNS) e in admin
   (sincronizzazione manuale dei domini usa e getta), con `wp_safe_remote_*`/`wp_remote_*`. `HTTP_ALLOWLIST`:
-  `src/Delivery.php`, `src/AntiSpam/DisposableDomains.php`.
+  `src/Delivery/Delivery.php`, `src/AntiSpam/DisposableDomains.php`.
 - Proposta: "mai durante il rendering di una pagina; solo nella richiesta di invio (REST o `admin-post.php`) e in
   admin", con timeout espliciti (≤ 15 s), gestione di `WP_Error` e dei codici HTTP, servizi elencati in
   "External services" di `readme.txt`. I controlli DNS restano opzionali e con cache in transient.
