@@ -34,19 +34,8 @@ jobs:
       - run: composer architecture
       - run: composer lint
 
-      # Errors of the code that predates the standards are in phpstan-baseline.neon: only new ones fail.
+      # No baseline: every PHPStan error fails.
       - run: composer analyse
-
-      # Claude Code cloud sessions cannot run PHPStan (tools/analyse.sh). When this job fails, print the baseline
-      # PHPStan would generate, as a diff: moving code between files can then update paths and class names in
-      # phpstan-baseline.neon. A new error is fixed in the code, never added to the baseline.
-      - name: Print the regenerated baseline (on failure)
-        if: failure() && matrix.php == '8.1'
-        run: |
-          [ -x tools/phpstan/vendor/bin/phpstan ] || composer install --working-dir=tools/phpstan --no-interaction --no-progress
-          sed '/^includes:/,/phpstan-baseline\.neon/d' phpstan.neon.dist > phpstan-regenerate.neon
-          tools/phpstan/vendor/bin/phpstan analyse -c phpstan-regenerate.neon --memory-limit=1G --no-progress --generate-baseline=regenerated-baseline.neon || true
-          diff -u phpstan-baseline.neon regenerated-baseline.neon || true
 
   test:
     name: PHPUnit (WordPress ${{ matrix.wp }}, PHP ${{ matrix.php }}${{ matrix.multisite && ', multisite' || '' }})

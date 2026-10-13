@@ -134,8 +134,8 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
   (`data/`) inclusi. Le classi non ancora spostate nelle cartelle seguono la Fase 3.2 del piano, un PR per
   funzionalità.
 - Standard: WordPress Coding Standards (`WordPress-Extra`, `WordPress-Docs`), PHPCompatibilityWP, PHPStan livello 8
-  con `szepeviktor/phpstan-wordpress`. Zero errori PHPCS. PHPStan: zero errori nuovi; quelli del codice
-  precedente sono in `phpstan-baseline.neon` e si tolgono da lì quando si correggono, mai se ne aggiungono.
+  con `szepeviktor/phpstan-wordpress`. Zero errori PHPCS e zero errori PHPStan, senza baseline: un errore si
+  corregge nel codice, mai con una baseline o un `@phpstan-ignore`.
 - Gli hook si agganciano dentro `boot()` o `register()` delle classi, o in un callback agganciato da lì; mai a
   livello di file (A), tranne attivazione e disattivazione in `easycontact.php`. Niente stato statico condiviso
   tra classi: l'unica proprietà statica è la copia in memoria della lista dei domini usa e getta, per richiesta.

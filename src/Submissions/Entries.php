@@ -22,7 +22,7 @@ final class Entries {
 	/**
 	 * Resolve the explicit per-form archive preference.
 	 *
-	 * @param array $config Validated delivery and privacy configuration.
+	 * @param array<string, mixed> $config Validated delivery and privacy configuration.
 	 * @return bool Result of this operation.
 	 */
 	public static function stores_entries( array $config ): bool {
@@ -32,7 +32,7 @@ final class Entries {
 	/**
 	 * Suspicious entries are saved only when an archive preference explicitly permits it.
 	 *
-	 * @param array $config Validated delivery and privacy configuration.
+	 * @param array<string, mixed> $config Validated delivery and privacy configuration.
 	 */
 	public static function stores_quarantine( array $config ): bool {
 		return self::stores_entries( $config ) || AntiSpam::enabled( $config, 'quarantine_entries' );
@@ -41,10 +41,10 @@ final class Entries {
 	/**
 	 * Persist all archived metadata or roll back an incomplete entry.
 	 *
-	 * @param int   $form_id Published form ID.
-	 * @param array $definition Validated form definition.
-	 * @param array $values Sanitized visible field values.
-	 * @param array $assessment Result of AntiSpam::assess(); empty for entries saved without one.
+	 * @param int                   $form_id Published form ID.
+	 * @param array<string, mixed>  $definition Validated form definition.
+	 * @param array<string, string> $values Sanitized visible field values.
+	 * @param array<string, mixed>  $assessment Result of AntiSpam::assess(); empty for entries saved without one.
 	 * @return int|WP_Error Result of this operation.
 	 */
 	public static function store( int $form_id, array $definition, array $values, array $assessment = array() ) {

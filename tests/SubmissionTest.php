@@ -418,7 +418,10 @@ class SubmissionTest extends TestCase {
 		$this->assertNotFalse( wp_next_scheduled( 'easycontact_retry_delivery', array( $entry ) ), 'Recoverable clean failure gets bounded cron retry' );
 
 		$this->slack_code = 200;
-		$this->assertTrue( Submission::retry( $entry ), 'Recovery succeeds' );
+		// Run the event as WP-Cron does, with its stored arguments.
+		$event = wp_get_scheduled_event( 'easycontact_retry_delivery', array( $entry ) );
+		do_action_ref_array( 'easycontact_retry_delivery', $event->args );
+		$this->assertFalse( wp_next_scheduled( 'easycontact_retry_delivery', array( $entry ) ), 'Recovery succeeds and leaves nothing scheduled' );
 		$this->assertSame(
 			array(
 				'mail'       => 1,
