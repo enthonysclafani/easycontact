@@ -458,7 +458,7 @@ final class ArchitectureChecker {
 				continue;
 			}
 			// Blank out comments, keeping their newlines so line numbers stay right.
-			$css = (string) preg_replace_callback( '~/\*.*?\*/~s', static fn( array $comment ): string => preg_replace( '/[^\n]/', ' ', $comment[0] ), (string) file_get_contents( $path ) );
+			$css = (string) preg_replace_callback( '~/\*.*?\*/~s', static fn( array $comment ): string => (string) preg_replace( '/[^\n]/', ' ', $comment[0] ), (string) file_get_contents( $path ) );
 			preg_match_all( '/([^{}]+)\{/', $css, $blocks, PREG_OFFSET_CAPTURE );
 			foreach ( $blocks[1] as $block ) {
 				$prelude = trim( $block[0] );
