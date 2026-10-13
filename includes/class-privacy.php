@@ -104,13 +104,22 @@ final class Privacy {
 			}
 			$category = Review::category( $post->ID );
 			if ( $category ) {
-				$fields[] = array( 'name' => __( 'Classificazione anti-spam', 'easycontact' ), 'value' => Review::labels()[ $category ] );
+				$fields[] = array(
+					'name'  => __( 'Classificazione anti-spam', 'easycontact' ),
+					'value' => Review::labels()[ $category ],
+				);
 			}
 			$assessment = get_post_meta( $post->ID, '_easycontact_antispam', true );
 			if ( is_array( $assessment ) ) {
-				$fields[] = array( 'name' => __( 'Punteggio anti-spam', 'easycontact' ), 'value' => (string) $assessment['score'] . '/100' );
-				$reasons = array_intersect_key( AntiSpam::reason_labels(), array_flip( $assessment['reasons'] ) );
-				$fields[] = array( 'name' => __( 'Motivi del controllo', 'easycontact' ), 'value' => implode( '; ', $reasons ) );
+				$fields[] = array(
+					'name'  => __( 'Punteggio anti-spam', 'easycontact' ),
+					'value' => (string) $assessment['score'] . '/100',
+				);
+				$reasons  = array_intersect_key( AntiSpam::reason_labels(), array_flip( $assessment['reasons'] ) );
+				$fields[] = array(
+					'name'  => __( 'Motivi del controllo', 'easycontact' ),
+					'value' => implode( '; ', $reasons ),
+				);
 			}
 			$data[] = array(
 				'group_id'    => 'easycontact',
@@ -169,7 +178,7 @@ final class Privacy {
 		if ( ! function_exists( 'wp_add_privacy_policy_content' ) ) {
 			return;
 		}
-		$text = __( 'I moduli inviano i dati compilati ai destinatari email configurati. Se attivato, l’archivio locale conserva i campi e la data dell’invio per il periodo impostato dall’amministratore. Gli strumenti di esportazione e cancellazione di WordPress possono gestire queste copie tramite gli indirizzi email presenti nell’invio. Il plugin non archivia indirizzi IP o user agent negli invii; usa temporaneamente un’impronta dell’IP, non reversibile senza la chiave del sito, per limitare gli invii ripetuti. Se abilitati per il modulo, MailerLite riceve email, nome e gruppo dell’iscritto dopo la selezione del consenso; Slack riceve solo i campi scelti dall’amministratore; Cloudflare Turnstile verifica il CAPTCHA e può trattare dati del browser. La cancellazione locale non elimina le copie già trasmesse ai servizi esterni. Adattare questo testo alla configurazione effettiva del sito e alle informative dei servizi utilizzati.', 'easycontact' );
+		$text  = __( 'I moduli inviano i dati compilati ai destinatari email configurati. Se attivato, l’archivio locale conserva i campi e la data dell’invio per il periodo impostato dall’amministratore. Gli strumenti di esportazione e cancellazione di WordPress possono gestire queste copie tramite gli indirizzi email presenti nell’invio. Il plugin non archivia indirizzi IP o user agent negli invii; usa temporaneamente un’impronta dell’IP, non reversibile senza la chiave del sito, per limitare gli invii ripetuti. Se abilitati per il modulo, MailerLite riceve email, nome e gruppo dell’iscritto dopo la selezione del consenso; Slack riceve solo i campi scelti dall’amministratore; Cloudflare Turnstile verifica il CAPTCHA e può trattare dati del browser. La cancellazione locale non elimina le copie già trasmesse ai servizi esterni. Adattare questo testo alla configurazione effettiva del sito e alle informative dei servizi utilizzati.', 'easycontact' );
 		$text .= "\n\n" . __( 'I controlli anti-spam usano regole locali, senza intelligenza artificiale. Contatori temporanei con impronte protette dalla chiave del sito misurano la frequenza di email, telefoni e messaggi simili per un massimo di 30 minuti. La quarantena, se consentita dall’archivio o attivata separatamente, conserva gli invii sospetti, il punteggio, i motivi e la revisione manuale per il periodo configurato. Gli invii sospesi non vengono inoltrati ai destinatari prima dell’approvazione. La verifica DNS delle email è facoltativa: interroga il resolver del server per il solo dominio e conserva il risultato per un massimo di 15 minuti; non verifica l’esistenza della singola casella. I metadati internazionali dei telefoni e una copia dell’elenco dei domini temporanei sono inclusi nel plugin. L’amministratore può sincronizzare manualmente l’elenco scaricando le liste pubbliche da GitHub, senza trasmettere indirizzi email o contenuti degli invii. I controlli dei domini temporanei usano sempre la copia locale.', 'easycontact' );
 		wp_add_privacy_policy_content( 'EasyContact', wpautop( esc_html( $text ) ) );
 	}

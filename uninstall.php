@@ -46,7 +46,14 @@ function uninstall_site(): void {
 			)
 		);
 	}
-	register_taxonomy( 'easycontact_safety', 'easycontact_entry', array( 'public' => false, 'rewrite' => false ) );
+	register_taxonomy(
+		'easycontact_safety',
+		'easycontact_entry',
+		array(
+			'public'  => false,
+			'rewrite' => false,
+		)
+	);
 	do {
 		$ids     = get_posts(
 			array(
@@ -63,7 +70,13 @@ function uninstall_site(): void {
 			}
 		}
 	} while ( $ids && $removed );
-	$terms = get_terms( array( 'taxonomy' => 'easycontact_safety', 'hide_empty' => false, 'fields' => 'ids' ) );
+	$terms = get_terms(
+		array(
+			'taxonomy'   => 'easycontact_safety',
+			'hide_empty' => false,
+			'fields'     => 'ids',
+		)
+	);
 	if ( ! is_wp_error( $terms ) ) {
 		foreach ( $terms as $term ) {
 			wp_delete_term( $term, 'easycontact_safety' );

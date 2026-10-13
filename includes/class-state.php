@@ -99,7 +99,10 @@ final class State {
 	/**
 	 * Bound rate-counter updates with a separate, short lease per network identity.
 	 *
-	 * @param int $form_id Published form ID.
+	 * @param int    $form_id Published form ID.
+	 * @param int    $limit Submissions allowed in the window.
+	 * @param string $bucket Counter name.
+	 * @param int    $window Window in seconds.
 	 * @return bool Result of this operation.
 	 */
 	public static function rate_allowed( int $form_id, int $limit = 10, string $bucket = 'submit', int $window = 300 ): bool {
@@ -108,7 +111,15 @@ final class State {
 		return null !== $count && $count <= $limit;
 	}
 
-	/** Atomically count a bounded, short-lived keyed identity; never store its raw value. */
+	/**
+	 * Atomically count a bounded, short-lived keyed identity; never store its raw value.
+	 *
+	 * @param string $context  Counter name.
+	 * @param string $identity Value to count, such as an address.
+	 * @param int    $window   Window in seconds.
+	 * @param int    $cap      Highest count stored.
+	 * @return int|null Count in the window, or null when the counter is busy.
+	 */
 	public static function count( string $context, string $identity, int $window = 300, int $cap = 100 ): ?int {
 		$key   = 'rate_' . substr( hash_hmac( 'sha256', get_current_blog_id() . '|' . $context . '|' . $identity, wp_salt( 'auth' ) ), 0, 40 );
 		$owner = null;

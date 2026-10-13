@@ -249,6 +249,14 @@ final class Admin {
 		}
 	}
 
+	/**
+	 * Country select with an automatic choice.
+	 *
+	 * @param string $name      Field name.
+	 * @param string $value     Selected country.
+	 * @param string $id        Element ID.
+	 * @param string $automatic Label of the automatic choice.
+	 */
 	private static function country_select( string $name, string $value, string $id, string $automatic ): void {
 		echo '<select id="' . esc_attr( $id ) . '" name="' . esc_attr( $name ) . '"><option value="">' . esc_html( $automatic ) . '</option>';
 		$countries = Phone::countries();
@@ -259,18 +267,40 @@ final class Admin {
 		echo '</select>';
 	}
 
+	/**
+	 * A form setting that can inherit the general settings.
+	 *
+	 * @param string $key    Configuration key.
+	 * @param string $label  Visible label.
+	 * @param array  $config Form configuration.
+	 * @param string $help   Description below the field.
+	 */
 	private static function inherited_select( string $key, string $label, array $config, string $help ): void {
 		echo '<p><label for="easycontact-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label><br><select id="easycontact-' . esc_attr( $key ) . '" name="easycontact_config[' . esc_attr( $key ) . ']">';
-		foreach ( array( 'inherit' => __( 'Usa impostazioni generali', 'easycontact' ), 'yes' => __( 'Attivato', 'easycontact' ), 'no' => __( 'Disattivato', 'easycontact' ) ) as $value => $text ) {
+		foreach ( array(
+			'inherit' => __( 'Usa impostazioni generali', 'easycontact' ),
+			'yes'     => __( 'Attivato', 'easycontact' ),
+			'no'      => __( 'Disattivato', 'easycontact' ),
+		) as $value => $text ) {
 			echo '<option value="' . esc_attr( $value ) . '" ' . selected( $config[ $key ], $value, false ) . '>' . esc_html( $text ) . '</option>';
 		}
 		echo '</select></p><p class="description">' . esc_html( $help ) . '</p>';
 	}
 
+	/**
+	 * Anti-spam settings of a form.
+	 *
+	 * @param WP_Post $post Form.
+	 */
 	public static function antispam_box( WP_Post $post ): void {
 		$config = Plugin::definition( $post->ID, true )['config'];
 		echo '<p><label for="easycontact-antispam-level">' . esc_html__( 'Livello anti-spam', 'easycontact' ) . '</label><br><select id="easycontact-antispam-level" name="easycontact_config[antispam_level]">';
-		foreach ( array( 'inherit' => __( 'Usa impostazioni generali', 'easycontact' ), '1' => __( '1 — Base', 'easycontact' ), '2' => __( '2 — Equilibrato', 'easycontact' ), '3' => __( '3 — Rigoroso', 'easycontact' ) ) as $value => $label ) {
+		foreach ( array(
+			'inherit' => __( 'Usa impostazioni generali', 'easycontact' ),
+			'1'       => __( '1 — Base', 'easycontact' ),
+			'2'       => __( '2 — Equilibrato', 'easycontact' ),
+			'3'       => __( '3 — Rigoroso', 'easycontact' ),
+		) as $value => $label ) {
 			echo '<option value="' . esc_attr( $value ) . '" ' . selected( $config['antispam_level'], $value, false ) . '>' . esc_html( $label ) . '</option>';
 		}
 		echo '</select></p><p class="description">' . esc_html__( 'I controlli di validità e l’honeypot sono sempre attivi. I livelli 2 e 3 aggiungono controlli sul contenuto, domini temporanei, ripetizioni e frequenza. Il livello 3 è più sensibile e può richiedere più revisioni.', 'easycontact' ) . '</p>';
@@ -409,7 +439,7 @@ final class Admin {
 		$config['mail_body']        = isset( $input['mail_body'] ) && is_string( $input['mail_body'] ) ? sanitize_textarea_field( $input['mail_body'] ) : '[fields]';
 		$config['conditions_match'] = 'any' === ( $input['conditions_match'] ?? '' ) ? 'any' : 'all';
 		$config['store_entries']    = in_array( $input['store_entries'] ?? '', array( 'inherit', 'yes', 'no' ), true ) ? $input['store_entries'] : 'inherit';
-		$level = $input['antispam_level'] ?? ( $previous['antispam_level'] ?? 'inherit' );
+		$level                      = $input['antispam_level'] ?? ( $previous['antispam_level'] ?? 'inherit' );
 		if ( ! is_scalar( $level ) || ! in_array( (string) $level, array( 'inherit', '1', '2', '3' ), true ) ) {
 			return new WP_Error( 'config', __( 'Seleziona un livello anti-spam da 1 a 3.', 'easycontact' ) );
 		}
@@ -426,7 +456,7 @@ final class Admin {
 			return new WP_Error( 'config', __( 'Seleziona un paese iniziale valido.', 'easycontact' ) );
 		}
 		$config['phone_country'] = $country;
-		$phrases = $input['spam_phrases'] ?? ( $previous['spam_phrases'] ?? '' );
+		$phrases                 = $input['spam_phrases'] ?? ( $previous['spam_phrases'] ?? '' );
 		if ( ! is_string( $phrases ) ) {
 			return new WP_Error( 'config', __( 'Le regole anti-spam devono essere testo.', 'easycontact' ) );
 		}
@@ -434,7 +464,7 @@ final class Admin {
 		if ( is_wp_error( $config['spam_phrases'] ) ) {
 			return $config['spam_phrases'];
 		}
-		$config['slack_webhook']    = ! empty( $input['clear_slack_webhook'] ) ? '' : ( isset( $input['slack_webhook'] ) && is_string( $input['slack_webhook'] ) && '' !== trim( $input['slack_webhook'] ) ? trim( $input['slack_webhook'] ) : $previous['slack_webhook'] );
+		$config['slack_webhook'] = ! empty( $input['clear_slack_webhook'] ) ? '' : ( isset( $input['slack_webhook'] ) && is_string( $input['slack_webhook'] ) && '' !== trim( $input['slack_webhook'] ) ? trim( $input['slack_webhook'] ) : $previous['slack_webhook'] );
 		if ( strlen( $config['slack_webhook'] ) > 512 ) {
 			return new WP_Error( 'config', __( 'Il webhook Slack è troppo lungo.', 'easycontact' ) );
 		}
@@ -522,15 +552,15 @@ final class Admin {
 			add_settings_section( 'easycontact-' . $section, $title, '__return_false', 'easycontact-settings' );
 		}
 		$items = array(
-			'antispam_level' => array( 'antispam', __( 'Livello predefinito', 'easycontact' ), 'level', __( 'Consigliato: 2 — Equilibrato. I moduli esistenti mantengono il livello 1 finché non viene modificato nelle loro opzioni.', 'easycontact' ) ),
-			'antispam_observe' => array( 'antispam', __( 'Modalità osservazione', 'easycontact' ), 'checkbox', __( 'Registra i segnali euristici senza fermare gli invii. Per esaminare i risultati, attiva l’archivio. L’honeypot resta attivo.', 'easycontact' ) ),
-			'quarantine_entries' => array( 'antispam', __( 'Quarantena con archivio disattivato', 'easycontact' ), 'checkbox', __( 'Conserva spam e sospetti per la revisione anche senza archivio normale; notifiche e integrazioni restano sospese.', 'easycontact' ) ),
+			'antispam_level'      => array( 'antispam', __( 'Livello predefinito', 'easycontact' ), 'level', __( 'Consigliato: 2 — Equilibrato. I moduli esistenti mantengono il livello 1 finché non viene modificato nelle loro opzioni.', 'easycontact' ) ),
+			'antispam_observe'    => array( 'antispam', __( 'Modalità osservazione', 'easycontact' ), 'checkbox', __( 'Registra i segnali euristici senza fermare gli invii. Per esaminare i risultati, attiva l’archivio. L’honeypot resta attivo.', 'easycontact' ) ),
+			'quarantine_entries'  => array( 'antispam', __( 'Quarantena con archivio disattivato', 'easycontact' ), 'checkbox', __( 'Conserva spam e sospetti per la revisione anche senza archivio normale; notifiche e integrazioni restano sospese.', 'easycontact' ) ),
 			'spam_retention_days' => array( 'antispam', __( 'Conservazione di spam e sospetti', 'easycontact' ), 'number', __( 'Giorni prima della cancellazione automatica di spam e probabile spam. Minimo 1; gli invii accettati seguono la conservazione normale.', 'easycontact' ) ),
-			'quarantine_limit' => array( 'antispam', __( 'Limite giornaliero della quarantena', 'easycontact' ), 'number', __( 'Numero massimo di nuovi invii sospetti archiviabili in una finestra di 24 ore. Oltre il limite vengono rifiutati.', 'easycontact' ) ),
-			'email_dns_check' => array( 'antispam', __( 'Controllo DNS delle email', 'easycontact' ), 'checkbox', __( 'Controlla il dominio tramite il resolver del server, con cache e tolleranza agli errori temporanei. Non verifica la casella.', 'easycontact' ) ),
-			'phone_country' => array( 'antispam', __( 'Paese iniziale del telefono', 'easycontact' ), 'country', __( 'La selezione automatica segue la lingua del sito. Il visitatore può sempre cambiare paese.', 'easycontact' ) ),
-			'disposable_domains' => array( 'antispam', __( 'Lista domini temporanei', 'easycontact' ), 'disposable', __( 'Usata nei livelli 2 e 3. Sincronizza su richiesta le fonti pubbliche e conserva la copia locale se una fonte non è disponibile. Nessun aggiornamento automatico.', 'easycontact' ) ),
-			'spam_phrases' => array( 'antispam', __( 'Frasi sospette', 'easycontact' ), 'textarea', __( 'Una frase per riga, da 4 a 150 caratteri. Aumenta il sospetto; usa frasi specifiche, evitando parole generiche.', 'easycontact' ) ),
+			'quarantine_limit'    => array( 'antispam', __( 'Limite giornaliero della quarantena', 'easycontact' ), 'number', __( 'Numero massimo di nuovi invii sospetti archiviabili in una finestra di 24 ore. Oltre il limite vengono rifiutati.', 'easycontact' ) ),
+			'email_dns_check'     => array( 'antispam', __( 'Controllo DNS delle email', 'easycontact' ), 'checkbox', __( 'Controlla il dominio tramite il resolver del server, con cache e tolleranza agli errori temporanei. Non verifica la casella.', 'easycontact' ) ),
+			'phone_country'       => array( 'antispam', __( 'Paese iniziale del telefono', 'easycontact' ), 'country', __( 'La selezione automatica segue la lingua del sito. Il visitatore può sempre cambiare paese.', 'easycontact' ) ),
+			'disposable_domains'  => array( 'antispam', __( 'Lista domini temporanei', 'easycontact' ), 'disposable', __( 'Usata nei livelli 2 e 3. Sincronizza su richiesta le fonti pubbliche e conserva la copia locale se una fonte non è disponibile. Nessun aggiornamento automatico.', 'easycontact' ) ),
+			'spam_phrases'        => array( 'antispam', __( 'Frasi sospette', 'easycontact' ), 'textarea', __( 'Una frase per riga, da 4 a 150 caratteri. Aumenta il sospetto; usa frasi specifiche, evitando parole generiche.', 'easycontact' ) ),
 			'store_entries'       => array( 'privacy', __( 'Archivio degli invii', 'easycontact' ), 'checkbox', __( 'Salva gli invii locali per impostazione predefinita. Ogni modulo può cambiare questa scelta.', 'easycontact' ) ),
 			'retention_days'      => array( 'privacy', __( 'Conservazione', 'easycontact' ), 'number', __( 'Giorni di conservazione. 0 mantiene gli invii fino alla cancellazione manuale. La pulizia usa la pianificazione di WordPress.', 'easycontact' ) ),
 			'allow_erasure'       => array( 'privacy', __( 'Richieste di cancellazione', 'easycontact' ), 'checkbox', __( 'Consenti agli strumenti privacy di WordPress di eliminare gli invii associati all’indirizzo email confermato.', 'easycontact' ) ),
@@ -582,7 +612,11 @@ final class Admin {
 		}
 		if ( 'level' === $type ) {
 			echo '<input type="hidden" name="' . esc_attr( Plugin::OPTION . '[antispam_present]' ) . '" value="1"><select id="easycontact-setting-' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '">';
-			foreach ( array( 1 => __( '1 — Base', 'easycontact' ), 2 => __( '2 — Equilibrato', 'easycontact' ), 3 => __( '3 — Rigoroso', 'easycontact' ) ) as $level => $label ) {
+			foreach ( array(
+				1 => __( '1 — Base', 'easycontact' ),
+				2 => __( '2 — Equilibrato', 'easycontact' ),
+				3 => __( '3 — Rigoroso', 'easycontact' ),
+			) as $level => $label ) {
 				echo '<option value="' . (int) $level . '" ' . selected( $settings[ $key ], $level, false ) . '>' . esc_html( $label ) . '</option>';
 			}
 			echo '</select><p class="description">' . esc_html( $args['help'] ) . '</p>';
@@ -627,11 +661,15 @@ final class Admin {
 		foreach ( array( 'store_entries', 'allow_erasure', 'delete_on_uninstall' ) as $key ) {
 			$settings[ $key ] = isset( $input[ $key ] ) && '1' === (string) ( is_scalar( $input[ $key ] ) ? $input[ $key ] : '' );
 		}
-		$settings['retention_days']     = isset( $input['retention_days'] ) && is_scalar( $input['retention_days'] ) ? min( 3650, max( 0, (int) $input['retention_days'] ) ) : 30;
+		$settings['retention_days'] = isset( $input['retention_days'] ) && is_scalar( $input['retention_days'] ) ? min( 3650, max( 0, (int) $input['retention_days'] ) ) : 30;
 		foreach ( array( 'antispam_observe', 'quarantine_entries', 'email_dns_check' ) as $key ) {
 			$settings[ $key ] = empty( $input['antispam_present'] ) ? $previous[ $key ] : ( isset( $input[ $key ] ) && '1' === (string) ( is_scalar( $input[ $key ] ) ? $input[ $key ] : '' ) );
 		}
-		foreach ( array( 'antispam_level' => array( 1, 3 ), 'spam_retention_days' => array( 1, 3650 ), 'quarantine_limit' => array( 1, 5000 ) ) as $key => $bounds ) {
+		foreach ( array(
+			'antispam_level'      => array( 1, 3 ),
+			'spam_retention_days' => array( 1, 3650 ),
+			'quarantine_limit'    => array( 1, 5000 ),
+		) as $key => $bounds ) {
 			$value = $input[ $key ] ?? $previous[ $key ];
 			if ( is_scalar( $value ) && preg_match( '/^\d+$/D', (string) $value ) && (int) $value >= $bounds[0] && (int) $value <= $bounds[1] ) {
 				$settings[ $key ] = (int) $value;
@@ -640,11 +678,11 @@ final class Admin {
 				add_settings_error( Plugin::OPTION, $key, __( 'Un valore anti-spam non è valido; è stato mantenuto quello precedente.', 'easycontact' ) );
 			}
 		}
-		$country = $input['phone_country'] ?? $previous['phone_country'];
+		$country                   = $input['phone_country'] ?? $previous['phone_country'];
 		$settings['phone_country'] = is_string( $country ) && ( '' === $country || Phone::valid_country( $country ) ) ? $country : $previous['phone_country'];
-		$value = $input['spam_phrases'] ?? $previous['spam_phrases'];
-		$result = is_string( $value ) ? AntiSpam::phrase_list( $value ) : new WP_Error( 'type' );
-		$settings['spam_phrases'] = is_wp_error( $result ) ? $previous['spam_phrases'] : $result;
+		$value                     = $input['spam_phrases'] ?? $previous['spam_phrases'];
+		$result                    = is_string( $value ) ? AntiSpam::phrase_list( $value ) : new WP_Error( 'type' );
+		$settings['spam_phrases']  = is_wp_error( $result ) ? $previous['spam_phrases'] : $result;
 		if ( is_wp_error( $result ) ) {
 			add_settings_error( Plugin::OPTION, 'spam_phrases', __( 'Una lista anti-spam non è valida; è stata mantenuta quella precedente.', 'easycontact' ) );
 		}
@@ -676,7 +714,7 @@ final class Admin {
 		echo '<div class="wrap"><h1>EasyContact · ' . esc_html__( 'Impostazioni', 'easycontact' ) . '</h1>';
 		settings_errors();
 		$notice_key = 'easycontact_disposable_notice_' . get_current_user_id();
-		$notice = get_transient( $notice_key );
+		$notice     = get_transient( $notice_key );
 		if ( is_array( $notice ) ) {
 			delete_transient( $notice_key );
 			echo '<div class="notice ' . ( $notice['error'] ? 'notice-error' : 'notice-success' ) . ' is-dismissible"><p>' . esc_html( $notice['message'] ) . '</p></div>';
@@ -690,16 +728,26 @@ final class Admin {
 		echo '</form></div>';
 	}
 
+	/**
+	 * Manual synchronization of the disposable-domain list: administrators only, POST with nonce.
+	 */
 	public static function sync_disposable_domains(): void {
 		if ( ! current_user_can( 'manage_options' ) || 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' ) ) {
 			wp_die( esc_html__( 'Operazione non consentita.', 'easycontact' ), '', array( 'response' => 403 ) );
 		}
 		check_admin_referer( 'easycontact_sync_disposable_domains' );
 		$result = DisposableDomains::sync();
-		$error = is_wp_error( $result );
+		$error  = is_wp_error( $result );
 		/* translators: %s: number of domains. */
 		$message = $error ? $result->get_error_message() : sprintf( __( 'Sincronizzazione completata: %s domini nella lista locale.', 'easycontact' ), number_format_i18n( $result['count'] ) );
-		set_transient( 'easycontact_disposable_notice_' . get_current_user_id(), array( 'error' => $error, 'message' => $message ), MINUTE_IN_SECONDS );
+		set_transient(
+			'easycontact_disposable_notice_' . get_current_user_id(),
+			array(
+				'error'   => $error,
+				'message' => $message,
+			),
+			MINUTE_IN_SECONDS
+		);
 		wp_safe_redirect( admin_url( 'edit.php?post_type=' . Plugin::FORM . '&page=easycontact-settings#easycontact-disposable-domains' ) );
 		exit;
 	}
