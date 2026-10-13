@@ -64,6 +64,36 @@ class RestTest extends TestCase {
 		$this->assertSame( 0, array_sum( $this->calls ), 'Nothing is delivered' );
 	}
 
+	public function test_routes_declare_typed_args_and_refuse_malformed_parameters(): void {
+		$id     = $this->form( $this->definition() );
+		$routes = rest_get_server()->get_routes();
+		foreach ( array( 'token', 'submit' ) as $name ) {
+			$endpoint = $routes[ '/easycontact/v1/forms/(?P<id>\\d+)/' . $name ][0];
+			$this->assertSame( '__return_true', $endpoint['permission_callback'], 'Public by design: forms are shown to anonymous visitors' );
+			$this->assertSame( 'integer', $endpoint['args']['id']['type'] );
+		}
+
+		$this->assertSame( 400, rest_do_request( new WP_REST_Request( 'GET', '/easycontact/v1/forms/0/token' ) )->get_status(), 'Form IDs start at 1' );
+		$token = new WP_REST_Request( 'GET', '/easycontact/v1/forms/' . $id . '/token' );
+		$token->set_query_params( array( 'clock' => str_repeat( '1', 201 ) ) );
+		$this->assertSame( 400, rest_do_request( $token )->get_status(), 'An oversized clock is refused' );
+
+		$request = new WP_REST_Request( 'POST', '/easycontact/v1/forms/' . $id . '/submit' );
+		$request->set_header( 'Content-Type', 'application/json' );
+		foreach ( array(
+			'nonce'    => array( 'a' ),
+			'ticket'   => 123,
+			'fields'   => 'text',
+			'honeypot' => 'text',
+		) as $param => $value ) {
+			$request->set_body( (string) wp_json_encode( array( $param => $value ) ) );
+			$response = rest_do_request( $request );
+			$this->assertSame( 400, $response->get_status(), 'Wrong type for ' . $param );
+			$this->assertSame( 'rest_invalid_param', $response->get_data()['code'] );
+		}
+		$this->assertSame( 0, array_sum( $this->calls ), 'Nothing is delivered' );
+	}
+
 	public function test_forms_and_entries_are_not_exposed_by_core_routes(): void {
 		$routes = rest_get_server()->get_routes();
 		foreach ( array_keys( $routes ) as $route ) {
