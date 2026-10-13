@@ -102,11 +102,11 @@ Fasi 0 e 1.
 - [x] 0.7 Sessioni cloud: `tools/cloud-setup.sh` e hook `SessionStart` in `.claude/settings.json`
       (Composer, MariaDB, suite di test di WordPress, sorgenti del core in `/tmp/wordpress-develop`)
 - [x] 0.8 `.editorconfig`, `.gitattributes` (strumenti di sviluppo esclusi dal pacchetto), `tools/build-dist.sh`
-- [ ] 0.9 Primo run della CI: si registra quanti errori PHPCS/PHPStan ci sono (baseline), senza correggerli qui
+- [x] 0.9 Primo run della CI: si registra quanti errori PHPCS/PHPStan ci sono (baseline), senza correggerli qui
       _PHPCS: 264 errori e 210 avvisi all'inizio, portati a zero con sole modifiche di stile e docblock (13 ottobre
       2026). PHPStan livello 8: 159 errori al primo run della CI, quasi tutti tipi mancanti negli array
-      (`missingType.iterableValue`) più qualche `string|false` non controllato. La baseline va generata fuori dal
-      cloud con `composer analyse -- --generate-baseline`; fino ad allora il passo PHPStan della CI non blocca._
+      (`missingType.iterableValue`) più qualche `string|false` non controllato. Con `phpVersion` fissato a 8.1 la
+      baseline generata dalla CI conta 165 errori in `phpstan-baseline.neon`; da qui PHPStan blocca ogni errore nuovo._
 
 ### Fase 1 — Regole e documentazione
 

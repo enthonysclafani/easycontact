@@ -34,18 +34,8 @@ jobs:
       - run: composer architecture
       - run: composer lint
 
-      # Point 0.9 of docs/piano-standard.md: the existing code has no PHPStan baseline yet
-      # (PHPStan cannot be installed in cloud sessions). The result is reported without
-      # blocking until the baseline is committed; then this line goes away.
+      # Errors of the code that predates the standards are in phpstan-baseline.neon: only new ones fail.
       - run: composer analyse
-        continue-on-error: true
-
-      # TEMPORARY: prints the baseline of the existing code so it can be committed (point 0.9).
-      - run: |
-          composer analyse -- --generate-baseline phpstan-baseline.neon --allow-empty-baseline || true
-          echo '----- BASELINE START -----'
-          cat phpstan-baseline.neon
-          echo '----- BASELINE END -----'
 
   test:
     name: PHPUnit (WordPress ${{ matrix.wp }}, PHP ${{ matrix.php }}${{ matrix.multisite && ', multisite' || '' }})

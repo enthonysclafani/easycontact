@@ -33,7 +33,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
 | Modello dati | `docs/data-model.md` | ❌ | ✅ | tenerlo aggiornato |
 | `composer check` | architettura + PHPCS + PHPStan + PHPUnit | ❌ | ✅ stessi script | |
 | PHPCS (WPCS Extra + Docs, PHPCompatibilityWP) | zero errori | ❌ (264 errori, 210 avvisi) | ✅ zero | |
-| PHPStan livello 8 | zero errori | ❌ | 🟡 configurato, non bloccante in CI | baseline (0.9), poi bloccante |
+| PHPStan livello 8 | zero errori | ❌ | 🟡 bloccante sugli errori nuovi, 165 vecchi in baseline | svuotare la baseline |
 | PHPUnit sulla suite di WordPress | singolo sito e multisito | ❌ (script `wp eval-file`) | ✅ 28 test, singolo sito e multisito | test per Fase 2–5 |
 | Controllo architetturale | `tools/check-architecture.php` con test | ❌ | ✅ adattato, con allowlist e `TODO` | ridurre le allowlist (Fasi 2 e 4) |
 | CI | statici, PHPUnit min/max/multisito, Plugin Check, azioni per SHA | ❌ | ✅ stessa struttura | primo run verde |
@@ -91,7 +91,7 @@ plugin sono stile e docblock, verificate dagli stessi test prima e dopo.
 Prima del merge di `Refactory` in `main` e del rilascio (Fase 6.4 del piano, da confermare da Enthony):
 
 - [ ] CI verde sulla pull request (statici, PHPUnit su 6.4 e 7.1 anche in multisito, Plugin Check)
-- [ ] Risultato di PHPStan letto nella CI e baseline committata (punto 0.9)
+- [x] Risultato di PHPStan letto nella CI e baseline committata (punto 0.9)
 - [ ] Verifica manuale sul sito Studio con Query Monitor: pagina senza modulo (zero query e zero asset del plugin),
       invio riuscito, invio sospetto in revisione, approvazione, nuovo tentativo dopo un errore di Slack/MailerLite
 - [ ] Prova di aggiornamento da 1.0.0 a una copia del sito reale: impostazioni, moduli e invii intatti

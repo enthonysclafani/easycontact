@@ -130,8 +130,8 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
   `includes/class-*.php`, caricate con `require_once` da `easycontact.php`. La struttura a cartelle con `register()`
   di EasyRankly arriva nella Fase 3 del piano, un PR per funzionalità.
 - Standard: WordPress Coding Standards (`WordPress-Extra`, `WordPress-Docs`), PHPCompatibilityWP, PHPStan livello 8
-  con `szepeviktor/phpstan-wordpress`. Zero errori PHPCS. PHPStan non blocca la CI finché non c'è la baseline
-  (punto 0.9 del piano); dopo, zero errori nuovi.
+  con `szepeviktor/phpstan-wordpress`. Zero errori PHPCS. PHPStan: zero errori nuovi; quelli del codice
+  precedente sono in `phpstan-baseline.neon` e si tolgono da lì quando si correggono, mai se ne aggiungono.
 - Gli hook si agganciano dentro `boot()` o `init()` delle classi, mai a livello di file (tranne attivazione e
   disattivazione in `easycontact.php`).
 - **Callback degli hook**: WordPress passa spesso stringhe dove ti aspetti interi. Nei callback converti
