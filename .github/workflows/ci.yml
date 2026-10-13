@@ -40,6 +40,13 @@ jobs:
       - run: composer analyse
         continue-on-error: true
 
+      # TEMPORARY: prints the baseline of the existing code so it can be committed (point 0.9).
+      - run: |
+          composer analyse -- --generate-baseline phpstan-baseline.neon --allow-empty-baseline || true
+          echo '----- BASELINE START -----'
+          cat phpstan-baseline.neon
+          echo '----- BASELINE END -----'
+
   test:
     name: PHPUnit (WordPress ${{ matrix.wp }}, PHP ${{ matrix.php }}${{ matrix.multisite && ', multisite' || '' }})
     runs-on: ubuntu-latest

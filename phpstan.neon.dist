@@ -3,6 +3,8 @@
 # outside the cloud, with `composer analyse -- --generate-baseline`, and then included here.
 parameters:
 	level: 8
+	# The declared minimum: the same result on every PHP version CI runs.
+	phpVersion: 80100
 	paths:
 		- easycontact.php
 		- uninstall.php
