@@ -64,7 +64,7 @@ final class State {
 	 * Read the latest receipt after ownership is acquired, even with a stale object cache.
 	 *
 	 * @param string $key Internal identifier.
-	 * @return array Result of this operation.
+	 * @return array<string, mixed> Result of this operation.
 	 */
 	public static function read( string $key ): array {
 		$raw    = self::read_option( 'easycontact_state_' . $key );
@@ -75,9 +75,9 @@ final class State {
 	/**
 	 * Persist outcomes and a keyed fingerprint; never submission values or credentials.
 	 *
-	 * @param string $key Internal identifier.
-	 * @param array  $data Operational record without submission values.
-	 * @param int    $expires UTC expiry timestamp.
+	 * @param string               $key Internal identifier.
+	 * @param array<string, mixed> $data Operational record without submission values.
+	 * @param int                  $expires UTC expiry timestamp.
 	 * @return bool Result of this operation.
 	 */
 	public static function write( string $key, array $data, int $expires ): bool {
@@ -151,7 +151,7 @@ final class State {
 				return $cap;
 			}
 			$rate['count'] = min( $cap, (int) $rate['count'] + 1 );
-			return set_transient( 'easycontact_' . $key, $rate, max( 1, $rate['expires'] - time() ) ) ? $rate['count'] : null;
+			return set_transient( 'easycontact_' . $key, $rate, max( 1, (int) $rate['expires'] - time() ) ) ? $rate['count'] : null;
 		} finally {
 			self::release( $key, $owner );
 		}

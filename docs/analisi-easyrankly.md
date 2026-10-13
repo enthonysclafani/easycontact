@@ -33,7 +33,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
 | Modello dati | `docs/data-model.md` | ❌ | ✅ | tenerlo aggiornato |
 | `composer check` | architettura + PHPCS + PHPStan + PHPUnit | ❌ | ✅ stessi script | |
 | PHPCS (WPCS Extra + Docs, PHPCompatibilityWP) | zero errori | ❌ (264 errori, 210 avvisi) | ✅ zero | |
-| PHPStan livello 8 | zero errori | ❌ | 🟡 bloccante sugli errori nuovi, 165 vecchi in baseline | svuotare la baseline |
+| PHPStan livello 8 | zero errori | ❌ | ✅ zero errori, senza baseline (Fase 6.1) | |
 | PHPUnit sulla suite di WordPress | singolo sito e multisito | ❌ (script `wp eval-file`) | ✅ 28 test, singolo sito e multisito | test per Fase 2–5 |
 | Controllo architetturale | `tools/check-architecture.php` con test | ❌ | ✅ adattato, con allowlist e `TODO` | ridurre le allowlist (Fasi 2 e 4) |
 | CI | statici, PHPUnit min/max/multisito, Plugin Check, azioni per SHA | ❌ | ✅ stessa struttura | primo run verde |

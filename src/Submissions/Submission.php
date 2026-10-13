@@ -27,7 +27,7 @@ final class Submission {
 	 * @return void
 	 */
 	public static function boot(): void {
-		add_action( 'easycontact_retry_delivery', array( self::class, 'retry' ) );
+		add_action( 'easycontact_retry_delivery', array( self::class, 'scheduled_retry' ) );
 		add_action( 'before_delete_post', array( self::class, 'cancel_entry' ) );
 		add_action( 'wp_trash_post', array( self::class, 'cancel_entry' ) );
 	}
@@ -35,26 +35,35 @@ final class Submission {
 	/**
 	 * Execute a validated submission under exclusive ownership.
 	 *
-	 * @param int    $form_id Published form ID.
-	 * @param array  $definition Validated form definition.
-	 * @param array  $values Sanitized visible field values.
-	 * @param string $ticket Signed submission ticket.
-	 * @param string $captcha Turnstile response token.
-	 * @param string $input_fingerprint Keyed fingerprint of the original submitted fields.
-	 * @param array  $context Request signals for the anti-spam assessment.
-	 * @return array|WP_Error Result of this operation.
+	 * @param int                   $form_id Published form ID.
+	 * @param array<string, mixed>  $definition Validated form definition.
+	 * @param array<string, string> $values Sanitized visible field values.
+	 * @param string                $ticket Signed submission ticket.
+	 * @param string                $captcha Turnstile response token.
+	 * @param string                $input_fingerprint Keyed fingerprint of the original submitted fields.
+	 * @param array<string, mixed>  $context Request signals for the anti-spam assessment.
+	 * @return array<string, mixed>|WP_Error Result of this operation.
 	 */
 	public static function process( int $form_id, array $definition, array $values, string $ticket, string $captcha, string $input_fingerprint, array $context = array() ) {
 		$key         = substr( hash( 'sha256', $ticket ), 0, 40 );
 		$lease       = 'submit_' . $key;
 		$owner       = State::claim( $lease );
 		$entry_lease = '';
+		/**
+		 * Claimed after $persist is defined, which reads it by reference.
+		 *
+		 * @var string|null $entry_owner
+		 */
 		$entry_owner = null;
 		if ( null === $owner ) {
 			return new WP_Error( 'busy', __( 'The submission is in progress. Wait a few seconds.', 'easycontact' ), array( 'status' => 429 ) );
 		}
 		try {
-			$fingerprint = hash_hmac( 'sha256', wp_json_encode( $values ), wp_salt( 'auth' ) );
+			$encoded = wp_json_encode( $values );
+			if ( false === $encoded ) {
+				return new WP_Error( 'invalid', __( 'The form is not valid.', 'easycontact' ), array( 'status' => 422 ) );
+			}
+			$fingerprint = hash_hmac( 'sha256', $encoded, wp_salt( 'auth' ) );
 			$state       = State::read( $key );
 			if ( $state && ( ! hash_equals( $state['fingerprint'], $fingerprint ) || ! hash_equals( $state['input_fingerprint'], $input_fingerprint ) ) ) {
 				return new WP_Error( 'used', __( 'This submission has already been processed. Reload the form for a new message.', 'easycontact' ), array( 'status' => 409 ) );
@@ -201,6 +210,16 @@ final class Submission {
 	}
 
 	/**
+	 * Run a scheduled retry; the cron argument is the entry ID.
+	 *
+	 * @param int|string $entry_id Private archived entry ID.
+	 * @return void
+	 */
+	public static function scheduled_retry( $entry_id ): void {
+		self::retry( absint( $entry_id ) );
+	}
+
+	/**
 	 * Retry only failed destinations from an explicitly enabled local archive.
 	 *
 	 * @param int  $entry_id Private archived entry ID.
@@ -243,7 +262,7 @@ final class Submission {
 			$status['key'] = $status['key'] ?? hash( 'sha256', 'entry_' . $entry_id );
 			if ( ! $manual && ( ! is_array( $job ) || $job['hash'] !== $hash || $job['attempts'] >= 3 || $job['expires'] < time() ) ) {
 				self::cancel( $entry_id );
-				return;
+				return null;
 			}
 			$validated = Schema::validate( $definition, (array) get_post_meta( $entry_id, '_easycontact_values', true ), array(), true );
 			if ( $validated['errors'] ) {
@@ -274,12 +293,12 @@ final class Submission {
 					continue;
 				}
 				if ( ! State::owns( $lease, $owner ) || ! get_post( $entry_id ) || ! Review::can_deliver( $entry_id ) ) {
-					return;
+					return null;
 				}
 				$outcomes[ $adapter ] = $adapter . '_uncertain';
 				self::status( $form_id, $entry_id, $outcomes, $status['key'], false );
 				if ( ( get_post_meta( $entry_id, '_easycontact_delivery', true )['outcomes'] ?? array() ) !== $outcomes ) {
-					return;
+					return null;
 				}
 				$outcomes[ $adapter ] = self::send( $adapter, $form_id, $definition, $validated['values'] );
 				self::status( $form_id, $entry_id, $outcomes, $status['key'], false );
@@ -326,7 +345,7 @@ final class Submission {
 		// Only the posts table has an ID column, so the condition stays unambiguous with the meta join.
 		$after = static fn( string $where ): string => $where . ' AND ID > ' . $after_id;
 		add_filter( 'posts_where', $after );
-		$ids   = ( new \WP_Query(
+		$query = new \WP_Query(
 			array(
 				'post_type'              => Plugin::ENTRY,
 				'post_status'            => 'any',
@@ -338,8 +357,9 @@ final class Submission {
 				'no_found_rows'          => true,
 				'update_post_term_cache' => false,
 			)
-		) )->posts;
+		);
 		remove_filter( 'posts_where', $after );
+		$ids = wp_parse_id_list( $query->posts ?? array() );
 		foreach ( $ids as $entry_id ) {
 			$job = get_post_meta( $entry_id, '_easycontact_retry', true );
 			if ( is_array( $job ) && ! wp_next_scheduled( 'easycontact_retry_delivery', array( (int) $entry_id ) ) ) {
@@ -369,7 +389,7 @@ final class Submission {
 	/**
 	 * Fingerprint delivery configuration so background retries cannot change recipients silently.
 	 *
-	 * @param array $definition Validated form definition.
+	 * @param array<string, mixed> $definition Validated form definition.
 	 * @return string Result of this operation.
 	 */
 	private static function definition_hash( array $definition ): string {
@@ -379,16 +399,16 @@ final class Submission {
 	/**
 	 * Convert provider results to safe status codes without leaking response bodies.
 	 *
-	 * @param string $adapter Supported destination name.
-	 * @param int    $form_id Published form ID.
-	 * @param array  $definition Validated form definition.
-	 * @param array  $values Sanitized visible field values.
+	 * @param string                $adapter Supported destination name.
+	 * @param int                   $form_id Published form ID.
+	 * @param array<string, mixed>  $definition Validated form definition.
+	 * @param array<string, string> $values Sanitized visible field values.
 	 * @return string Result of this operation.
 	 */
 	private static function send( string $adapter, int $form_id, array $definition, array $values ): string {
 		try {
 			$result = 'mailerlite' === $adapter ? Delivery::mailerlite( $definition['config'], $values ) : Delivery::$adapter( $form_id, $definition, $values );
-			return is_wp_error( $result ) ? $result->get_error_code() : ( true === $result ? 'sent' : 'skipped' );
+			return is_wp_error( $result ) ? (string) $result->get_error_code() : ( true === $result ? 'sent' : 'skipped' );
 		} catch ( \Throwable $error ) {
 			// Another mail/HTTP extension may throw after sending; preserve the uncertainty marker.
 			return $adapter . '_uncertain';
@@ -398,11 +418,11 @@ final class Submission {
 	/**
 	 * Record operational metadata without overwriting a newer form submission during a retry.
 	 *
-	 * @param int    $form_id Published form ID.
-	 * @param int    $entry_id Private archived entry ID.
-	 * @param array  $outcomes Status codes keyed by destination.
-	 * @param string $key Internal identifier.
-	 * @param bool   $initial Whether this is the initial submission.
+	 * @param int                   $form_id Published form ID.
+	 * @param int                   $entry_id Private archived entry ID.
+	 * @param array<string, string> $outcomes Status codes keyed by destination.
+	 * @param string                $key Internal identifier.
+	 * @param bool                  $initial Whether this is the initial submission.
 	 * @return void
 	 */
 	private static function status( int $form_id, int $entry_id, array $outcomes, string $key, bool $initial ): void {
@@ -423,10 +443,10 @@ final class Submission {
 	/**
 	 * Schedule at most three retries; cron arguments contain only the native entry ID.
 	 *
-	 * @param int    $entry_id Private archived entry ID.
-	 * @param string $hash Keyed form definition fingerprint.
-	 * @param array  $outcomes Status codes keyed by destination.
-	 * @param array  $job Bounded retry job metadata.
+	 * @param int                       $entry_id Private archived entry ID.
+	 * @param string                    $hash Keyed form definition fingerprint.
+	 * @param array<string, string>     $outcomes Status codes keyed by destination.
+	 * @param array<string, int|string> $job Bounded retry job metadata.
 	 * @return void
 	 */
 	private static function schedule( int $entry_id, string $hash, array $outcomes, array $job = array() ): void {

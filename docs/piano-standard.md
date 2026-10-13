@@ -210,7 +210,10 @@ Fasi 0 e 1.
 
 ### Fase 6 — Controllo finale
 
-- [ ] 6.1 `composer check` verde senza baseline né `phpcs:ignore` non motivati
+- [x] 6.1 `composer check` verde senza baseline né `phpcs:ignore` non motivati
+      _Fatto in quattro PR (AntiSpam, Phone, Admin e strumenti; Delivery, Privacy e Review; moduli; invii): i 159
+      errori della baseline sono corretti nel codice e `phpstan-baseline.neon` non c'è più. I 34 `phpcs:ignore`
+      nominano la regola e hanno la motivazione nella stessa riga._
 - [ ] 6.2 Controllo di sicurezza (lista sul modello di `docs/sicurezza.md` di EasyRankly): input dell'invio,
       upload (se presenti), segreti delle integrazioni, SSRF sui webhook, rate limit
 - [ ] 6.3 Verifica manuale sul sito Studio locale (`~/Studio/form-a-caso`) con Query Monitor

@@ -113,7 +113,7 @@ final class Endpoint {
 	 *
 	 * @param int    $id Native WordPress post ID.
 	 * @param string $clock Signed start time to keep; a new one is issued when it is invalid.
-	 * @return array Result of this operation.
+	 * @return array{nonce: string, ticket: string, expires: int, honeypot: string, clock: string} Result of this operation.
 	 */
 	public static function issue( int $id, string $clock = '' ): array {
 		$issued    = time();
@@ -196,7 +196,7 @@ final class Endpoint {
 	 * Bound the REST body and delegate to common submission validation.
 	 *
 	 * @param WP_REST_Request $request Current REST request.
-	 * @return array|WP_Error Result of this operation.
+	 * @return array<string, mixed>|WP_Error Result of this operation.
 	 */
 	public static function rest_submit( WP_REST_Request $request ) {
 		if ( strlen( $request->get_body() ) > 50000 ) {
@@ -208,9 +208,9 @@ final class Endpoint {
 	/**
 	 * Validate availability, nonce, ticket and fields before any delivery.
 	 *
-	 * @param int   $id Native WordPress post ID.
-	 * @param array $input Untrusted input to validate.
-	 * @return array|WP_Error Result of this operation.
+	 * @param int                  $id Native WordPress post ID.
+	 * @param array<string, mixed> $input Untrusted input to validate.
+	 * @return array<string, mixed>|WP_Error Result of this operation.
 	 */
 	public static function submit( int $id, array $input ) {
 		$definition = self::available( $id ) ? Forms::definition( $id ) : null;
