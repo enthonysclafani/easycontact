@@ -5,8 +5,9 @@
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\Delivery;
 
+use EasyContact\Plugin;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;

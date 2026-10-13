@@ -139,7 +139,7 @@ Fasi 0 e 1.
 - [ ] 3.2 Una cartella per funzionalità (ipotesi: `Forms/`, `Submissions/`, `Delivery/`, `AntiSpam/`, `Phone/`,
       `Review/`, `Privacy/`, `Settings/`), classi admin in `*/Admin/`; un PR per funzionalità, comportamento
       invariato e coperto dai test della Fase 0
-      _Fatto: `Phone/`, `Privacy/`, `AntiSpam/`._
+      _Fatto: `Phone/`, `Privacy/`, `AntiSpam/`, `Delivery/`._
 - [ ] 3.3 Hook solo dentro `register()`; niente metodi statici usati come registro globale dove non serve
 - [ ] 3.4 `register_setting()` con schema completo per `easycontact_settings`; `register_post_meta()` con schema
       e `auth_callback` per i meta dei moduli

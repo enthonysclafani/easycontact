@@ -8,6 +8,7 @@
 namespace EasyContact;
 
 use EasyContact\AntiSpam\AntiSpam;
+use EasyContact\Delivery\Delivery;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;

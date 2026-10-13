@@ -241,64 +241,64 @@ parameters:
 			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\Delivery\:\:mail\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Delivery\\Delivery\:\:mail\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
-			message: '#^Method EasyContact\\Delivery\:\:mail\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Delivery\\Delivery\:\:mail\(\) has parameter \$values with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
-			message: '#^Method EasyContact\\Delivery\:\:mailerlite\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Delivery\\Delivery\:\:mailerlite\(\) has parameter \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
-			message: '#^Method EasyContact\\Delivery\:\:mailerlite\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Delivery\\Delivery\:\:mailerlite\(\) has parameter \$values with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
-			message: '#^Method EasyContact\\Delivery\:\:replace\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Delivery\\Delivery\:\:replace\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
-			message: '#^Method EasyContact\\Delivery\:\:replace\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Delivery\\Delivery\:\:replace\(\) has parameter \$values with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
-			message: '#^Method EasyContact\\Delivery\:\:slack\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Delivery\\Delivery\:\:slack\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
-			message: '#^Method EasyContact\\Delivery\:\:slack\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Delivery\\Delivery\:\:slack\(\) has parameter \$values with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
 			message: '#^Parameter \#2 \$args of function wp_safe_remote_post expects array\{method\?\: string, timeout\?\: float, redirection\?\: int, httpversion\?\: string, user\-agent\?\: string, reject_unsafe_urls\?\: bool, blocking\?\: bool, headers\?\: array\|string, \.\.\.\}, array\{timeout\: 8, limit_response_size\: 65536, redirection\: 0, headers\: array\{Authorization\: non\-falsy\-string, Content\-Type\: ''application/json'', Accept\: ''application/json''\}, body\: non\-empty\-string\|false\} given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
 			message: '#^Parameter \#2 \$args of function wp_safe_remote_post expects array\{method\?\: string, timeout\?\: float, redirection\?\: int, httpversion\?\: string, user\-agent\?\: string, reject_unsafe_urls\?\: bool, blocking\?\: bool, headers\?\: array\|string, \.\.\.\}, array\{timeout\: 8, limit_response_size\: 65536, redirection\: 0, headers\: array\{Content\-Type\: ''application/json''\}, body\: non\-empty\-string\|false\} given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Delivery.php
+			path: src/Delivery/Delivery.php
 
 		-
 			message: '#^Argument of an invalid type list\<string\>\|false supplied for foreach, only iterables are supported\.$#'
