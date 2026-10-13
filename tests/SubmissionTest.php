@@ -20,6 +20,8 @@ use EasyContact\Privacy\Privacy;
 use EasyContact\Review\Admin\Screen;
 use EasyContact\Review\Review;
 use EasyContact\Schema;
+use EasyContact\Settings\Admin\Page;
+use EasyContact\Settings\Settings;
 use EasyContact\State;
 use EasyContact\Submission;
 
@@ -393,7 +395,7 @@ class SubmissionTest extends TestCase {
 		$this->assertNotWPError( $this->submit( $quarantine_id, $this->input( $quarantine_id, $this->values( array( 'messaggio' => self::PROMOTION ) ) ) ), 'Explicit quarantine works independently of normal archive' );
 		$this->assertSame( 'suspect', Review::category( $this->entry() ), 'Probable spam is a distinct category' );
 
-		update_option( Plugin::OPTION, array_merge( Plugin::settings(), array( 'quarantine_limit' => 2 ) ), false );
+		update_option( Settings::OPTION, array_merge( Settings::get(), array( 'quarantine_limit' => 2 ) ), false );
 		$this->assertNotWPError( $this->submit( $quarantine_id, $this->input( $quarantine_id, $this->values(), 'bot' ) ), 'Quarantine accepts within budget' );
 		$this->assertSame( 'spam', $this->submit( $quarantine_id, $this->input( $quarantine_id, $this->values(), 'bot' ) )->get_error_code(), 'Quarantine daily budget is bounded' );
 	}
@@ -449,9 +451,9 @@ class SubmissionTest extends TestCase {
 		$this->assertSame( array( 'suspect', 'suspect' ), array( Review::category( $accepted ), Review::category( $suspect ) ), 'Bulk classification handles multiple entries' );
 
 		update_option(
-			Plugin::OPTION,
+			Settings::OPTION,
 			array_merge(
-				Plugin::settings(),
+				Settings::get(),
 				array(
 					'spam_retention_days' => 14,
 					'retention_days'      => 30,
@@ -488,7 +490,7 @@ class SubmissionTest extends TestCase {
 		$definition = $this->definition();
 		$this->assertWPError( Admin::config( array( 'antispam_level' => '99' ), $definition['config'], $definition['schema']['fields'] ), 'Reject invalid per-form protection level' );
 
-		$settings = Admin::sanitize_settings(
+		$settings = Page::sanitize_settings(
 			array(
 				'antispam_present'      => '1',
 				'antispam_level'        => '99',

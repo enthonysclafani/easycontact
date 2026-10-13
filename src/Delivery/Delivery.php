@@ -7,7 +7,7 @@
 
 namespace EasyContact\Delivery;
 
-use EasyContact\Plugin;
+use EasyContact\Settings\Settings;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -25,7 +25,7 @@ final class Delivery {
 	 * @return true|WP_Error Result of this operation.
 	 */
 	public static function captcha( int $form_id, string $token, string $idempotency_key = '' ) {
-		$settings = Plugin::settings();
+		$settings = Settings::get();
 		if ( '' === $settings['turnstile_secret'] || '' === $token || strlen( $token ) > 2048 ) {
 			return new WP_Error( 'captcha', __( 'Completa la verifica CAPTCHA.', 'easycontact' ), array( 'status' => 422 ) );
 		}
@@ -129,7 +129,7 @@ final class Delivery {
 			return 'skipped';
 		}
 		$email = $values[ $config['mailerlite_email'] ] ?? '';
-		$token = Plugin::settings()['mailerlite_token'];
+		$token = Settings::get()['mailerlite_token'];
 		if ( ! is_email( $email ) || '' === $token ) {
 			return new WP_Error( 'mailerlite_configuration', 'mailerlite_configuration' );
 		}

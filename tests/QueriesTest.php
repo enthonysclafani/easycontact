@@ -8,6 +8,7 @@
 namespace EasyContact\Tests;
 
 use EasyContact\Plugin;
+use EasyContact\Settings\Settings;
 
 /**
  * A page without a form costs the same as WordPress without the plugin (CLAUDE.md, "Prestazioni").
@@ -38,12 +39,12 @@ class QueriesTest extends TestCase {
 	 */
 	public function test_setup_runs_again_after_an_update(): void {
 		update_option( 'easycontact_version', '0.0.1', false );
-		delete_option( Plugin::OPTION );
+		delete_option( Settings::OPTION );
 
 		Plugin::init();
 
 		$this->assertSame( EASYCONTACT_VERSION, get_option( 'easycontact_version' ) );
-		$this->assertIsArray( get_option( Plugin::OPTION ) );
+		$this->assertIsArray( get_option( Settings::OPTION ) );
 		$this->assertArrayHasKey( 'easycontact_version', wp_load_alloptions(), 'The version check is free on every request' );
 		$this->assertNotFalse( wp_next_scheduled( 'easycontact_daily_cleanup' ) );
 	}

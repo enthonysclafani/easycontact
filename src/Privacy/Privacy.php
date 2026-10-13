@@ -10,6 +10,7 @@ namespace EasyContact\Privacy;
 use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Plugin;
 use EasyContact\Review\Review;
+use EasyContact\Settings\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -146,7 +147,7 @@ final class Privacy {
 	 * @return array Result of this operation.
 	 */
 	public static function erase( string $email, int $page = 1 ): array {
-		$allowed = (bool) Plugin::settings()['allow_erasure'];
+		$allowed = (bool) Settings::get()['allow_erasure'];
 		// Deletions shrink the result set: always consume the first batch, never skip with an offset.
 		$posts    = is_email( $email ) ? self::entries( $email, $allowed ? 1 : $page ) : array();
 		$removed  = false;

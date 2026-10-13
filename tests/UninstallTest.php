@@ -10,6 +10,7 @@ namespace EasyContact\Tests;
 use EasyContact\AntiSpam\DisposableDomains;
 use EasyContact\Plugin;
 use EasyContact\Review\Review;
+use EasyContact\Settings\Settings;
 use EasyContact\State;
 
 /**
@@ -25,7 +26,7 @@ class UninstallTest extends TestCase {
 		$this->assertTechnicalDataRemoved();
 		$this->assertNotNull( get_post( $site['form'] ), 'Forms are kept without opt-in' );
 		$this->assertNotNull( get_post( $site['entry'] ), 'Entries are kept without opt-in' );
-		$this->assertIsArray( get_option( Plugin::OPTION ), 'Settings are kept without opt-in' );
+		$this->assertIsArray( get_option( Settings::OPTION ), 'Settings are kept without opt-in' );
 	}
 
 	public function test_opt_in_removes_everything_the_plugin_created(): void {
@@ -70,7 +71,7 @@ class UninstallTest extends TestCase {
 	 */
 	private function seed( bool $delete = false ): array {
 		Plugin::init();
-		update_option( Plugin::OPTION, array_merge( Plugin::settings(), array( 'delete_on_uninstall' => $delete ) ), false );
+		update_option( Settings::OPTION, array_merge( Settings::get(), array( 'delete_on_uninstall' => $delete ) ), false );
 		$definition = $this->definition();
 		$form       = $this->form( $definition );
 		$entry      = Plugin::store( $form, $definition, $this->values(), $this->assessment( 'accepted' ) );
@@ -111,7 +112,7 @@ class UninstallTest extends TestCase {
 	}
 
 	private function assertTechnicalDataRemoved(): void {
-		$left = array_diff( $this->options_left(), array( Plugin::OPTION, 'easycontact_review_terms_version' ) );
+		$left = array_diff( $this->options_left(), array( Settings::OPTION, 'easycontact_review_terms_version' ) );
 		$this->assertSame( array(), array_values( $left ), 'Locks, receipts, transients, version and list cache are removed' );
 		foreach ( array( 'easycontact_daily_cleanup', 'easycontact_retention_cleanup', 'easycontact_state_cleanup', 'easycontact_retry_delivery', 'easycontact_resume_retries' ) as $hook ) {
 			$this->assertFalse( $this->scheduled( $hook ), 'No scheduled event left: ' . $hook );

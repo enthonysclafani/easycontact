@@ -12,6 +12,8 @@ use EasyContact\Phone\Phone;
 use EasyContact\Privacy\Privacy;
 use EasyContact\Review\Admin\Screen;
 use EasyContact\Review\Review;
+use EasyContact\Settings\Admin\Page;
+use EasyContact\Settings\Settings;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -20,9 +22,8 @@ defined( 'ABSPATH' ) || exit;
  * Own native storage, site lifecycle and bounded maintenance.
  */
 final class Plugin {
-	public const OPTION = 'easycontact_settings';
-	public const FORM   = 'easycontact_form';
-	public const ENTRY  = 'easycontact_entry';
+	public const FORM  = 'easycontact_form';
+	public const ENTRY = 'easycontact_entry';
 
 	/**
 	 * Register the hooks of every part of the plugin, one line each.
@@ -40,44 +41,10 @@ final class Plugin {
 		Privacy::boot();
 		Phone::boot();
 		if ( is_admin() ) {
+			Page::boot();
 			Admin::boot();
 			Screen::boot();
 		}
-	}
-
-	/**
-	 * Return conservative defaults for site settings.
-	 *
-	 * @return array Result of this operation.
-	 */
-	public static function defaults(): array {
-		return array(
-			'store_entries'       => false,
-			'retention_days'      => 30,
-			'spam_retention_days' => 14,
-			'antispam_level'      => 2,
-			'antispam_observe'    => false,
-			'quarantine_entries'  => false,
-			'quarantine_limit'    => 500,
-			'email_dns_check'     => false,
-			'phone_country'       => '',
-			'spam_phrases'        => '',
-			'allow_erasure'       => true,
-			'delete_on_uninstall' => false,
-			'mailerlite_token'    => '',
-			'turnstile_site_key'  => '',
-			'turnstile_secret'    => '',
-		);
-	}
-
-	/**
-	 * Read site settings with defaults.
-	 *
-	 * @return array Result of this operation.
-	 */
-	public static function settings(): array {
-		$settings = get_option( self::OPTION, array() );
-		return array_merge( self::defaults(), is_array( $settings ) ? $settings : array() );
 	}
 
 	/**
@@ -86,7 +53,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public static function activate(): void {
-		add_option( self::OPTION, self::defaults(), '', false );
+		add_option( Settings::OPTION, Settings::defaults(), '', false );
 		self::schedule();
 	}
 
@@ -213,7 +180,7 @@ final class Plugin {
 	 * Lazy setup also covers sites reached after network activation.
 	 */
 	private static function setup(): void {
-		add_option( self::OPTION, self::defaults(), '', false );
+		add_option( Settings::OPTION, Settings::defaults(), '', false );
 		if ( ! Review::create_terms() ) {
 			// Retried on the next request.
 			return;
@@ -308,7 +275,7 @@ final class Plugin {
 	 * @return bool Result of this operation.
 	 */
 	public static function stores_entries( array $config ): bool {
-		return 'inherit' === $config['store_entries'] ? (bool) self::settings()['store_entries'] : 'yes' === $config['store_entries'];
+		return 'inherit' === $config['store_entries'] ? (bool) Settings::get()['store_entries'] : 'yes' === $config['store_entries'];
 	}
 
 	/**
@@ -383,7 +350,7 @@ final class Plugin {
 	 * @return void
 	 */
 	public static function cleanup(): void {
-		$settings = self::settings();
+		$settings = Settings::get();
 		$started  = microtime( true );
 		$pending  = false;
 		foreach ( array(
