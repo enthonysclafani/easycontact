@@ -14,7 +14,7 @@ use EasyContact\Admin;
 use EasyContact\AntiSpam;
 use EasyContact\DisposableDomains;
 use EasyContact\Frontend;
-use EasyContact\Phone;
+use EasyContact\Phone\Phone;
 use EasyContact\Plugin;
 use EasyContact\Privacy;
 use EasyContact\Review;

@@ -5,8 +5,9 @@
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\Phone;
 
+use EasyContact\Plugin;
 use EasyContact\Vendor\Phone\PhoneNumberFormat;
 use EasyContact\Vendor\Phone\PhoneNumberType;
 use EasyContact\Vendor\Phone\PhoneNumberUtil;
@@ -21,8 +22,8 @@ final class Phone {
 	/** Load only our isolated upstream namespace, never another plugin's version. */
 	public static function boot(): void {
 		if ( ! function_exists( 'mb_strtoupper' ) || ! function_exists( 'mb_strtolower' ) ) {
-			require_once dirname( __DIR__ ) . '/includes/vendor/mbstring/Mbstring.php';
-			require_once dirname( __DIR__ ) . '/includes/vendor/mbstring/bootstrap.php';
+			require_once dirname( __DIR__, 2 ) . '/includes/vendor/mbstring/Mbstring.php';
+			require_once dirname( __DIR__, 2 ) . '/includes/vendor/mbstring/bootstrap.php';
 		}
 		spl_autoload_register(
 			static function ( string $class_name ): void {
@@ -34,7 +35,7 @@ final class Phone {
 				if ( ! preg_match( '/^[A-Za-z0-9_\\\\]+$/D', $relative ) ) {
 					return;
 				}
-				$path = dirname( __DIR__ ) . '/includes/vendor/phone/' . str_replace( '\\', '/', $relative ) . '.php';
+				$path = dirname( __DIR__, 2 ) . '/includes/vendor/phone/' . str_replace( '\\', '/', $relative ) . '.php';
 				if ( is_file( $path ) ) {
 					require_once $path;
 				}
@@ -46,7 +47,7 @@ final class Phone {
 	public static function countries(): array {
 		static $countries;
 		if ( null === $countries ) {
-			$countries = wp_json_file_decode( dirname( __DIR__ ) . '/includes/data/countries.json', array( 'associative' => true ) );
+			$countries = wp_json_file_decode( dirname( __DIR__, 2 ) . '/includes/data/countries.json', array( 'associative' => true ) );
 			$countries = is_array( $countries ) ? $countries : array();
 		}
 		return $countries;
