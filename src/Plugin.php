@@ -20,11 +20,11 @@ final class Plugin {
 	public const ENTRY  = 'easycontact_entry';
 
 	/**
-	 * Register WordPress hooks.
+	 * Register the hooks of every part of the plugin, one line each.
 	 *
 	 * @return void
 	 */
-	public static function boot(): void {
+	public static function register(): void {
 		add_action( 'init', array( self::class, 'init' ) );
 		add_action( 'easycontact_daily_cleanup', array( self::class, 'cleanup' ) );
 		add_action( 'easycontact_retention_cleanup', array( self::class, 'cleanup' ) );
@@ -33,6 +33,8 @@ final class Plugin {
 		Submission::boot();
 		Frontend::boot();
 		Privacy::boot();
+		Phone::boot();
+		Review::boot();
 		if ( is_admin() ) {
 			Admin::boot();
 		}

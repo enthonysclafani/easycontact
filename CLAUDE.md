@@ -51,7 +51,7 @@ blocca la CI. Ogni file ammesso in un'allowlist ha un commento con il motivo o c
 
 1. **Zero tabelle custom** (A). Mai `CREATE TABLE`, `ALTER TABLE`, `DROP TABLE`, `dbDelta()`. I dati vanno in Options
    API, post meta, post type non pubblici, tassonomie nascoste, transient.
-2. **`$wpdb` solo in allowlist** (A), sempre con `$wpdb->prepare()`. Solo due file: `class-state.php` (lock atomici e
+2. **`$wpdb` solo in allowlist** (A), sempre con `$wpdb->prepare()`. Solo due file: `src/State.php` (lock atomici e
    pulizia dei lock scaduti, D6; con una cache a oggetti persistente i contatori non usano lock) e `uninstall.php`
    (ricerca per prefisso dei nomi dinamici, una volta sola). Nessun file nuovo nell'allowlist senza approvazione.
 3. **Niente cron, con una sola eccezione** (D1). Retention e pulizie si fanno a lotti, pigre, su `admin_init` e dopo
@@ -59,7 +59,7 @@ blocca la CI. Ogni file ammesso in un'allowlist ha un commento con il motivo o c
    tentativi di consegna. Finché la Fase 4.1 non è fatta, gli eventi attuali restano nei file in allowlist (A);
    nessun evento nuovo.
 4. **Asset nel frontend solo al rendering di un modulo** (A per i file, test per il comportamento) (D2).
-   `wp_enqueue_*` solo in `class-frontend.php` (al rendering) e `class-admin.php` (schermate del plugin). Nessun JS o
+   `wp_enqueue_*` solo in `src/Frontend.php` (al rendering) e `src/Admin.php` (schermate del plugin). Nessun JS o
    CSS inline (A per `style="…"`). Una pagina senza modulo non carica niente del plugin: `tests/QueriesTest.php`.
 5. **HTTP solo nei file in allowlist** (A), con le API di WordPress (A: niente cURL, `fopen`/`file_get_contents` su
    URL, socket) (D3). Mai durante il rendering di una pagina, solo nella richiesta di invio e in admin; timeout ≤ 15 s; `WP_Error` e codici HTTP
@@ -127,8 +127,10 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
 ## PHP: stile e struttura
 
 - PHP minimo 8.1, WordPress minimo 6.4 (D7). Namespace `EasyContact`, classi `final` con metodi statici in
-  `includes/class-*.php`, caricate con `require_once` da `easycontact.php`. La struttura a cartelle con `register()`
-  di EasyRankly arriva nella Fase 3 del piano, un PR per funzionalità.
+  `src/`, un file per classe con nome PSR-4 (`src/AntiSpam.php` per `EasyContact\AntiSpam`), caricate da
+  `src/autoload.php`. `easycontact.php` registra solo l'autoload, attivazione e disattivazione e chiama
+  `Plugin::register()`. `includes/` contiene solo librerie (`vendor/`) e dati (`data/`) inclusi. Le cartelle per
+  funzionalità arrivano nella Fase 3.2 del piano, un PR per funzionalità.
 - Standard: WordPress Coding Standards (`WordPress-Extra`, `WordPress-Docs`), PHPCompatibilityWP, PHPStan livello 8
   con `szepeviktor/phpstan-wordpress`. Zero errori PHPCS. PHPStan: zero errori nuovi; quelli del codice
   precedente sono in `phpstan-baseline.neon` e si tolgono da lì quando si correggono, mai se ne aggiungono.

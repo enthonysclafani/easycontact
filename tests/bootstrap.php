@@ -38,6 +38,4 @@ tests_add_filter(
 
 require $easycontact_tests_dir . '/includes/bootstrap.php';
 
-// Admin code loads only in wp-admin; tests call it directly.
-require_once dirname( __DIR__ ) . '/includes/class-admin.php';
 require_once __DIR__ . '/support/class-testcase.php';

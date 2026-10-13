@@ -30,7 +30,7 @@ final class ArchitectureChecker {
 	 *
 	 * @var list<string>
 	 */
-	private const SCANNED_PATHS = array( 'easycontact.php', 'uninstall.php', 'includes' );
+	private const SCANNED_PATHS = array( 'easycontact.php', 'uninstall.php', 'src', 'includes' );
 
 	/**
 	 * Directories never scanned: bundled upstream libraries and data (THIRD-PARTY.md).
@@ -47,7 +47,7 @@ final class ArchitectureChecker {
 	private const WPDB_ALLOWLIST = array(
 		// Atomic leases (INSERT IGNORE on the unique option_name), cache-bypassing reads and the bounded cleanup of
 		// expired leases and states: D6. Rate counters use no lease with a persistent object cache.
-		'includes/class-state.php',
+		'src/State.php',
 		// Runs once: finds this plugin's dynamic option names (leases, states, transients) by prefix and deletes them
 		// through the Options API. An index option would cost a write on every submission instead (plan point 2.3).
 		'uninstall.php',
@@ -60,9 +60,9 @@ final class ArchitectureChecker {
 	 */
 	private const CRON_ALLOWLIST = array(
 		// TODO D1: retention, receipts and bounded delivery retries.
-		'includes/class-plugin.php',
-		'includes/class-state.php',
-		'includes/class-submission.php',
+		'src/Plugin.php',
+		'src/State.php',
+		'src/Submission.php',
 		// Removes the events above.
 		'uninstall.php',
 	);
@@ -72,14 +72,14 @@ final class ArchitectureChecker {
 	 *
 	 * @var list<string>
 	 */
-	private const ASSET_ALLOWLIST = array( 'includes/class-frontend.php', 'includes/class-admin.php' );
+	private const ASSET_ALLOWLIST = array( 'src/Frontend.php', 'src/Admin.php' );
 
 	/**
 	 * Files allowed to make HTTP requests (D3): delivery on submission and the manual list synchronization.
 	 *
 	 * @var list<string>
 	 */
-	private const HTTP_ALLOWLIST = array( 'includes/class-delivery.php', 'includes/class-disposable-domains.php' );
+	private const HTTP_ALLOWLIST = array( 'src/Delivery.php', 'src/DisposableDomains.php' );
 
 	/**
 	 * Functions forbidden everywhere, grouped by the rule they break.

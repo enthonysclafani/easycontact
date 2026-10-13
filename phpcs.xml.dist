@@ -47,9 +47,9 @@
 		<exclude-pattern>/tools/*</exclude-pattern>
 	</rule>
 
-	<!-- DisposableDomains keeps its readable file name (class-disposable-domains.php); renaming it is left to Phase 3 of the plan. -->
-	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
-		<exclude-pattern>/includes/class-disposable-domains\.php$</exclude-pattern>
+	<!-- Classes in src/ follow PSR-4 file names (src/autoload.php), as in EasyRankly. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>/src/*</exclude-pattern>
 	</rule>
 
 	<!-- Tests define WordPress constants (WP_UNINSTALL_PLUGIN, WP_TESTS_*) and never ship. -->

@@ -21,23 +21,8 @@ define( 'EASYCONTACT_FILE', __FILE__ );
 define( 'EASYCONTACT_DIR', plugin_dir_path( __FILE__ ) );
 define( 'EASYCONTACT_URL', plugin_dir_url( __FILE__ ) );
 
-require_once EASYCONTACT_DIR . 'includes/class-schema.php';
-require_once EASYCONTACT_DIR . 'includes/class-phone.php';
-require_once EASYCONTACT_DIR . 'includes/class-antispam.php';
-require_once EASYCONTACT_DIR . 'includes/class-disposable-domains.php';
-require_once EASYCONTACT_DIR . 'includes/class-review.php';
-require_once EASYCONTACT_DIR . 'includes/class-plugin.php';
-require_once EASYCONTACT_DIR . 'includes/class-delivery.php';
-require_once EASYCONTACT_DIR . 'includes/class-state.php';
-require_once EASYCONTACT_DIR . 'includes/class-submission.php';
-require_once EASYCONTACT_DIR . 'includes/class-frontend.php';
-require_once EASYCONTACT_DIR . 'includes/class-privacy.php';
-if ( is_admin() ) {
-	require_once EASYCONTACT_DIR . 'includes/class-admin.php';
-}
+require_once EASYCONTACT_DIR . 'src/autoload.php';
 
 register_activation_hook( __FILE__, array( 'EasyContact\\Plugin', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'EasyContact\\Plugin', 'deactivate' ) );
-EasyContact\Plugin::boot();
-EasyContact\Phone::boot();
-EasyContact\Review::boot();
+EasyContact\Plugin::register();

@@ -135,7 +135,7 @@ Fasi 0 e 1.
 
 ### Fase 3 — Struttura
 
-- [ ] 3.1 `src/autoload.php` PSR-4, `src/Plugin.php` con `register()`; bootstrap in `easycontact.php` ridotto
+- [x] 3.1 `src/autoload.php` PSR-4, `src/Plugin.php` con `register()`; bootstrap in `easycontact.php` ridotto
 - [ ] 3.2 Una cartella per funzionalità (ipotesi: `Forms/`, `Submissions/`, `Delivery/`, `AntiSpam/`, `Phone/`,
       `Review/`, `Privacy/`, `Settings/`), classi admin in `*/Admin/`; un PR per funzionalità, comportamento
       invariato e coperto dai test della Fase 0

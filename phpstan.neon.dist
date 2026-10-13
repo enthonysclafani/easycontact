@@ -11,6 +11,7 @@ parameters:
 	paths:
 		- easycontact.php
 		- uninstall.php
+		- src
 		- includes
 		- tools
 	excludePaths:
