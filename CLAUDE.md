@@ -78,7 +78,7 @@ blocca la CI. Ogni file ammesso in un'allowlist ha un commento con il motivo o c
 |---|---|---|
 | Moduli e invii | post type non pubblici `easycontact_form` / `easycontact_entry` + `WP_Query` | `$wpdb` diretto, tabelle |
 | Categorie anti-spam | tassonomia nascosta `easycontact_safety` | meta "status" fatti a mano |
-| Impostazioni | Settings API con `sanitize_callback`; dalla Fase 3.4 `register_setting()` con schema | option non registrate nuove |
+| Impostazioni | `register_setting()` con `sanitize_callback` e schema (`Settings::schema()`), senza REST per i segreti | option non registrate nuove |
 | Endpoint | `register_rest_route()` con `permission_callback` e `args`; `admin-post.php` con nonce per i form classici | `admin-ajax.php` |
 | HTTP verso terzi | `wp_safe_remote_*()` per URL dell'utente (webhook Slack), `wp_remote_*()` per host fissi | cURL, `file_get_contents()` |
 | Email | `wp_mail()` | invio SMTP proprio |

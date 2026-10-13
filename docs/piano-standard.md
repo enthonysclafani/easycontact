@@ -151,8 +151,12 @@ Fasi 0 e 1.
       `src/`, come in EasyRankly. Restano un filtro `posts_where` aggiunto e tolto intorno a una sola query in
       `Submission::resume()` (paginazione per ID) e la cache per richiesta `DisposableDomains::$lists`, che evita
       di rileggere fino a 8 MB per ogni controllo: nessun registro globale._
-- [ ] 3.4 `register_setting()` con schema completo per `easycontact_settings`; `register_post_meta()` con schema
+- [x] 3.4 `register_setting()` con schema completo per `easycontact_settings`; `register_post_meta()` con schema
       e `auth_callback` per i meta dei moduli
+      _Fatto: `Settings::schema()` descrive ogni chiave (tipo, limiti, default) e `Page::sanitize_settings()` lo
+      verifica chiave per chiave prima di salvare; l'option resta fuori dal REST perché contiene il token di
+      MailerLite e la chiave segreta di Turnstile (diversamente da EasyRankly). `Forms::register_meta()` registra
+      `_easycontact_definition` e `_easycontact_last_delivery` su `init`. Test: `tests/SettingsTest.php`._
 - [ ] 3.5 REST: `args` con `type`, `sanitize_callback`, `validate_callback` per le route pubbliche; motivazione
       scritta del `__return_true` (moduli pubblici) e test con utente anonimo
 

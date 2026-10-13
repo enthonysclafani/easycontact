@@ -25,7 +25,7 @@ I nomi sono quelli della 1.0.0 e non si rinominano (D8).
 
 | Nome | Autoload | Contenuto | Disinstallazione |
 |---|---|---|---|
-| `easycontact_settings` | no | Impostazioni del sito, creata con i default all'attivazione e al setup (`Settings::defaults()`): `store_entries`, `retention_days` (30), `spam_retention_days` (14), `antispam_level` (2), `antispam_observe`, `quarantine_entries`, `quarantine_limit` (500), `email_dns_check`, `phone_country`, `spam_phrases`, `allow_erasure`, `delete_on_uninstall`, `mailerlite_token`, `turnstile_site_key`, `turnstile_secret`. | Solo con opt-in |
+| `easycontact_settings` | no | Impostazioni del sito, creata con i default all'attivazione e al setup (`Settings::defaults()`): `store_entries`, `retention_days` (30), `spam_retention_days` (14), `antispam_level` (2), `antispam_observe`, `quarantine_entries`, `quarantine_limit` (500), `email_dns_check`, `phone_country`, `spam_phrases`, `allow_erasure`, `delete_on_uninstall`, `mailerlite_token`, `turnstile_site_key`, `turnstile_secret`. Registrata con `register_setting()` e descritta da `Settings::schema()`, fuori dal REST perché contiene i segreti. | Solo con opt-in |
 | `easycontact_version` | sì | Versione per cui è girato il setup. Se diversa da `EASYCONTACT_VERSION`, `Plugin::init()` rifà il setup (impostazioni mancanti, categorie, ripresa dei tentativi). La disattivazione la cancella. Sui siti aggiornati dalla 1.0.0 resta non autoload fino al primo cambio di versione. | Sempre |
 | `easycontact_review_terms_version` | no | `1` quando le tre categorie esistono. Letta solo durante il setup. | Sempre |
 | `easycontact_disposable_domains` | no | Ultima sincronizzazione completa della lista domini usa e getta: `version`, `domains` (testo, un dominio per riga, < 8 MB), `count` (≤ 250.000), `sources`, `updated_at`. Assente = lista inclusa nel plugin (`includes/data/`). Scritta solo dalla sincronizzazione manuale in admin. | Sempre |
@@ -57,8 +57,9 @@ Sugli invii (`easycontact_entry`):
 | `_easycontact_delivery` | Esito per destinazione (`outcomes`: email, MailerLite, Slack). |
 | `_easycontact_retry` | Nuovo tentativo in corso: `hash`, `attempts` (max 3), `expires`. |
 
-Tutti i meta si cancellano con il loro post (quindi solo con opt-in). Nessuno è registrato con
-`register_post_meta()` (Fase 3.4 del piano).
+Tutti i meta si cancellano con il loro post (quindi solo con opt-in). I due meta dei moduli sono registrati con
+`register_post_meta()` (`Forms::register_meta()`): `single`, fuori dal REST, `auth_callback` che nega la modifica
+dalle API generiche dei meta; senza `default`, quindi un meta assente si legge ancora come stringa vuota.
 
 ## Transient
 

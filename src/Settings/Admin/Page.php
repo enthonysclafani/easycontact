@@ -51,9 +51,11 @@ final class Page {
 			'easycontact_settings_group',
 			Settings::OPTION,
 			array(
-				'type'              => 'array',
+				'type'              => 'object',
+				'description'       => 'EasyContact site settings (schema: Settings::schema()).',
 				'default'           => Settings::defaults(),
 				'sanitize_callback' => array( self::class, 'sanitize_settings' ),
+				// Holds the MailerLite token and the Turnstile secret.
 				'show_in_rest'      => false,
 			)
 		);
@@ -212,6 +214,14 @@ final class Page {
 			if ( preg_match( '/[\x00-\x20\x7f]/', $settings[ $key ] ) || strlen( $settings[ $key ] ) > 2000 ) {
 				$settings[ $key ] = $previous[ $key ];
 				add_settings_error( Settings::OPTION, $key, __( 'La credenziale contiene caratteri non validi; è stata mantenuta quella precedente.', 'easycontact' ) );
+			}
+		}
+		// Every branch above keeps the schema; this guard catches a previous value or a future bound that drifts from
+		// it, one key at a time, so an old stored value never blocks saving the others.
+		foreach ( Settings::properties() as $key => $property ) {
+			if ( true !== rest_validate_value_from_schema( $settings[ $key ], $property, $key ) ) {
+				$settings[ $key ] = $property['default'];
+				add_settings_error( Settings::OPTION, $key, __( 'Un valore non era valido ed è stato riportato a quello predefinito.', 'easycontact' ) );
 			}
 		}
 		return $settings;
