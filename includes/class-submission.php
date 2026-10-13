@@ -316,9 +316,24 @@ final class Submission {
 	 * @return void
 	 */
 	public static function resume( int $after_id = 0 ): void {
-		global $wpdb;
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Keyset pagination of native metadata for one-time job recovery; deleted jobs must not shift an offset.
-		$ids = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT post_id FROM {$wpdb->postmeta} WHERE meta_key = %s AND post_id > %d ORDER BY post_id ASC LIMIT 50", '_easycontact_retry', $after_id ) );
+		// Keyset pagination: retries that finish between batches delete their job, which would shift an offset.
+		// Only the posts table has an ID column, so the condition stays unambiguous with the meta join.
+		$after = static fn( string $where ): string => $where . ' AND ID > ' . $after_id;
+		add_filter( 'posts_where', $after );
+		$ids   = ( new \WP_Query(
+			array(
+				'post_type'              => Plugin::ENTRY,
+				'post_status'            => 'any',
+				'meta_key'               => '_easycontact_retry', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Bounded batch, only after an update.
+				'fields'                 => 'ids',
+				'orderby'                => 'ID',
+				'order'                  => 'ASC',
+				'posts_per_page'         => 50,
+				'no_found_rows'          => true,
+				'update_post_term_cache' => false,
+			)
+		) )->posts;
+		remove_filter( 'posts_where', $after );
 		foreach ( $ids as $entry_id ) {
 			$job = get_post_meta( $entry_id, '_easycontact_retry', true );
 			if ( is_array( $job ) && ! wp_next_scheduled( 'easycontact_retry_delivery', array( (int) $entry_id ) ) ) {

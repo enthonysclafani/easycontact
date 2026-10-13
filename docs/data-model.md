@@ -64,7 +64,7 @@ Tutti i meta si cancellano con il loro post (quindi solo con opt-in). Nessuno è
 
 | Nome | Durata | Contenuto |
 |---|---|---|
-| `easycontact_rate_{hash}` | finestra del limite (5 minuti di default) | Contatore di invii, token e tentativi per indirizzo e modulo. L'indirizzo non si salva: la chiave è un HMAC. |
+| `easycontact_rate_{hash}` | finestra del limite (5 minuti di default) | Contatore di invii, token e tentativi per indirizzo e modulo. L'indirizzo non si salva: la chiave è un HMAC. Con una cache a oggetti persistente il contatore sta invece nel gruppo di cache `easycontact_rate` (chiave `rate_{hash}`, stessa scadenza) e non scrive nel database. |
 | `easycontact_dns_{hash}` | 15 minuti (1 se l'esito è incerto) | Esito del controllo DNS sul dominio di un'email, se `email_dns_check` è attivo. |
 | `easycontact_review_notice_{utente}` | 90 secondi | Messaggio da mostrare dopo una revisione. |
 | `easycontact_disposable_notice_{utente}` | 1 minuto | Esito della sincronizzazione dei domini. |
