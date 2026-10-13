@@ -192,13 +192,27 @@ final class Plugin {
 			)
 		);
 		Review::register();
-		// Lazy setup also covers sites reached after network activation.
-		add_option( self::OPTION, self::defaults(), '', false );
+		// Reads the autoloaded cron option: no query.
 		self::schedule();
+		// The version is autoloaded, so the check costs no query; setup runs only after an update.
 		if ( EASYCONTACT_VERSION !== get_option( 'easycontact_version' ) ) {
-			update_option( 'easycontact_version', EASYCONTACT_VERSION, false );
-			wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_resume_retries' );
+			self::setup();
 		}
+	}
+
+	/**
+	 * Create missing data and resume archive jobs after activation or an update.
+	 *
+	 * Lazy setup also covers sites reached after network activation.
+	 */
+	private static function setup(): void {
+		add_option( self::OPTION, self::defaults(), '', false );
+		if ( ! Review::create_terms() ) {
+			// Retried on the next request.
+			return;
+		}
+		update_option( 'easycontact_version', EASYCONTACT_VERSION, true );
+		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_resume_retries' );
 	}
 
 	/**

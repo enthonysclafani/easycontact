@@ -31,7 +31,7 @@ final class Review {
 	}
 
 	/**
-	 * Register the private taxonomy and create its three terms once.
+	 * Register the private taxonomy.
 	 */
 	public static function register(): void {
 		register_taxonomy(
@@ -50,19 +50,29 @@ final class Review {
 				'update_count_callback' => '_update_generic_term_count',
 			)
 		);
-		if ( '1' !== get_option( 'easycontact_review_terms_version' ) ) {
-			$complete = true;
-			foreach ( self::labels() as $slug => $label ) {
-				$term = term_exists( $slug, self::TAXONOMY );
-				if ( ! $term ) {
-					$term = wp_insert_term( $label, self::TAXONOMY, array( 'slug' => $slug ) );
-				}
-				$complete = $complete && ! is_wp_error( $term );
-			}
-			if ( $complete ) {
-				update_option( 'easycontact_review_terms_version', '1', false );
-			}
+	}
+
+	/**
+	 * Create the three categories once; called by the plugin setup, never on an ordinary request.
+	 *
+	 * @return bool Whether every category exists.
+	 */
+	public static function create_terms(): bool {
+		if ( '1' === get_option( 'easycontact_review_terms_version' ) ) {
+			return true;
 		}
+		$complete = true;
+		foreach ( self::labels() as $slug => $label ) {
+			$term = term_exists( $slug, self::TAXONOMY );
+			if ( ! $term ) {
+				$term = wp_insert_term( $label, self::TAXONOMY, array( 'slug' => $slug ) );
+			}
+			$complete = $complete && ! is_wp_error( $term );
+		}
+		if ( $complete ) {
+			update_option( 'easycontact_review_terms_version', '1', false );
+		}
+		return $complete;
 	}
 
 	/**
@@ -153,6 +163,12 @@ final class Review {
 			return true;
 		}
 		$term = term_exists( $category, self::TAXONOMY );
+		if ( ! $term ) {
+			// A category removed outside the plugin (a migration, a database cleanup) would make every archive fail.
+			delete_option( 'easycontact_review_terms_version' );
+			self::create_terms();
+			$term = term_exists( $category, self::TAXONOMY );
+		}
 		if ( ! $term || is_wp_error( $term ) ) {
 			return false;
 		}
