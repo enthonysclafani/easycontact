@@ -65,7 +65,7 @@ WordPress erasure removes local archived copies only. Copies already sent by ema
 3. Create and publish a form from EasyContact > Moduli.
 4. Add the shortcode [easycontact id="123"] to a page, replacing 123 with the form ID.
 
-The initial user interface is in Italian. A separate Italian setup guide is provided with this build.
+The interface is in English and includes an Italian translation, used automatically when the site or user language is Italian. A separate Italian setup guide is provided with this build.
 
 == Frequently Asked Questions ==
 
@@ -134,7 +134,7 @@ With the archive disabled there is no background delivery queue and no saved cop
 The browser refreshes an expired submission ticket before a first send and preserves field values. After an interrupted request it reuses the original ticket and payload to retrieve a stored confirmation. If an ambiguous attempt has already expired, it asks the visitor to contact the site before sending again.
 
 = Are translations supported? =
-All interface strings use the easycontact text domain. The package includes a POT template. Translations use WordPress's standard language directory and automatic translation loading. This build includes Italian source strings; no additional compiled language packs are bundled.
+All interface strings are in English and use the easycontact text domain. The package includes a POT template and the Italian translation (languages/easycontact-it_IT.po and .mo). Translations in WordPress's language directory take precedence over the bundled one.
 
 = Can forms be imported from other plugins? =
 This version uses its own small tag syntax. It does not include automatic imports, a drag-and-drop builder, file uploads, payments, multiple steps, or separate confirmation emails to the submitter.

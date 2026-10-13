@@ -25,8 +25,8 @@ final class Review {
 	 */
 	public static function labels(): array {
 		return array(
-			'accepted' => __( 'Accettato', 'easycontact' ),
-			'suspect'  => __( 'Probabile spam', 'easycontact' ),
+			'accepted' => __( 'Accepted', 'easycontact' ),
+			'suspect'  => __( 'Likely spam', 'easycontact' ),
 			'spam'     => __( 'Spam', 'easycontact' ),
 		);
 	}
@@ -195,14 +195,14 @@ final class Review {
 		$lease = 'retry_' . $id;
 		$owner = State::claim( $lease );
 		if ( null === $owner ) {
-			return new WP_Error( 'busy', __( 'Questo invio è in elaborazione. Riprova tra qualche secondo.', 'easycontact' ) );
+			return new WP_Error( 'busy', __( 'This submission is being processed. Try again in a few seconds.', 'easycontact' ) );
 		}
 		try {
 			if ( 'private' !== get_post_status( $id ) || get_post_meta( $id, '_easycontact_initializing', true ) ) {
-				return new WP_Error( 'busy', __( 'Questo invio non è disponibile per la revisione. Riprova tra qualche secondo.', 'easycontact' ) );
+				return new WP_Error( 'busy', __( 'This submission is not available for review. Try again in a few seconds.', 'easycontact' ) );
 			}
 			if ( ! self::write( $id, $category, 'manual', 'accepted' !== $category || self::held( $id ) ) ) {
-				return new WP_Error( 'save', __( 'Non è stato possibile aggiornare la classificazione.', 'easycontact' ) );
+				return new WP_Error( 'save', __( 'The category could not be updated.', 'easycontact' ) );
 			}
 			return true;
 		} finally {

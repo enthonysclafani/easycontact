@@ -144,9 +144,9 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
 - Prefissi: option e transient `easycontact_`, meta `_easycontact_`, post type e tassonomie `easycontact_`, hook
   `easycontact_`. Nessuna rinomina dei nomi esistenti (D8).
 - Ogni hook pubblico (`apply_filters`/`do_action`) è una promessa di compatibilità: aggiungerne uno si chiede.
-- Codice, commenti e stringhe sorgente in inglese (D9). Le stringhe dell'interfaccia oggi sono ancora in italiano
-  dentro `__()`: passano all'inglese con una traduzione `it_IT` nella Fase 5.3; fino ad allora le nuove stringhe
-  seguono quelle vicine.
+- Codice, commenti e stringhe sorgente in inglese (D9), brevi e con le parole del core. La traduzione italiana è in
+  `languages/easycontact-it_IT.po` e `.mo`: ogni stringa nuova o cambiata si aggiunge lì, poi si rigenerano `.pot` e
+  `.mo` con WP-CLI (`wp i18n make-pot`, `wp i18n make-mo`); `tests/I18nTest.php` fallisce se manca una traduzione.
 
 ## Dati e ciclo di vita
 

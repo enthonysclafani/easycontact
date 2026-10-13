@@ -52,7 +52,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
 | `register_setting()` / `register_post_meta()` con schema | ✅ | ❌ | ✅ schema delle impostazioni senza REST (contengono segreti), meta dei moduli registrati | Fase 3.4 |
 | `args` tipizzati sulle route REST | ✅ | 🟡 | ✅ tipi e lunghezze, `__return_true` motivato | Fase 3.5 |
 | Disinstallazione completa e testata | ✅ | 🟡 completa, non testata | ✅ testata anche in multisito | D5 |
-| Stringhe sorgente in inglese | ✅ | ❌ italiano | ❌ | D9 |
+| Stringhe sorgente in inglese | ✅ | ❌ italiano | ✅ inglese con traduzione `it_IT` inclusa | D9, Fase 5.3 |
 | Un solo foglio di stile admin | ✅ | ✅ `admin.css` (più `frontend.css` per il modulo) | ✅ regola `one-stylesheet` | Fase 5.1 |
 
 ## Trovato e corretto

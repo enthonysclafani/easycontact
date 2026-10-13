@@ -32,7 +32,7 @@ final class Screen {
 		add_action(
 			'add_meta_boxes',
 			static function (): void {
-				add_meta_box( 'easycontact-review', __( 'Classificazione anti-spam', 'easycontact' ), array( self::class, 'box' ), Plugin::ENTRY, 'side', 'high' );
+				add_meta_box( 'easycontact-review', __( 'Anti-spam category', 'easycontact' ), array( self::class, 'box' ), Plugin::ENTRY, 'side', 'high' );
 			}
 		);
 		add_filter( 'bulk_actions-edit-' . Plugin::ENTRY, array( self::class, 'bulk_actions' ) );
@@ -48,7 +48,7 @@ final class Screen {
 	 * @param array $columns List table columns.
 	 */
 	public static function columns( array $columns ): array {
-		$columns['easycontact-review'] = __( 'Classificazione', 'easycontact' );
+		$columns['easycontact-review'] = __( 'Classification', 'easycontact' );
 		return $columns;
 	}
 
@@ -63,13 +63,13 @@ final class Screen {
 			return;
 		}
 		$category = Review::category( $id );
-		echo '<span class="easycontact-badge easycontact-badge-' . esc_attr( '' !== $category ? $category : 'unknown' ) . '">' . esc_html( Review::labels()[ $category ] ?? __( 'Da classificare', 'easycontact' ) ) . '</span>';
+		echo '<span class="easycontact-badge easycontact-badge-' . esc_attr( '' !== $category ? $category : 'unknown' ) . '">' . esc_html( Review::labels()[ $category ] ?? __( 'To be classified', 'easycontact' ) ) . '</span>';
 		$record = get_post_meta( $id, '_easycontact_review', true );
 		if ( is_array( $record ) ) {
-			echo '<br><small>' . esc_html( 'manual' === $record['source'] ? __( 'Revisione manuale', 'easycontact' ) : __( 'Controllo automatico', 'easycontact' ) ) . '</small>';
+			echo '<br><small>' . esc_html( 'manual' === $record['source'] ? __( 'Manual review', 'easycontact' ) : __( 'Automatic check', 'easycontact' ) ) . '</small>';
 		}
 		if ( Review::held( $id ) ) {
-			echo '<br><small>' . esc_html__( 'Inoltro sospeso', 'easycontact' ) . '</small>';
+			echo '<br><small>' . esc_html__( 'Delivery held', 'easycontact' ) . '</small>';
 		}
 	}
 
@@ -130,7 +130,7 @@ final class Screen {
 					),
 					admin_url( 'edit.php' )
 				)
-			) . '"' . ( 'unclassified' === $current ? ' class="current" aria-current="page"' : '' ) . '>' . esc_html__( 'Da classificare', 'easycontact' ) . ' <span class="count">(' . (int) $unclassified->found_posts . ')</span></a>';
+			) . '"' . ( 'unclassified' === $current ? ' class="current" aria-current="page"' : '' ) . '>' . esc_html__( 'To be classified', 'easycontact' ) . ' <span class="count">(' . (int) $unclassified->found_posts . ')</span></a>';
 		}
 		if ( $current && isset( $views['all'] ) ) {
 			$views['all'] = str_replace( array( 'class="current"', 'aria-current="page"' ), '', $views['all'] );
@@ -172,21 +172,21 @@ final class Screen {
 		$category = Review::category( $post->ID );
 		wp_nonce_field( 'easycontact_review_' . $post->ID, 'easycontact_review_nonce', false );
 		echo '<input type="hidden" name="easycontact_review_entry" value="' . esc_attr( (string) $post->ID ) . '">';
-		echo '<p><label for="easycontact-review-status">' . esc_html__( 'Categoria', 'easycontact' ) . '</label><br><select id="easycontact-review-status" name="easycontact_review_status">';
+		echo '<p><label for="easycontact-review-status">' . esc_html__( 'Category', 'easycontact' ) . '</label><br><select id="easycontact-review-status" name="easycontact_review_status">';
 		if ( ! $category ) {
-			echo '<option value="">' . esc_html__( 'Da classificare', 'easycontact' ) . '</option>';
+			echo '<option value="">' . esc_html__( 'To be classified', 'easycontact' ) . '</option>';
 		}
 		foreach ( Review::labels() as $slug => $label ) {
 			echo '<option value="' . esc_attr( $slug ) . '" ' . selected( $category, $slug, false ) . '>' . esc_html( $label ) . '</option>';
 		}
-		echo '</select></p><p><button class="button" type="submit" name="action" value="easycontact_classify" formaction="' . esc_url( admin_url( 'admin-post.php' ) ) . '">' . esc_html__( 'Aggiorna categoria', 'easycontact' ) . '</button></p>';
+		echo '</select></p><p><button class="button" type="submit" name="action" value="easycontact_classify" formaction="' . esc_url( admin_url( 'admin-post.php' ) ) . '">' . esc_html__( 'Update category', 'easycontact' ) . '</button></p>';
 		$assessment = get_post_meta( $post->ID, '_easycontact_antispam', true );
 		if ( is_array( $assessment ) ) {
 			/* translators: 1: anti-spam score, 2: protection level. */
-			echo '<p>' . esc_html( sprintf( __( 'Punteggio: %1$d/100 · Livello %2$d', 'easycontact' ), $assessment['score'], $assessment['level'] ) ) . '</p>';
+			echo '<p>' . esc_html( sprintf( __( 'Score: %1$d/100 · Level %2$d', 'easycontact' ), $assessment['score'], $assessment['level'] ) ) . '</p>';
 			if ( ! empty( $assessment['observe'] ) ) {
 				/* translators: %s: category detected in observation mode. */
-				echo '<p>' . esc_html( sprintf( __( 'Modalità osservazione: rilevato come %s.', 'easycontact' ), Review::labels()[ $assessment['detected'] ] ) ) . '</p>';
+				echo '<p>' . esc_html( sprintf( __( 'Observation mode: detected as %s.', 'easycontact' ), Review::labels()[ $assessment['detected'] ] ) ) . '</p>';
 			}
 			echo '<ul>';
 			foreach ( $assessment['reasons'] as $reason ) {
@@ -198,10 +198,10 @@ final class Screen {
 		}
 		$record = get_post_meta( $post->ID, '_easycontact_review', true );
 		if ( is_array( $record ) && 'manual' === $record['source'] ) {
-			echo '<p>' . esc_html__( 'La revisione manuale ha precedenza sul controllo automatico.', 'easycontact' ) . '</p>';
+			echo '<p>' . esc_html__( 'Manual review takes precedence over the automatic check.', 'easycontact' ) . '</p>';
 		}
 		if ( Review::requires_approval( $post->ID ) ) {
-			echo '<p>' . esc_html__( 'Inoltro sospeso. Cambiare categoria non invia notifiche.', 'easycontact' ) . '</p><p><button class="button button-primary" type="submit" name="action" value="easycontact_approve" formaction="' . esc_url( admin_url( 'admin-post.php' ) ) . '">' . esc_html__( 'Approva e invia', 'easycontact' ) . '</button></p>';
+			echo '<p>' . esc_html__( 'Delivery held. Changing the category sends no notifications.', 'easycontact' ) . '</p><p><button class="button button-primary" type="submit" name="action" value="easycontact_approve" formaction="' . esc_url( admin_url( 'admin-post.php' ) ) . '">' . esc_html__( 'Approve and send', 'easycontact' ) . '</button></p>';
 		}
 	}
 
@@ -213,7 +213,7 @@ final class Screen {
 	public static function bulk_actions( array $actions ): array {
 		foreach ( Review::labels() as $slug => $label ) {
 			/* translators: %s: classification label. */
-			$actions[ 'easycontact-classify-' . $slug ] = sprintf( __( 'Segna come %s', 'easycontact' ), $label );
+			$actions[ 'easycontact-classify-' . $slug ] = sprintf( __( 'Mark as %s', 'easycontact' ), $label );
 		}
 		return $actions;
 	}
@@ -240,7 +240,7 @@ final class Screen {
 			}
 		}
 		/* translators: 1: updated entries, 2: selected entries. */
-		self::queue_notice( sprintf( __( 'Classificazione aggiornata per %1$d invii su %2$d selezionati.', 'easycontact' ), $updated, count( $ids ) ), count( $ids ) !== $updated );
+		self::queue_notice( sprintf( __( 'Category updated for %1$d of %2$d selected submissions.', 'easycontact' ), $updated, count( $ids ) ), count( $ids ) !== $updated );
 		return $redirect;
 	}
 
@@ -250,17 +250,17 @@ final class Screen {
 	public static function action(): void {
 		$id = isset( $_POST['easycontact_review_entry'] ) && is_scalar( $_POST['easycontact_review_entry'] ) ? absint( $_POST['easycontact_review_entry'] ) : 0;
 		if ( ! current_user_can( 'manage_options' ) || ! $id || Plugin::ENTRY !== get_post_type( $id ) || 'private' !== get_post_status( $id ) ) {
-			wp_die( esc_html__( 'Invio non disponibile.', 'easycontact' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'Submission not available.', 'easycontact' ), '', array( 'response' => 403 ) );
 		}
 		check_admin_referer( 'easycontact_review_' . $id, 'easycontact_review_nonce' );
 		$action = isset( $_POST['action'] ) && is_string( $_POST['action'] ) ? sanitize_key( wp_unslash( $_POST['action'] ) ) : '';
 		if ( 'easycontact_approve' === $action ) {
 			$result  = Submission::retry( $id, true, false, true );
-			$message = __( 'Invio approvato. Controlla gli esiti delle destinazioni nel dettaglio.', 'easycontact' );
+			$message = __( 'Submission approved. Check the destination outcomes in the details.', 'easycontact' );
 		} else {
 			$category = isset( $_POST['easycontact_review_status'] ) && is_string( $_POST['easycontact_review_status'] ) ? sanitize_key( wp_unslash( $_POST['easycontact_review_status'] ) ) : '';
-			$result   = isset( Review::labels()[ $category ] ) ? Review::change( $id, $category ) : new WP_Error( 'category', __( 'Seleziona una categoria valida.', 'easycontact' ) );
-			$message  = __( 'Classificazione aggiornata.', 'easycontact' );
+			$result   = isset( Review::labels()[ $category ] ) ? Review::change( $id, $category ) : new WP_Error( 'category', __( 'Select a valid category.', 'easycontact' ) );
+			$message  = __( 'Category updated.', 'easycontact' );
 		}
 		self::queue_notice( is_wp_error( $result ) ? $result->get_error_message() : $message, is_wp_error( $result ) );
 		wp_safe_redirect( admin_url( 'post.php?post=' . $id . '&action=edit' ) );

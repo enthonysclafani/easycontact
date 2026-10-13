@@ -201,7 +201,12 @@ Fasi 0 e 1.
       senza nonce e una con il nonce di un altro oggetto vengano fermati da `wp_die()` senza effetti, e che
       l'amministratore con il nonce giusto ottenga l'effetto e il ritorno alla schermata. REST non serve: sono form
       classici con ricarica della pagina, come prevede la tabella delle API native in CLAUDE.md._
-- [ ] 5.3 Testi delle schermate brevi e coerenti
+- [x] 5.3 Testi delle schermate brevi e coerenti
+      _Fatto con D9: le stringhe sorgente sono in inglese, brevi e con le parole del core; il testo italiano di oggi è
+      in `languages/easycontact-it_IT.po`/`.mo`, caricato da `Plugin::init()` solo quando il file per la lingua esiste,
+      così un sito in italiano non vede cambiamenti. Anche le etichette del modulo predefinito e gli esempi della
+      pagina Supporto seguono la lingua. `tests/I18nTest.php` verifica che ogni stringa sia tradotta, che un sito in
+      italiano mostri i testi di prima e che il modulo predefinito resti valido in entrambe le lingue._
 
 ### Fase 6 — Controllo finale
 

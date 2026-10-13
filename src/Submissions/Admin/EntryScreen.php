@@ -44,7 +44,7 @@ final class EntryScreen {
 	 * @return void
 	 */
 	public static function boxes(): void {
-		add_meta_box( 'easycontact-entry-data', __( 'Dati dell’invio', 'easycontact' ), array( self::class, 'entry_box' ), Plugin::ENTRY, 'normal', 'high' );
+		add_meta_box( 'easycontact-entry-data', __( 'Submission data', 'easycontact' ), array( self::class, 'entry_box' ), Plugin::ENTRY, 'normal', 'high' );
 		remove_meta_box( 'submitdiv', Plugin::ENTRY, 'side' );
 	}
 
@@ -55,7 +55,7 @@ final class EntryScreen {
 	 * @return array<string, string> Result of this operation.
 	 */
 	public static function columns( array $columns ): array {
-		$columns['easycontact-delivery'] = __( 'Esito invii', 'easycontact' );
+		$columns['easycontact-delivery'] = __( 'Submission outcome', 'easycontact' );
 		return $columns;
 	}
 
@@ -97,18 +97,18 @@ final class EntryScreen {
 				$retry = $retry || ( 'archive' !== $adapter && ! in_array( $outcome, array( 'sent', 'skipped', 'disabled', 'held' ), true ) );
 			}
 			if ( wp_next_scheduled( 'easycontact_retry_delivery', array( $post->ID ) ) ) {
-				echo '<p>' . esc_html__( 'È programmato un nuovo tentativo per le destinazioni temporaneamente non disponibili.', 'easycontact' ) . '</p>';
+				echo '<p>' . esc_html__( 'A new attempt is scheduled for destinations that are temporarily unavailable.', 'easycontact' ) . '</p>';
 			}
 			if ( $retry && 'private' === $post->post_status && Review::can_deliver( $post->ID ) ) {
 				wp_nonce_field( 'easycontact_retry_' . $post->ID, 'easycontact_retry_nonce', false );
 				echo '<input type="hidden" name="easycontact_retry_entry" value="' . esc_attr( (string) $post->ID ) . '">';
-				echo '<p><label><input type="checkbox" name="easycontact_retry_confirm" value="1"> ' . esc_html__( 'Ho verificato le destinazioni con esito non confermato e desidero ripetere anche questi invii.', 'easycontact' ) . '</label></p>';
-				echo '<p><button type="submit" class="button" name="action" value="easycontact_retry" formaction="' . esc_url( admin_url( 'admin-post.php' ) ) . '">' . esc_html__( 'Riprova le destinazioni non riuscite', 'easycontact' ) . '</button></p><p class="description">' . esc_html__( 'Usa la configurazione attuale del modulo. Gli invii già accettati vengono conservati. Senza la verifica selezionata, gli esiti non confermati restano sospesi.', 'easycontact' ) . '</p>';
+				echo '<p><label><input type="checkbox" name="easycontact_retry_confirm" value="1"> ' . esc_html__( 'I have checked the destinations with unconfirmed outcomes and want to repeat these deliveries too.', 'easycontact' ) . '</label></p>';
+				echo '<p><button type="submit" class="button" name="action" value="easycontact_retry" formaction="' . esc_url( admin_url( 'admin-post.php' ) ) . '">' . esc_html__( 'Retry failed destinations', 'easycontact' ) . '</button></p><p class="description">' . esc_html__( 'Uses the form\'s current configuration. Deliveries already accepted are kept. Without the check selected, unconfirmed outcomes stay held.', 'easycontact' ) . '</p>';
 			}
 		}
 		$url = get_delete_post_link( $post->ID, '', true );
 		if ( $url ) {
-			echo '<p><a class="submitdelete deletion" href="' . esc_url( $url ) . '">' . esc_html__( 'Elimina definitivamente questo invio', 'easycontact' ) . '</a></p>';
+			echo '<p><a class="submitdelete deletion" href="' . esc_url( $url ) . '">' . esc_html__( 'Permanently delete this submission', 'easycontact' ) . '</a></p>';
 		}
 	}
 
@@ -120,7 +120,7 @@ final class EntryScreen {
 	public static function retry(): void {
 		$id = isset( $_POST['easycontact_retry_entry'] ) && is_scalar( $_POST['easycontact_retry_entry'] ) ? absint( $_POST['easycontact_retry_entry'] ) : 0;
 		if ( ! current_user_can( 'manage_options' ) || ! $id || Plugin::ENTRY !== get_post_type( $id ) || 'private' !== get_post_status( $id ) ) {
-			wp_die( esc_html__( 'Invio non disponibile.', 'easycontact' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'Submission not available.', 'easycontact' ), '', array( 'response' => 403 ) );
 		}
 		check_admin_referer( 'easycontact_retry_' . $id, 'easycontact_retry_nonce' );
 		$confirmed = isset( $_POST['easycontact_retry_confirm'] ) && '1' === $_POST['easycontact_retry_confirm'];

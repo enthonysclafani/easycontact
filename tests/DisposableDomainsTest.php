@@ -132,7 +132,7 @@ class DisposableDomainsTest extends TestCase {
 		ob_start();
 		Page::settings_page();
 		$html = (string) ob_get_clean();
-		$this->assertStringContainsString( 'Sincronizza lista', $html, 'Settings offer the manual synchronization' );
+		$this->assertStringContainsString( 'Synchronize list', $html, 'Settings offer the manual synchronization' );
 		$this->assertStringContainsString( 'form="easycontact-disposable-sync"', $html, 'The button submits a separate form' );
 		$this->assertStringContainsString( 'action="' . esc_url( admin_url( 'admin-post.php' ) ) . '"', $html, 'The separate form posts to admin-post.php' );
 		$this->assertStringNotContainsString( 'blocked_email_domains', $html, 'Settings have no manual domain fields' );

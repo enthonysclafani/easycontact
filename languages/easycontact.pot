@@ -3,13 +3,13 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: EasyContact 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/easycontact\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/i18n\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-13T09:26:58+00:00\n"
+"POT-Creation-Date: 2026-10-13T14:25:58+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: easycontact\n"
@@ -21,1254 +21,1322 @@ msgstr ""
 
 #. Description of the plugin
 #: easycontact.php
-msgid "Moduli con anti-spam locale, telefoni internazionali, campi condizionali, MailerLite, Slack e Turnstile."
+msgid "Contact forms with local anti-spam, international phone numbers, conditional fields, MailerLite, Slack and Turnstile."
 msgstr ""
 
-#: src/Admin.php:55
-#: src/Admin.php:676
-msgid "Impostazioni"
+#: src/Admin/Admin.php:37
+#: src/Admin/Admin.php:76
+msgid "Support"
 msgstr ""
 
-#: src/Admin.php:56
-#: src/Admin.php:718
-msgid "Supporto"
+#: src/Admin/Admin.php:59
+msgid "Option 1"
 msgstr ""
 
-#: src/Admin.php:78
-msgid "Opzione 1"
+#: src/Admin/Admin.php:60
+msgid "Option 2"
 msgstr ""
 
-#: src/Admin.php:79
-msgid "Opzione 2"
+#: src/Admin/Admin.php:77
+msgid "Syntax and examples"
 msgstr ""
 
-#: src/Admin.php:90
-#: src/Plugin.php:165
-msgid "Modulo"
+#: src/Admin/Admin.php:78
+msgid "Separate fields on the same line with | to place them in equal-width columns. Start a new line for a new row. An asterisk makes the field required. Save the form to update the fields available in the rules."
 msgstr ""
 
-#: src/Admin.php:91
-msgid "Campi condizionali"
+#: src/Admin/Admin.php:79
+msgid "Two columns (50% each):"
 msgstr ""
 
-#: src/Admin.php:92
-msgid "Email"
+#. translators: Example form syntax: translate only the labels in quotes.
+#: src/Admin/Admin.php:80
+msgid "[text* name \"Name\"] | [email* email \"Email\"]"
 msgstr ""
 
-#: src/Admin.php:93
-msgid "Integrazioni"
+#. translators: Example form syntax: translate only the labels in quotes.
+#: src/Admin/Admin.php:81
+msgid "Three columns (33.33% each):"
 msgstr ""
 
-#: src/Admin.php:94
-#: src/Admin.php:517
-msgid "Anti-spam e telefono internazionale"
+#. translators: Example form syntax: translate only the labels in quotes.
+#: src/Admin/Admin.php:82
+msgid "[text* name \"Name\"] | [text* surname \"Surname\"] | [email* email \"Email\"]"
 msgstr ""
 
-#: src/Admin.php:95
-msgid "Opzioni"
+#. translators: Example form syntax: translate only the labels in quotes.
+#: src/Admin/Admin.php:83
+msgid "Widths account for the space between columns. On small screens fields stack vertically. Notes and the button must stay on their own line."
 msgstr ""
 
-#: src/Admin.php:96
-msgid "Dati dell’invio"
+#. translators: Example form syntax, one tag per line: translate only the labels in quotes.
+#: src/Admin/Admin.php:84
+msgid ""
+"[select reason \"Reason\" \"Information\" \"Quote\"]\n"
+"[number budget \"Budget\" min:0 max:100000 step:1]\n"
+"[checkbox newsletter \"I would like to receive the newsletter\"]\n"
+"[acceptance* privacy \"I have read the privacy policy\"]\n"
+"[note \"A short hint\"]\n"
+"[submit \"Send\"]"
 msgstr ""
 
-#: src/Admin.php:113
-msgid "Testo"
+#. translators: Example form syntax, one tag per line: translate only the labels in quotes.
+#: src/Admin/Admin.php:85
+msgid ""
+"[tel phone \"Phone\"]\n"
+"[tel* cell \"Mobile\" mobile country:IT]\n"
+"[tel contact \"Contact number\" allow-repeated]"
 msgstr ""
 
-#: src/Admin.php:115
-#: src/Admin.php:200
-msgid "Messaggio"
+#. translators: Example form syntax, one tag per line: translate only the labels in quotes.
+#: src/Admin/Admin.php:86
+msgid "The phone field includes a country selector. country:IT sets the initial country, mobile requires a mobile number and allow-repeated accepts fully repetitive numbers. email, textarea and url are also available. Use unique lowercase names."
 msgstr ""
 
-#: src/Admin.php:116
-msgid "Selezione"
+#: src/AntiSpam/AntiSpam.php:114
+msgid "Enter at most 30 short phrases, one per line."
 msgstr ""
 
-#: src/Admin.php:117
-msgid "Numero"
+#: src/AntiSpam/AntiSpam.php:123
+msgid "Each phrase must be 4 to 150 characters long."
 msgstr ""
 
-#: src/Admin.php:118
-msgid "Telefono"
+#: src/AntiSpam/AntiSpam.php:260
+msgid "Anti-bot field filled in"
 msgstr ""
 
-#: src/Admin.php:119
-msgid "Checkbox"
+#: src/AntiSpam/AntiSpam.php:261
+msgid "Extremely fast completion"
 msgstr ""
 
-#: src/Admin.php:120
-msgid "Consenso"
+#: src/AntiSpam/AntiSpam.php:262
+msgid "Disposable email domain"
 msgstr ""
 
-#: src/Admin.php:124
-msgid "Definizione del modulo"
+#: src/AntiSpam/AntiSpam.php:263
+msgid "Email domain blocked in the settings"
 msgstr ""
 
-#: src/Admin.php:129
-msgid "Anteprima salvata"
+#: src/AntiSpam/AntiSpam.php:264
+msgid "Email with a repetitive pattern"
 msgstr ""
 
-#: src/Admin.php:147
-msgid "Nessuno"
+#: src/AntiSpam/AntiSpam.php:265
+msgid "Many submissions from the same email"
 msgstr ""
 
-#: src/Admin.php:169
-msgid "Configurato; lascia vuoto per mantenerlo"
+#: src/AntiSpam/AntiSpam.php:266
+msgid "Many submissions from the same phone"
 msgstr ""
 
-#: src/Admin.php:196
-msgid "Invia una notifica email"
+#: src/AntiSpam/AntiSpam.php:267
+msgid "Fully repetitive phone number"
 msgstr ""
 
-#: src/Admin.php:197
-msgid "Destinatari"
+#: src/AntiSpam/AntiSpam.php:268
+msgid "Text made of repetitions"
 msgstr ""
 
-#: src/Admin.php:197
-msgid "Indirizzi email separati da virgola."
+#: src/AntiSpam/AntiSpam.php:269
+msgid "High number of links"
 msgstr ""
 
-#: src/Admin.php:198
-msgid "Oggetto"
+#: src/AntiSpam/AntiSpam.php:270
+msgid "Recurring promotional pattern"
 msgstr ""
 
-#: src/Admin.php:199
-msgid "Rispondi all’indirizzo del campo"
+#: src/AntiSpam/AntiSpam.php:271
+msgid "Phrase flagged in the form rules"
 msgstr ""
 
-#: src/Admin.php:200
-msgid "[fields] include i campi visibili; [form] il titolo del modulo; [site] il nome del sito. Puoi usare anche [nome_del_campo]."
-msgstr ""
-
-#: src/Admin.php:213
-msgid "Attiva MailerLite per questo modulo"
-msgstr ""
-
-#: src/Admin.php:215
-msgid "Nome"
-msgstr ""
-
-#: src/Admin.php:216
-msgid "Campo del consenso newsletter"
-msgstr ""
-
-#: src/Admin.php:217
-msgid "ID dei gruppi MailerLite"
-msgstr ""
-
-#: src/Admin.php:217
-msgid "Uno o più ID separati da virgola. L’iscrizione avviene solo con il consenso selezionato. Il double opt-in si configura in MailerLite, nelle impostazioni API e integrazioni."
-msgstr ""
-
-#: src/Admin.php:219
-msgid "Invia una notifica Slack"
-msgstr ""
-
-#: src/Admin.php:220
-msgid "Webhook del canale"
-msgstr ""
-
-#: src/Admin.php:221
-msgid "Rimuovi il webhook salvato"
-msgstr ""
-
-#: src/Admin.php:222
-msgid "Campi da includere nella notifica"
-msgstr ""
-
-#: src/Admin.php:222
-msgid "Nomi dei campi separati da virgola. Solo i campi visibili scelti qui saranno inviati a Slack."
-msgstr ""
-
-#: src/Admin.php:223
-msgid "Configura token MailerLite e CAPTCHA nelle impostazioni"
-msgstr ""
-
-#: src/Admin.php:234
-msgid "Verifica con Cloudflare Turnstile"
-msgstr ""
-
-#: src/Admin.php:235
-#: src/Admin.php:534
-msgid "Archivio degli invii"
-msgstr ""
-
-#: src/Admin.php:237
-#: src/Admin.php:264
-#: src/Admin.php:273
-msgid "Usa impostazioni generali"
-msgstr ""
-
-#: src/Admin.php:238
-#: src/Admin.php:264
-msgid "Disattivato"
-msgstr ""
-
-#: src/Admin.php:239
-#: src/Admin.php:264
-msgid "Attivato"
-msgstr ""
-
-#: src/Admin.php:244
-msgid "Messaggio di conferma"
-msgstr ""
-
-#: src/Admin.php:247
-msgid "Ultimo esito"
-msgstr ""
-
-#: src/Admin.php:272
-msgid "Livello anti-spam"
-msgstr ""
-
-#: src/Admin.php:273
-#: src/Admin.php:585
-msgid "1 — Base"
-msgstr ""
-
-#: src/Admin.php:273
-#: src/Admin.php:585
-msgid "2 — Equilibrato"
-msgstr ""
-
-#: src/Admin.php:273
-#: src/Admin.php:585
-msgid "3 — Rigoroso"
-msgstr ""
-
-#: src/Admin.php:276
-msgid "I controlli di validità e l’honeypot sono sempre attivi. I livelli 2 e 3 aggiungono controlli sul contenuto, domini temporanei, ripetizioni e frequenza. Il livello 3 è più sensibile e può richiedere più revisioni."
-msgstr ""
-
-#: src/Admin.php:277
-#: src/Admin.php:527
-msgid "Quarantena con archivio disattivato"
-msgstr ""
-
-#: src/Admin.php:277
-msgid "Conserva spam e sospetti anche quando l’archivio normale è disattivato. Con archivio attivo, i sospetti sono sempre salvati con inoltro sospeso. Senza conservazione, vengono rifiutati."
-msgstr ""
-
-#: src/Admin.php:278
-#: src/Admin.php:526
-msgid "Modalità osservazione"
-msgstr ""
-
-#: src/Admin.php:278
-msgid "Calcola il punteggio senza fermare gli invii per i segnali euristici. L’honeypot resta attivo. Per esaminare i risultati, attiva l’archivio."
-msgstr ""
-
-#: src/Admin.php:279
-msgid "Controllo DNS del dominio email"
-msgstr ""
-
-#: src/Admin.php:279
-msgid "Verifica la capacità del dominio di ricevere posta. Non verifica l’esistenza della casella. Gli errori temporanei del resolver non bloccano l’invio."
-msgstr ""
-
-#: src/Admin.php:280
-#: src/Admin.php:531
-msgid "Paese iniziale del telefono"
-msgstr ""
-
-#: src/Admin.php:281
-msgid "Usa impostazioni generali o lingua del sito"
-msgstr ""
-
-#: src/Admin.php:282
-msgid "Il visitatore può scegliere qualsiasi paese. Per lingue senza un paese riconoscibile, configura un valore iniziale oppure lascia la scelta al visitatore."
-msgstr ""
-
-#: src/Admin.php:283
-msgid "I domini temporanei vengono riconosciuti tramite le liste pubbliche condivise da tutti i moduli nei livelli 2 e 3."
-msgstr ""
-
-#: src/Admin.php:283
-msgid "Gestisci la lista nelle impostazioni"
-msgstr ""
-
-#: src/Admin.php:284
-msgid "Frasi sospette per questo modulo"
-msgstr ""
-
-#: src/Admin.php:285
-msgid "Una frase per riga. Le frasi del modulo si aggiungono a quelle generali e contribuiscono al punteggio nei livelli 2 e 3; non provano da sole che il messaggio sia spam."
-msgstr ""
-
-#: src/Admin.php:295
-msgid "È uguale a"
-msgstr ""
-
-#: src/Admin.php:296
-msgid "È diverso da"
-msgstr ""
-
-#: src/Admin.php:297
-msgid "Contiene"
-msgstr ""
-
-#: src/Admin.php:298
-msgid "È vuoto"
-msgstr ""
-
-#: src/Admin.php:299
-msgid "Non è vuoto"
-msgstr ""
-
-#: src/Admin.php:300
-msgid "È maggiore di"
-msgstr ""
-
-#: src/Admin.php:301
-msgid "È minore di"
-msgstr ""
-
-#: src/Admin.php:316
-msgid "Campo da mostrare"
-msgstr ""
-
-#: src/Admin.php:317
-msgid "Campo da confrontare"
-msgstr ""
-
-#: src/Admin.php:325
-#: src/Admin.php:341
-msgid "Confronto"
-msgstr ""
-
-#: src/Admin.php:329
-#: src/Admin.php:341
-msgid "Valore"
-msgstr ""
-
-#: src/Admin.php:329
-msgid "Rimuovi"
-msgstr ""
-
-#: src/Admin.php:340
-msgid "Mostra un campo quando il confronto è soddisfatto. I campi nascosti non vengono validati né trasmessi. Per una checkbox usa il valore 1 quando selezionata."
-msgstr ""
-
-#: src/Admin.php:340
-msgid "Per le regole dello stesso campo richiedi"
-msgstr ""
-
-#: src/Admin.php:340
-msgid "tutte le condizioni (AND)"
-msgstr ""
-
-#: src/Admin.php:340
-msgid "almeno una condizione (OR)"
-msgstr ""
-
-#: src/Admin.php:341
-msgid "Mostra"
-msgstr ""
-
-#: src/Admin.php:341
-msgid "Quando"
-msgstr ""
-
-#: src/Admin.php:345
-msgid "Aggiungi regola"
-msgstr ""
-
-#: src/Admin.php:386
-msgid "Non è stato possibile salvare il modulo. Riprova."
-msgstr ""
-
-#: src/Admin.php:406
-msgid "Un’opzione è troppo lunga."
-msgstr ""
-
-#: src/Admin.php:414
-msgid "Seleziona un livello anti-spam da 1 a 3."
-msgstr ""
-
-#: src/Admin.php:420
-msgid "Una preferenza anti-spam non è valida."
-msgstr ""
-
-#: src/Admin.php:426
-msgid "Seleziona un paese iniziale valido."
-msgstr ""
-
-#: src/Admin.php:431
-msgid "Le regole anti-spam devono essere testo."
-msgstr ""
-
-#: src/Admin.php:439
-msgid "Il webhook Slack è troppo lungo."
-msgstr ""
-
-#: src/Admin.php:442
-msgid "Controlla la lunghezza dei messaggi e inserisci una conferma per il visitatore."
-msgstr ""
-
-#: src/Admin.php:447
-msgid "Controlla destinatari, oggetto, messaggio e campo Reply-To della notifica email."
-msgstr ""
-
-#: src/Admin.php:452
-msgid "MailerLite richiede token, campo email, consenso newsletter e ID di almeno un gruppo."
-msgstr ""
-
-#: src/Admin.php:455
-msgid "Inserisci un webhook HTTPS valido di hooks.slack.com."
-msgstr ""
-
-#: src/Admin.php:459
-msgid "Slack richiede almeno un campo esistente da includere."
-msgstr ""
-
-#: src/Admin.php:464
-msgid "Configura entrambe le chiavi Turnstile prima di attivare il CAPTCHA."
-msgstr ""
-
-#: src/Admin.php:467
-msgid "Attiva almeno una destinazione o l’archivio degli invii."
-msgstr ""
-
-#: src/Admin.php:494
-msgid "La definizione del modulo non è stata aggiornata: "
-msgstr ""
-
-#: src/Admin.php:516
-msgid "Privacy dei moduli"
-msgstr ""
-
-#: src/Admin.php:518
-msgid "MailerLite"
-msgstr ""
-
-#: src/Admin.php:520
-msgid "Disinstallazione"
-msgstr ""
-
-#: src/Admin.php:525
-msgid "Livello predefinito"
-msgstr ""
-
-#: src/Admin.php:525
-msgid "Consigliato: 2 — Equilibrato. I moduli esistenti mantengono il livello 1 finché non viene modificato nelle loro opzioni."
-msgstr ""
-
-#: src/Admin.php:526
-msgid "Registra i segnali euristici senza fermare gli invii. Per esaminare i risultati, attiva l’archivio. L’honeypot resta attivo."
-msgstr ""
-
-#: src/Admin.php:527
-msgid "Conserva spam e sospetti per la revisione anche senza archivio normale; notifiche e integrazioni restano sospese."
-msgstr ""
-
-#: src/Admin.php:528
-msgid "Conservazione di spam e sospetti"
-msgstr ""
-
-#: src/Admin.php:528
-msgid "Giorni prima della cancellazione automatica di spam e probabile spam. Minimo 1; gli invii accettati seguono la conservazione normale."
-msgstr ""
-
-#: src/Admin.php:529
-msgid "Limite giornaliero della quarantena"
-msgstr ""
-
-#: src/Admin.php:529
-msgid "Numero massimo di nuovi invii sospetti archiviabili in una finestra di 24 ore. Oltre il limite vengono rifiutati."
-msgstr ""
-
-#: src/Admin.php:530
-msgid "Controllo DNS delle email"
-msgstr ""
-
-#: src/Admin.php:530
-msgid "Controlla il dominio tramite il resolver del server, con cache e tolleranza agli errori temporanei. Non verifica la casella."
-msgstr ""
-
-#: src/Admin.php:531
-msgid "La selezione automatica segue la lingua del sito. Il visitatore può sempre cambiare paese."
-msgstr ""
-
-#: src/Admin.php:532
-msgid "Lista domini temporanei"
-msgstr ""
-
-#: src/Admin.php:532
-msgid "Usata nei livelli 2 e 3. Sincronizza su richiesta le fonti pubbliche e conserva la copia locale se una fonte non è disponibile. Nessun aggiornamento automatico."
-msgstr ""
-
-#: src/Admin.php:533
-msgid "Frasi sospette"
-msgstr ""
-
-#: src/Admin.php:533
-msgid "Una frase per riga, da 4 a 150 caratteri. Aumenta il sospetto; usa frasi specifiche, evitando parole generiche."
-msgstr ""
-
-#: src/Admin.php:534
-msgid "Salva gli invii locali per impostazione predefinita. Ogni modulo può cambiare questa scelta."
-msgstr ""
-
-#: src/Admin.php:535
-msgid "Conservazione"
-msgstr ""
-
-#: src/Admin.php:535
-msgid "Giorni di conservazione. 0 mantiene gli invii fino alla cancellazione manuale. La pulizia usa la pianificazione di WordPress."
-msgstr ""
-
-#: src/Admin.php:536
-msgid "Richieste di cancellazione"
-msgstr ""
-
-#: src/Admin.php:536
-msgid "Consenti agli strumenti privacy di WordPress di eliminare gli invii associati all’indirizzo email confermato."
-msgstr ""
-
-#: src/Admin.php:537
-msgid "Token API"
-msgstr ""
-
-#: src/Admin.php:537
-msgid "Token della versione attuale di MailerLite. Lascia vuoto per mantenere il token salvato."
-msgstr ""
-
-#: src/Admin.php:538
-msgid "Site key"
-msgstr ""
-
-#: src/Admin.php:538
-msgid "Il CAPTCHA si attiva nelle opzioni di ciascun modulo."
-msgstr ""
-
-#: src/Admin.php:539
-msgid "Secret key"
-msgstr ""
-
-#: src/Admin.php:539
-msgid "Lascia vuoto per mantenere la chiave salvata."
-msgstr ""
-
-#: src/Admin.php:540
-msgid "Rimuovi i dati"
-msgstr ""
-
-#: src/Admin.php:540
-msgid "Alla disinstallazione elimina definitivamente moduli, invii, impostazioni e credenziali del plugin. La sola disattivazione conserva i dati."
-msgstr ""
-
-#. translators: %s: number of domains.
-#: src/Admin.php:573
-#, php-format
-msgid "%s domini nella lista locale"
-msgstr ""
-
-#. translators: %s: date and time of the synchronization, or date of the bundled snapshot.
-#: src/Admin.php:575
-#, php-format
-msgid "Ultima sincronizzazione: %s"
-msgstr ""
-
-#. translators: %s: date and time of the synchronization, or date of the bundled snapshot.
-#: src/Admin.php:575
-#, php-format
-msgid "Copia inclusa nel plugin, aggiornata al %s"
-msgstr ""
-
-#: src/Admin.php:580
-msgid "Sincronizza lista"
-msgstr ""
-
-#: src/Admin.php:592
-msgid "Automatico dalla lingua del sito"
-msgstr ""
-
-#: src/Admin.php:606
-msgid "Configurato"
-msgstr ""
-
-#: src/Admin.php:613
-msgid "Rimuovi la credenziale salvata"
-msgstr ""
-
-#: src/Admin.php:640
-msgid "Un valore anti-spam non è valido; è stato mantenuto quello precedente."
-msgstr ""
-
-#: src/Admin.php:649
-msgid "Una lista anti-spam non è valida; è stata mantenuta quella precedente."
-msgstr ""
-
-#: src/Admin.php:654
-msgid "La site key non è valida; è stata mantenuta quella precedente."
-msgstr ""
-
-#: src/Admin.php:661
-msgid "La credenziale contiene caratteri non validi; è stata mantenuta quella precedente."
-msgstr ""
-
-#: src/Admin.php:695
-msgid "Operazione non consentita."
-msgstr ""
-
-#. translators: %s: number of domains.
-#: src/Admin.php:701
-#, php-format
-msgid "Sincronizzazione completata: %s domini nella lista locale."
-msgstr ""
-
-#: src/Admin.php:719
-msgid "Sintassi ed esempi"
-msgstr ""
-
-#: src/Admin.php:720
-msgid "Separa i campi sulla stessa riga con | per affiancarli in colonne di uguale larghezza. Vai a capo per iniziare una nuova riga. L’asterisco rende il campo obbligatorio. Salva il modulo per aggiornare i campi disponibili nelle regole."
-msgstr ""
-
-#: src/Admin.php:721
-msgid "Due colonne (50% ciascuna):"
-msgstr ""
-
-#: src/Admin.php:723
-msgid "Tre colonne (33,33% ciascuna):"
-msgstr ""
-
-#: src/Admin.php:725
-msgid "Le larghezze tengono conto dello spazio tra le colonne. Su schermi piccoli i campi si dispongono uno sotto l’altro. Note e pulsante devono restare separati."
-msgstr ""
-
-#: src/Admin.php:728
-msgid "Il telefono include il selettore del paese. country:IT imposta il paese iniziale del campo, mobile richiede un cellulare e allow-repeated consente numeri interamente ripetitivi. Sono disponibili anche email, textarea e url. Usa nomi unici in minuscolo."
-msgstr ""
-
-#: src/Admin.php:744
-msgid "Esito invii"
-msgstr ""
-
-#: src/Admin.php:792
-msgid "Archivio"
-msgstr ""
-
-#: src/Admin.php:797
-msgid "Accettata dal servizio email"
-msgstr ""
-
-#: src/Admin.php:797
-msgid "Inviato"
-msgstr ""
-
-#: src/Admin.php:799
-msgid "Salvato"
-msgstr ""
-
-#: src/Admin.php:801
-msgid "Inoltro sospeso in attesa di approvazione"
-msgstr ""
-
-#: src/Admin.php:803
-msgid "Destinazione disattivata"
-msgstr ""
-
-#: src/Admin.php:805
-msgid "Non inviato: consenso non selezionato"
-msgstr ""
-
-#: src/Admin.php:807
-msgid "Esito non confermato; verifica la destinazione prima di reinviare"
-msgstr ""
-
-#. translators: %s: HTTP response code from an external integration.
-#: src/Admin.php:810
-#, php-format
-msgid "Errore del servizio (HTTP %s)"
-msgstr ""
-
-#: src/Admin.php:812
-msgid "Invio non riuscito; controlla le impostazioni"
-msgstr ""
-
-#: src/Admin.php:841
-msgid "È programmato un nuovo tentativo per le destinazioni temporaneamente non disponibili."
-msgstr ""
-
-#: src/Admin.php:846
-msgid "Ho verificato le destinazioni con esito non confermato e desidero ripetere anche questi invii."
-msgstr ""
-
-#: src/Admin.php:847
-msgid "Riprova le destinazioni non riuscite"
-msgstr ""
-
-#: src/Admin.php:847
-msgid "Usa la configurazione attuale del modulo. Gli invii già accettati vengono conservati. Senza la verifica selezionata, gli esiti non confermati restano sospesi."
-msgstr ""
-
-#: src/Admin.php:852
-msgid "Elimina definitivamente questo invio"
-msgstr ""
-
-#: src/Admin.php:864
-msgid "Anteprima non disponibile."
-msgstr ""
-
-#: src/Admin.php:872
-msgid "Anteprima modulo"
-msgstr ""
-
-#: src/Admin.php:874
-msgid "Anteprima della versione salvata. L’invio e le integrazioni sono disattivati."
-msgstr ""
-
-#: src/Admin.php:889
-#: src/Review.php:274
-#: src/Submission.php:204
-msgid "Invio non disponibile."
-msgstr ""
-
-#: src/AntiSpam.php:67
-msgid "Inserisci al massimo 30 frasi brevi, una per riga."
-msgstr ""
-
-#: src/AntiSpam.php:76
-msgid "Ogni frase deve contenere da 4 a 150 caratteri."
-msgstr ""
-
-#: src/AntiSpam.php:186
-msgid "Campo anti-bot compilato"
-msgstr ""
-
-#: src/AntiSpam.php:187
-msgid "Compilazione estremamente rapida"
-msgstr ""
-
-#: src/AntiSpam.php:188
-msgid "Dominio email temporaneo"
-msgstr ""
-
-#: src/AntiSpam.php:189
-msgid "Dominio email bloccato nelle impostazioni"
-msgstr ""
-
-#: src/AntiSpam.php:190
-msgid "Email con sequenza ripetitiva"
-msgstr ""
-
-#: src/AntiSpam.php:191
-msgid "Molti invii dalla stessa email"
-msgstr ""
-
-#: src/AntiSpam.php:192
-msgid "Molti invii dallo stesso telefono"
-msgstr ""
-
-#: src/AntiSpam.php:193
-msgid "Numero telefonico interamente ripetitivo"
-msgstr ""
-
-#: src/AntiSpam.php:194
-msgid "Testo composto da ripetizioni"
-msgstr ""
-
-#: src/AntiSpam.php:195
-msgid "Elevata presenza di collegamenti"
-msgstr ""
-
-#: src/AntiSpam.php:196
-msgid "Schema promozionale ricorrente"
-msgstr ""
-
-#: src/AntiSpam.php:197
-msgid "Frase segnalata nelle regole del modulo"
-msgstr ""
-
-#: src/AntiSpam.php:198
-msgid "Contenuto ripetuto in più invii"
-msgstr ""
-
-#: src/Delivery.php:29
-#: src/Frontend.php:298
-msgid "Completa la verifica CAPTCHA."
-msgstr ""
-
-#: src/Delivery.php:49
-msgid "La verifica CAPTCHA non è riuscita. Riprova."
-msgstr ""
-
-#: src/Delivery.php:107
-#: src/Delivery.php:211
-msgid "Sì"
-msgstr ""
-
-#: src/Delivery.php:107
-#: src/Delivery.php:211
-msgid "No"
-msgstr ""
-
-#: src/Delivery.php:194
-msgid "Nuovo messaggio: "
+#: src/AntiSpam/AntiSpam.php:272
+msgid "Content repeated across submissions"
 msgstr ""
 
 #. translators: %s: public domain-list source name.
-#: src/DisposableDomains.php:111
+#: src/AntiSpam/DisposableDomains.php:140
 #, php-format
-msgid "La fonte %s non è disponibile o ha restituito una lista incompleta o non valida. La lista precedente è stata mantenuta."
+msgid "The %s source is unavailable or returned an incomplete or invalid list. The previous list was kept."
 msgstr ""
 
-#: src/DisposableDomains.php:117
-msgid "La lista ricevuta è troppo grande. La lista precedente è stata mantenuta."
+#: src/AntiSpam/DisposableDomains.php:146
+msgid "The received list is too large. The previous list was kept."
 msgstr ""
 
-#: src/DisposableDomains.php:123
-msgid "Non è stato possibile salvare la lista. La lista precedente è stata mantenuta."
+#: src/AntiSpam/DisposableDomains.php:159
+msgid "The list could not be saved. The previous list was kept."
 msgstr ""
 
-#: src/Frontend.php:129
-#: src/Frontend.php:162
-msgid "Modulo non disponibile."
+#: src/Delivery/Admin/Outcomes.php:27
+msgid "Archive"
 msgstr ""
 
-#: src/Frontend.php:132
-msgid "Troppe richieste ravvicinate. Attendi qualche minuto."
+#: src/Delivery/Admin/Outcomes.php:32
+msgid "Accepted by the mail service"
 msgstr ""
 
-#: src/Frontend.php:148
-msgid "Il messaggio è troppo lungo."
+#: src/Delivery/Admin/Outcomes.php:32
+msgid "Sent"
 msgstr ""
 
-#: src/Frontend.php:165
-msgid "Troppi tentativi ravvicinati. Attendi qualche minuto."
+#: src/Delivery/Admin/Outcomes.php:34
+msgid "Saved"
 msgstr ""
 
-#: src/Frontend.php:170
-msgid "La sessione del modulo è scaduta. Ricarica la pagina."
+#: src/Delivery/Admin/Outcomes.php:36
+msgid "Delivery held pending approval"
 msgstr ""
 
-#: src/Frontend.php:173
-#: src/Frontend.php:196
-msgid "Il modulo non è valido."
+#: src/Delivery/Admin/Outcomes.php:38
+msgid "Destination disabled"
 msgstr ""
 
-#: src/Frontend.php:178
-msgid "Il paese selezionato non è valido."
+#: src/Delivery/Admin/Outcomes.php:40
+msgid "Not sent: consent not selected"
 msgstr ""
 
-#: src/Frontend.php:185
-msgid "Il modulo non è valido. Ricarica la pagina."
+#: src/Delivery/Admin/Outcomes.php:42
+msgid "Outcome not confirmed; check the destination before sending again"
 msgstr ""
 
-#: src/Frontend.php:201
-msgid "Questo invio è già stato elaborato. Contatta il sito prima di inviare un altro messaggio."
+#. translators: %s: HTTP response code from an external integration.
+#: src/Delivery/Admin/Outcomes.php:45
+#, php-format
+msgid "Service error (HTTP %s)"
 msgstr ""
 
-#: src/Frontend.php:208
-msgid "Controlla i campi evidenziati."
+#: src/Delivery/Admin/Outcomes.php:47
+msgid "Delivery failed; check the settings"
 msgstr ""
 
-#: src/Frontend.php:232
-msgid "Invio del modulo"
+#: src/Delivery/Delivery.php:30
+#: src/Forms/Renderer.php:83
+msgid "Complete the CAPTCHA."
 msgstr ""
 
-#: src/Frontend.php:254
-msgid "Pubblica un modulo valido prima di usare lo shortcode."
+#: src/Delivery/Delivery.php:50
+msgid "The CAPTCHA check failed. Try again."
 msgstr ""
 
-#: src/Frontend.php:294
-msgid "Invio in corso…"
+#: src/Delivery/Delivery.php:108
+#: src/Delivery/Delivery.php:212
+msgid "Yes"
 msgstr ""
 
-#: src/Frontend.php:295
-msgid "Invio non riuscito. Riprova."
+#: src/Delivery/Delivery.php:108
+#: src/Delivery/Delivery.php:212
+msgid "No"
 msgstr ""
 
-#: src/Frontend.php:296
-msgid "Connessione interrotta. Riprova senza ricaricare la pagina per verificare questo invio."
+#: src/Delivery/Delivery.php:195
+msgid "New message: "
 msgstr ""
 
-#: src/Frontend.php:297
-msgid "La sessione è scaduta. I campi compilati sono stati mantenuti: riprova."
+#: src/Forms/Admin/Editor.php:50
+#: src/Plugin.php:145
+msgid "Form"
 msgstr ""
 
-#: src/Frontend.php:299
-msgid "La verifica CAPTCHA non è disponibile. Riprova più tardi."
+#: src/Forms/Admin/Editor.php:51
+msgid "Conditional fields"
 msgstr ""
 
-#: src/Frontend.php:300
-#: src/Submission.php:435
-msgid "Non è stato possibile confermare l’invio. Contatta il sito prima di inviare di nuovo il messaggio."
+#: src/Forms/Admin/Editor.php:52
+#: src/Forms/Forms.php:54
+msgid "Email"
 msgstr ""
 
-#: src/Frontend.php:338
-msgid "Lascia vuoto questo campo"
+#: src/Forms/Admin/Editor.php:53
+msgid "Integrations"
 msgstr ""
 
-#: src/Frontend.php:357
-msgid "Attiva JavaScript per completare il CAPTCHA e inviare il modulo."
+#: src/Forms/Admin/Editor.php:54
+#: src/Settings/Admin/Page.php:64
+msgid "Anti-spam and international phone"
 msgstr ""
 
-#: src/Frontend.php:371
-#: src/Submission.php:140
-msgid "Il messaggio è stato ricevuto ed è in attesa di verifica."
+#: src/Forms/Admin/Editor.php:55
+msgid "Options"
 msgstr ""
 
-#: src/Frontend.php:409
-msgid "Seleziona…"
+#: src/Forms/Admin/Editor.php:66
+#: src/Submissions/Admin/EntryScreen.php:58
+msgid "Submission outcome"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:102
+msgid "Text"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:104
+#: src/Forms/Admin/Editor.php:189
+#: src/Forms/Forms.php:57
+msgid "Message"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:105
+msgid "Select"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:106
+msgid "Number"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:107
+msgid "Phone"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:108
+msgid "Checkbox"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:109
+msgid "Consent"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:113
+msgid "Form definition"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:118
+msgid "Saved preview"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:136
+msgid "None"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:158
+msgid "Configured; leave empty to keep it"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:185
+msgid "Send an email notification"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:186
+msgid "Recipients"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:186
+msgid "Comma-separated email addresses."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:187
+msgid "Subject"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:188
+msgid "Reply to the address in the field"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:189
+msgid "[fields] includes the visible fields; [form] the form title; [site] the site name. You can also use [field_name]."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:202
+msgid "Enable MailerLite for this form"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:204
+#: src/Forms/Forms.php:53
+msgid "Name"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:205
+msgid "Newsletter consent field"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:206
+msgid "MailerLite group IDs"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:206
+msgid "One or more comma-separated IDs. Subscription happens only when consent is selected. Double opt-in is configured in MailerLite, in the API and integrations settings."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:208
+msgid "Send a Slack notification"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:209
+msgid "Channel webhook"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:210
+msgid "Remove the saved webhook"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:211
+msgid "Fields to include in the notification"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:211
+msgid "Comma-separated field names. Only the visible fields chosen here are sent to Slack."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:212
+msgid "Configure the MailerLite token and the CAPTCHA in the settings"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:223
+msgid "Verify with Cloudflare Turnstile"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:224
+#: src/Settings/Admin/Page.php:81
+msgid "Submission archive"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:226
+#: src/Forms/Admin/Editor.php:252
+#: src/Forms/Admin/Editor.php:270
+msgid "Use the general settings"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:227
+#: src/Forms/Admin/Editor.php:254
+msgid "Off"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:228
+#: src/Forms/Admin/Editor.php:253
+msgid "On"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:233
+msgid "Confirmation message"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:236
+msgid "Last outcome"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:268
+msgid "Anti-spam level"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:271
+#: src/Settings/Admin/Page.php:133
+msgid "1 — Basic"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:272
+#: src/Settings/Admin/Page.php:134
+msgid "2 — Balanced"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:273
+#: src/Settings/Admin/Page.php:135
+msgid "3 — Strict"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:277
+msgid "Validity checks and the honeypot are always on. Levels 2 and 3 add checks on content, disposable domains, repetitions and frequency. Level 3 is more sensitive and may need more reviews."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:278
+#: src/Settings/Admin/Page.php:74
+msgid "Quarantine with the archive off"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:278
+msgid "Keep spam and suspicious submissions even when the normal archive is off. With the archive on, suspicious submissions are always saved with delivery held. Without storage, they are rejected."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:279
+#: src/Settings/Admin/Page.php:73
+msgid "Observation mode"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:279
+msgid "Calculate the score without stopping submissions for heuristic signals. The honeypot stays on. To review the results, turn on the archive."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:280
+msgid "Email domain DNS check"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:280
+msgid "Check that the domain can receive mail. It does not check that the mailbox exists. Temporary resolver errors do not block the submission."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:281
+#: src/Settings/Admin/Page.php:78
+msgid "Initial phone country"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:282
+msgid "Use the general settings or the site language"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:283
+msgid "Visitors can choose any country. For languages without a recognizable country, set an initial value or leave the choice to the visitor."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:284
+msgid "Disposable domains are recognized through the public lists shared by all forms at levels 2 and 3."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:284
+msgid "Manage the list in the settings"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:285
+msgid "Suspicious phrases for this form"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:286
+msgid "One phrase per line. Form phrases add to the general ones and raise the score at levels 2 and 3; on their own they do not prove that a message is spam."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:296
+msgid "Is equal to"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:297
+msgid "Is not equal to"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:298
+msgid "Contains"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:299
+msgid "Is empty"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:300
+msgid "Is not empty"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:301
+msgid "Is greater than"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:302
+msgid "Is less than"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:317
+msgid "Field to show"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:318
+msgid "Field to compare"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:326
+#: src/Forms/Admin/Editor.php:342
+msgid "Comparison"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:330
+#: src/Forms/Admin/Editor.php:342
+msgid "Value"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:330
+msgid "Remove"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:341
+msgid "Show a field when the comparison is met. Hidden fields are neither validated nor sent. For a checkbox use the value 1 when checked."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:341
+msgid "For rules on the same field require"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:341
+msgid "all conditions (AND)"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:341
+msgid "at least one condition (OR)"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:342
+msgid "Show"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:342
+msgid "When"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:346
+msgid "Add rule"
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:387
+msgid "The form could not be saved. Try again."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:407
+msgid "An option is too long."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:415
+msgid "Select an anti-spam level from 1 to 3."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:421
+msgid "An anti-spam preference is not valid."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:427
+msgid "Select a valid initial country."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:432
+msgid "Anti-spam rules must be text."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:440
+msgid "The Slack webhook is too long."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:443
+msgid "Check the length of the messages and enter a confirmation for the visitor."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:448
+msgid "Check the recipients, subject, message and Reply-To field of the email notification."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:453
+msgid "MailerLite needs a token, an email field, a newsletter consent field and at least one group ID."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:456
+msgid "Enter a valid HTTPS webhook from hooks.slack.com."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:460
+msgid "Slack needs at least one existing field to include."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:465
+msgid "Configure both Turnstile keys before turning on the CAPTCHA."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:468
+msgid "Turn on at least one destination or the submission archive."
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:495
+msgid "The form definition was not updated: "
+msgstr ""
+
+#: src/Forms/Admin/Editor.php:508
+msgid "Preview not available."
+msgstr ""
+
+#: src/Forms/Forms.php:55
+msgid "Reason"
+msgstr ""
+
+#: src/Forms/Forms.php:55
+msgid "Information"
+msgstr ""
+
+#: src/Forms/Forms.php:55
+msgid "Quote"
+msgstr ""
+
+#: src/Forms/Forms.php:56
+msgid "Estimated budget"
+msgstr ""
+
+#: src/Forms/Forms.php:58
+msgid "I would like to receive the newsletter"
+msgstr ""
+
+#: src/Forms/Forms.php:59
+msgid "I have read the privacy policy"
+msgstr ""
+
+#: src/Forms/Forms.php:60
+msgid "Send message"
+msgstr ""
+
+#: src/Forms/Forms.php:72
+msgid "New message: [form]"
+msgstr ""
+
+#: src/Forms/Forms.php:92
+msgid "Thank you, your message has been received."
+msgstr ""
+
+#: src/Forms/Renderer.php:39
+msgid "Publish a valid form before using the shortcode."
+msgstr ""
+
+#: src/Forms/Renderer.php:79
+msgid "Sending…"
+msgstr ""
+
+#: src/Forms/Renderer.php:80
+msgid "Sending failed. Try again."
+msgstr ""
+
+#: src/Forms/Renderer.php:81
+msgid "Connection lost. Try again without reloading the page to verify this submission."
+msgstr ""
+
+#: src/Forms/Renderer.php:82
+msgid "The session has expired. Your entries were kept: try again."
+msgstr ""
+
+#: src/Forms/Renderer.php:84
+msgid "The CAPTCHA is not available. Try again later."
+msgstr ""
+
+#: src/Forms/Renderer.php:85
+#: src/Submissions/Submission.php:466
+msgid "The submission could not be confirmed. Contact the site before sending the message again."
+msgstr ""
+
+#: src/Forms/Renderer.php:123
+msgid "Leave this field empty"
+msgstr ""
+
+#: src/Forms/Renderer.php:142
+msgid "Turn on JavaScript to complete the CAPTCHA and send the form."
+msgstr ""
+
+#: src/Forms/Renderer.php:156
+#: src/Submissions/Submission.php:157
+msgid "Your message has been received and is awaiting review."
+msgstr ""
+
+#: src/Forms/Renderer.php:195
+msgid "Select…"
 msgstr ""
 
 #. translators: %s: telephone field label.
-#: src/Frontend.php:417
+#: src/Forms/Renderer.php:203
 #, php-format
-msgid "Paese per %s"
+msgid "Country for %s"
 msgstr ""
 
-#: src/Frontend.php:418
-msgid "Cerca paese…"
+#: src/Forms/Renderer.php:204
+msgid "Search country…"
 msgstr ""
 
-#: src/Frontend.php:418
-msgid "Cerca un paese"
+#: src/Forms/Renderer.php:204
+msgid "Search for a country"
 msgstr ""
 
-#: src/Frontend.php:418
-msgid "Seleziona paese"
+#: src/Forms/Renderer.php:204
+msgid "Select country"
 msgstr ""
 
-#: src/Frontend.php:442
-msgid "Informativa privacy (si apre in una nuova finestra)"
+#: src/Forms/Renderer.php:238
+msgid "Privacy policy (opens in a new window)"
 msgstr ""
 
-#: src/Frontend.php:442
-msgid "Informativa privacy"
+#: src/Forms/Renderer.php:238
+msgid "Privacy policy"
 msgstr ""
 
-#: src/Phone.php:105
-#: src/Schema.php:318
-msgid "Controlla il numero e il paese selezionato."
+#: src/Forms/Renderer.php:271
+msgid "Form preview"
+msgstr ""
+
+#: src/Forms/Renderer.php:273
+msgid "Preview of the saved version. Sending and integrations are disabled."
+msgstr ""
+
+#: src/Forms/Schema.php:31
+msgid "The form is too long."
+msgstr ""
+
+#: src/Forms/Schema.php:37
+msgid "Send"
+msgstr ""
+
+#: src/Forms/Schema.php:44
+msgid "Use the documented tags and | to place fields on the same line; free text and HTML are not supported."
+msgstr ""
+
+#: src/Forms/Schema.php:49
+msgid "A tag is not valid. Check the quotes."
+msgstr ""
+
+#: src/Forms/Schema.php:52
+msgid "The field type is not valid."
+msgstr ""
+
+#: src/Forms/Schema.php:57
+msgid "Use | only between two fields on the same line. Notes and the button must stay on their own line."
+msgstr ""
+
+#: src/Forms/Schema.php:62
+msgid "Notes and the button need a single label in quotes."
+msgstr ""
+
+#: src/Forms/Schema.php:77
+msgid "Syntax: [type name \"Label\"]."
+msgstr ""
+
+#: src/Forms/Schema.php:81
+msgid "Each field needs a unique lowercase name. The names form, site and fields are reserved."
+msgstr ""
+
+#: src/Forms/Schema.php:92
+msgid "Enter a short label for each field."
+msgstr ""
+
+#: src/Forms/Schema.php:100
+msgid "Select options must have a short text."
+msgstr ""
+
+#: src/Forms/Schema.php:105
+msgid "The number limits are not valid."
+msgstr ""
+
+#: src/Forms/Schema.php:113
+msgid "This tag contains an unsupported option."
+msgstr ""
+
+#: src/Forms/Schema.php:118
+msgid "Check the select options or the number limits."
+msgstr ""
+
+#: src/Forms/Schema.php:139
+msgid "Enter 1 to 40 valid fields, using only the documented tags."
+msgstr ""
+
+#: src/Forms/Schema.php:182
+msgid "At most 80 rules are allowed."
+msgstr ""
+
+#: src/Forms/Schema.php:187
+msgid "A rule is not valid."
+msgstr ""
+
+#: src/Forms/Schema.php:197
+msgid "Rules need existing fields and consistent values. A field cannot depend on itself."
+msgstr ""
+
+#: src/Forms/Schema.php:214
+msgid "The rules form a loop. Remove one of the dependencies."
+msgstr ""
+
+#: src/Forms/Schema.php:301
+msgid "Check this field."
+msgstr ""
+
+#: src/Forms/Schema.php:310
+msgid "Enter a valid email address."
+msgstr ""
+
+#: src/Forms/Schema.php:312
+msgid "The email domain does not seem able to receive mail. Check the address."
+msgstr ""
+
+#: src/Forms/Schema.php:322
+#: src/Phone/Phone.php:194
+msgid "Check the number and the selected country."
+msgstr ""
+
+#: src/Forms/Schema.php:324
+msgid "The number is a fully repetitive sequence. Check the contact details."
+msgstr ""
+
+#: src/Forms/Schema.php:338
+msgid "Enter a valid value."
+msgstr ""
+
+#: src/Plugin.php:144
+#: src/Plugin.php:149
+msgid "Forms"
+msgstr ""
+
+#: src/Plugin.php:147
+msgid "Add a form"
+msgstr ""
+
+#: src/Plugin.php:148
+msgid "Edit form"
+msgstr ""
+
+#: src/Plugin.php:163
+#: src/Plugin.php:166
+msgid "Submissions"
 msgstr ""
 
 #: src/Plugin.php:164
-#: src/Plugin.php:169
-msgid "Moduli"
+msgid "Submission"
 msgstr ""
 
-#: src/Plugin.php:167
-msgid "Aggiungi un modulo"
+#: src/Plugin.php:165
+msgid "Submission details"
 msgstr ""
 
-#: src/Plugin.php:168
-msgid "Modifica modulo"
+#: src/Privacy/Privacy.php:100
+msgid "Submission date"
 msgstr ""
 
-#: src/Plugin.php:183
-#: src/Plugin.php:186
-msgid "Invii"
+#: src/Privacy/Privacy.php:113
+#: src/Review/Admin/Screen.php:35
+msgid "Anti-spam category"
 msgstr ""
 
-#: src/Plugin.php:184
-msgid "Invio"
+#: src/Privacy/Privacy.php:120
+msgid "Anti-spam score"
 msgstr ""
 
-#: src/Plugin.php:185
-msgid "Dettaglio invio"
+#: src/Privacy/Privacy.php:125
+msgid "Check reasons"
 msgstr ""
 
-#: src/Plugin.php:222
-msgid "Nuovo messaggio: [form]"
+#: src/Privacy/Privacy.php:131
+msgid "Form submissions"
 msgstr ""
 
-#: src/Plugin.php:242
-msgid "Grazie, il messaggio è stato acquisito."
+#: src/Privacy/Privacy.php:164
+msgid "Some submissions were kept according to the site settings or could not be deleted."
 msgstr ""
 
-#: src/Privacy.php:95
-msgid "Data invio"
+#: src/Privacy/Privacy.php:167
+msgid "The local copies were deleted. Any copies in email, MailerLite and Slack must be managed in those services."
 msgstr ""
 
-#: src/Privacy.php:107
-#: src/Review.php:50
-msgid "Classificazione anti-spam"
+#: src/Privacy/Privacy.php:186
+msgid "Forms send the submitted data to the configured email recipients. When enabled, the local archive keeps the fields and the submission date for the period set by the administrator. The WordPress export and erasure tools can manage these copies through the email addresses in the submission. The plugin does not store IP addresses or user agents in submissions; it temporarily uses a fingerprint of the IP, not reversible without the site key, to limit repeated submissions. When enabled for the form, MailerLite receives the subscriber's email, name and group after consent is selected; Slack receives only the fields chosen by the administrator; Cloudflare Turnstile verifies the CAPTCHA and may process browser data. Local erasure does not delete copies already sent to external services. Adapt this text to the site's actual configuration and to the policies of the services in use."
 msgstr ""
 
-#: src/Privacy.php:111
-msgid "Punteggio anti-spam"
+#: src/Privacy/Privacy.php:187
+msgid "Anti-spam checks use local rules, without artificial intelligence. Temporary counters with fingerprints protected by the site key measure how often emails, phone numbers and similar messages occur, for up to 30 minutes. Quarantine, when allowed by the archive or turned on separately, keeps suspicious submissions, their score, reasons and manual review for the configured period. Held submissions are not delivered to recipients before approval. The email DNS check is optional: it asks the server's resolver about the domain only and keeps the result for up to 15 minutes; it does not check that the individual mailbox exists. International phone metadata and a copy of the disposable domain list are included in the plugin. The administrator can synchronize the list manually by downloading the public lists from GitHub, without sending email addresses or submission content. Disposable domain checks always use the local copy."
 msgstr ""
 
-#: src/Privacy.php:113
-msgid "Motivi del controllo"
+#: src/Review/Admin/Screen.php:51
+msgid "Classification"
 msgstr ""
 
-#: src/Privacy.php:117
-msgid "Invii dei moduli"
+#: src/Review/Admin/Screen.php:66
+#: src/Review/Admin/Screen.php:133
+#: src/Review/Admin/Screen.php:177
+msgid "To be classified"
 msgstr ""
 
-#: src/Privacy.php:150
-msgid "Alcuni invii sono stati conservati secondo le impostazioni del sito o non è stato possibile eliminarli."
+#: src/Review/Admin/Screen.php:69
+msgid "Manual review"
 msgstr ""
 
-#: src/Privacy.php:153
-msgid "Le copie locali sono state eliminate. Le eventuali copie in email, MailerLite e Slack vanno gestite nei rispettivi servizi."
+#: src/Review/Admin/Screen.php:69
+msgid "Automatic check"
 msgstr ""
 
-#: src/Privacy.php:172
-msgid "I moduli inviano i dati compilati ai destinatari email configurati. Se attivato, l’archivio locale conserva i campi e la data dell’invio per il periodo impostato dall’amministratore. Gli strumenti di esportazione e cancellazione di WordPress possono gestire queste copie tramite gli indirizzi email presenti nell’invio. Il plugin non archivia indirizzi IP o user agent negli invii; usa temporaneamente un’impronta dell’IP, non reversibile senza la chiave del sito, per limitare gli invii ripetuti. Se abilitati per il modulo, MailerLite riceve email, nome e gruppo dell’iscritto dopo la selezione del consenso; Slack riceve solo i campi scelti dall’amministratore; Cloudflare Turnstile verifica il CAPTCHA e può trattare dati del browser. La cancellazione locale non elimina le copie già trasmesse ai servizi esterni. Adattare questo testo alla configurazione effettiva del sito e alle informative dei servizi utilizzati."
+#: src/Review/Admin/Screen.php:72
+msgid "Delivery held"
 msgstr ""
 
-#: src/Privacy.php:173
-msgid "I controlli anti-spam usano regole locali, senza intelligenza artificiale. Contatori temporanei con impronte protette dalla chiave del sito misurano la frequenza di email, telefoni e messaggi simili per un massimo di 30 minuti. La quarantena, se consentita dall’archivio o attivata separatamente, conserva gli invii sospetti, il punteggio, i motivi e la revisione manuale per il periodo configurato. Gli invii sospesi non vengono inoltrati ai destinatari prima dell’approvazione. La verifica DNS delle email è facoltativa: interroga il resolver del server per il solo dominio e conserva il risultato per un massimo di 15 minuti; non verifica l’esistenza della singola casella. I metadati internazionali dei telefoni e una copia dell’elenco dei domini temporanei sono inclusi nel plugin. L’amministratore può sincronizzare manualmente l’elenco scaricando le liste pubbliche da GitHub, senza trasmettere indirizzi email o contenuti degli invii. I controlli dei domini temporanei usano sempre la copia locale."
+#: src/Review/Admin/Screen.php:175
+msgid "Category"
 msgstr ""
 
-#: src/Review.php:15
-msgid "Accettato"
-msgstr ""
-
-#: src/Review.php:15
-msgid "Probabile spam"
-msgstr ""
-
-#: src/Review.php:15
-msgid "Spam"
-msgstr ""
-
-#: src/Review.php:133
-#: src/Submission.php:198
-#: src/Submission.php:211
-msgid "Questo invio è in elaborazione. Riprova tra qualche secondo."
-msgstr ""
-
-#: src/Review.php:137
-msgid "Questo invio non è disponibile per la revisione. Riprova tra qualche secondo."
-msgstr ""
-
-#: src/Review.php:140
-msgid "Non è stato possibile aggiornare la classificazione."
-msgstr ""
-
-#: src/Review.php:158
-msgid "Classificazione"
-msgstr ""
-
-#: src/Review.php:167
-#: src/Review.php:186
-#: src/Review.php:213
-msgid "Da classificare"
-msgstr ""
-
-#: src/Review.php:170
-msgid "Revisione manuale"
-msgstr ""
-
-#: src/Review.php:170
-msgid "Controllo automatico"
-msgstr ""
-
-#: src/Review.php:173
-msgid "Inoltro sospeso"
-msgstr ""
-
-#: src/Review.php:211
-msgid "Categoria"
-msgstr ""
-
-#: src/Review.php:218
-msgid "Aggiorna categoria"
+#: src/Review/Admin/Screen.php:182
+msgid "Update category"
 msgstr ""
 
 #. translators: 1: anti-spam score, 2: protection level.
-#: src/Review.php:222
+#: src/Review/Admin/Screen.php:186
 #, php-format
-msgid "Punteggio: %1$d/100 · Livello %2$d"
+msgid "Score: %1$d/100 · Level %2$d"
 msgstr ""
 
 #. translators: %s: category detected in observation mode.
-#: src/Review.php:225
+#: src/Review/Admin/Screen.php:189
 #, php-format
-msgid "Modalità osservazione: rilevato come %s."
+msgid "Observation mode: detected as %s."
 msgstr ""
 
-#: src/Review.php:237
-msgid "La revisione manuale ha precedenza sul controllo automatico."
+#: src/Review/Admin/Screen.php:201
+msgid "Manual review takes precedence over the automatic check."
 msgstr ""
 
-#: src/Review.php:240
-msgid "Inoltro sospeso. Cambiare categoria non invia notifiche."
+#: src/Review/Admin/Screen.php:204
+msgid "Delivery held. Changing the category sends no notifications."
 msgstr ""
 
-#: src/Review.php:240
-msgid "Approva e invia"
+#: src/Review/Admin/Screen.php:204
+msgid "Approve and send"
 msgstr ""
 
 #. translators: %s: classification label.
-#: src/Review.php:247
+#: src/Review/Admin/Screen.php:216
 #, php-format
-msgid "Segna come %s"
+msgid "Mark as %s"
 msgstr ""
 
 #. translators: 1: updated entries, 2: selected entries.
-#: src/Review.php:267
+#: src/Review/Admin/Screen.php:243
 #, php-format
-msgid "Classificazione aggiornata per %1$d invii su %2$d selezionati."
+msgid "Category updated for %1$d of %2$d selected submissions."
 msgstr ""
 
-#: src/Review.php:280
-msgid "Invio approvato. Controlla gli esiti delle destinazioni nel dettaglio."
+#: src/Review/Admin/Screen.php:253
+#: src/Submissions/Admin/EntryScreen.php:123
+#: src/Submissions/Submission.php:222
+msgid "Submission not available."
 msgstr ""
 
-#: src/Review.php:283
-msgid "Seleziona una categoria valida."
+#: src/Review/Admin/Screen.php:259
+msgid "Submission approved. Check the destination outcomes in the details."
 msgstr ""
 
-#: src/Review.php:284
-msgid "Classificazione aggiornata."
+#: src/Review/Admin/Screen.php:262
+msgid "Select a valid category."
 msgstr ""
 
-#: src/Schema.php:29
-msgid "Il modulo è troppo lungo."
+#: src/Review/Admin/Screen.php:263
+msgid "Category updated."
 msgstr ""
 
-#: src/Schema.php:35
-msgid "Invia"
+#: src/Review/Review.php:28
+msgid "Accepted"
 msgstr ""
 
-#: src/Schema.php:42
-msgid "Usa i tag documentati e | per affiancare i campi sulla stessa riga; testo libero e HTML non sono supportati."
+#: src/Review/Review.php:29
+msgid "Likely spam"
 msgstr ""
 
-#: src/Schema.php:47
-msgid "Un tag non è valido. Controlla le virgolette."
+#: src/Review/Review.php:30
+msgid "Spam"
 msgstr ""
 
-#: src/Schema.php:50
-msgid "Il tipo di campo non è valido."
+#: src/Review/Review.php:198
+#: src/Submissions/Submission.php:216
+#: src/Submissions/Submission.php:229
+msgid "This submission is being processed. Try again in a few seconds."
 msgstr ""
 
-#: src/Schema.php:55
-msgid "Usa | solo tra due campi sulla stessa riga. Note e pulsante devono restare separati."
+#: src/Review/Review.php:202
+msgid "This submission is not available for review. Try again in a few seconds."
 msgstr ""
 
-#: src/Schema.php:60
-msgid "Note e pulsante richiedono una sola etichetta tra virgolette."
+#: src/Review/Review.php:205
+msgid "The category could not be updated."
 msgstr ""
 
-#: src/Schema.php:75
-msgid "Sintassi: [tipo nome \"Etichetta\"]."
+#: src/Settings/Admin/Page.php:41
+#: src/Settings/Admin/Page.php:239
+msgid "Settings"
 msgstr ""
 
-#: src/Schema.php:79
-msgid "Ogni campo richiede un nome unico in minuscolo. I nomi form, site e fields sono riservati."
+#: src/Settings/Admin/Page.php:63
+msgid "Form privacy"
 msgstr ""
 
-#: src/Schema.php:90
-msgid "Inserisci un’etichetta breve per ogni campo."
+#: src/Settings/Admin/Page.php:65
+msgid "MailerLite"
 msgstr ""
 
-#: src/Schema.php:98
-msgid "Le opzioni della selezione devono avere un testo breve."
+#: src/Settings/Admin/Page.php:67
+msgid "Uninstall"
 msgstr ""
 
-#: src/Schema.php:103
-msgid "I limiti numerici non sono validi."
+#: src/Settings/Admin/Page.php:72
+msgid "Default level"
 msgstr ""
 
-#: src/Schema.php:111
-msgid "Questo tag contiene un’opzione non supportata."
+#: src/Settings/Admin/Page.php:72
+msgid "Recommended: 2 — Balanced. Existing forms keep level 1 until it is changed in their options."
 msgstr ""
 
-#: src/Schema.php:116
-msgid "Controlla le opzioni della selezione o i limiti numerici."
+#: src/Settings/Admin/Page.php:73
+msgid "Record heuristic signals without stopping submissions. To review the results, turn on the archive. The honeypot stays on."
 msgstr ""
 
-#: src/Schema.php:137
-msgid "Inserisci da 1 a 40 campi validi, usando solo i tag documentati."
+#: src/Settings/Admin/Page.php:74
+msgid "Keep spam and suspicious submissions for review even without the normal archive; notifications and integrations stay held."
 msgstr ""
 
-#: src/Schema.php:180
-msgid "Sono consentite al massimo 80 regole."
+#: src/Settings/Admin/Page.php:75
+msgid "Spam and suspicious retention"
 msgstr ""
 
-#: src/Schema.php:185
-msgid "Una regola non è valida."
+#: src/Settings/Admin/Page.php:75
+msgid "Days before spam and likely spam are deleted automatically. Minimum 1; accepted submissions follow the normal retention."
 msgstr ""
 
-#: src/Schema.php:195
-msgid "Le regole richiedono campi esistenti e valori coerenti. Un campo non può dipendere da sé stesso."
+#: src/Settings/Admin/Page.php:76
+msgid "Daily quarantine limit"
 msgstr ""
 
-#: src/Schema.php:212
-msgid "Le regole formano un ciclo. Rimuovi una delle dipendenze."
+#: src/Settings/Admin/Page.php:76
+msgid "Maximum number of new suspicious submissions that can be archived in a 24-hour window. Beyond the limit they are rejected."
 msgstr ""
 
-#: src/Schema.php:297
-msgid "Controlla questo campo."
+#: src/Settings/Admin/Page.php:77
+msgid "Email DNS check"
 msgstr ""
 
-#: src/Schema.php:306
-msgid "Inserisci un indirizzo email valido."
+#: src/Settings/Admin/Page.php:77
+msgid "Check the domain through the server's resolver, with caching and tolerance of temporary errors. It does not check the mailbox."
 msgstr ""
 
-#: src/Schema.php:308
-msgid "Il dominio email non risulta in grado di ricevere posta. Controlla l’indirizzo."
+#: src/Settings/Admin/Page.php:78
+msgid "Automatic selection follows the site language. Visitors can always change the country."
 msgstr ""
 
-#: src/Schema.php:320
-msgid "Il numero contiene una sequenza interamente ripetitiva. Controlla il recapito."
+#: src/Settings/Admin/Page.php:79
+msgid "Disposable domain list"
 msgstr ""
 
-#: src/Schema.php:334
-msgid "Inserisci un valore valido."
+#: src/Settings/Admin/Page.php:79
+msgid "Used at levels 2 and 3. Synchronize the public sources on request; the local copy is kept if a source is unavailable. No automatic updates."
 msgstr ""
 
-#: src/Submission.php:47
-msgid "L’invio è in corso. Attendi qualche secondo."
+#: src/Settings/Admin/Page.php:80
+msgid "Suspicious phrases"
 msgstr ""
 
-#: src/Submission.php:53
-msgid "Questo invio è già stato elaborato. Ricarica il modulo per un nuovo messaggio."
+#: src/Settings/Admin/Page.php:80
+msgid "One phrase per line, 4 to 150 characters. Raises suspicion; use specific phrases and avoid generic words."
 msgstr ""
 
-#: src/Submission.php:61
-msgid "Il modulo è stato aggiornato. Ricarica la pagina prima di un nuovo invio."
+#: src/Settings/Admin/Page.php:81
+msgid "Save submissions locally by default. Each form can change this choice."
 msgstr ""
 
-#: src/Submission.php:64
-msgid "Troppi invii ravvicinati. Attendi qualche minuto."
+#: src/Settings/Admin/Page.php:82
+msgid "Retention"
 msgstr ""
 
-#: src/Submission.php:76
-msgid "Non è stato possibile accettare l’invio. Controlla i dati e il messaggio oppure usa un altro contatto del sito."
+#: src/Settings/Admin/Page.php:82
+msgid "Days to keep submissions. 0 keeps them until deleted manually. Cleanup runs in batches when an administrator opens the dashboard or after a submission, once a day."
 msgstr ""
 
-#: src/Submission.php:81
-msgid "Non è stato possibile accettare l’invio. Usa un altro contatto del sito."
+#: src/Settings/Admin/Page.php:83
+msgid "Erasure requests"
 msgstr ""
 
-#: src/Submission.php:132
-msgid "Non è stato possibile conservare il messaggio per la verifica. Riprova più tardi."
+#: src/Settings/Admin/Page.php:83
+msgid "Let the WordPress privacy tools delete the submissions linked to the confirmed email address."
 msgstr ""
 
-#: src/Submission.php:170
-msgid "Non è stato possibile acquisire il messaggio. Riprova più tardi o usa un altro contatto."
+#: src/Settings/Admin/Page.php:84
+msgid "API token"
 msgstr ""
 
-#: src/Submission.php:208
-msgid "L’invio è sospeso. Usa Approva e invia dopo la verifica."
+#: src/Settings/Admin/Page.php:84
+msgid "Token for the current MailerLite version. Leave empty to keep the saved token."
 msgstr ""
 
-#: src/Submission.php:214
-msgid "Questo invio è già stato approvato oppure non è in quarantena."
+#: src/Settings/Admin/Page.php:85
+msgid "Site key"
 msgstr ""
 
-#: src/Submission.php:222
-msgid "Il modulo originale non è disponibile per l’inoltro."
+#: src/Settings/Admin/Page.php:85
+msgid "Turn on the CAPTCHA in each form's options."
 msgstr ""
 
-#: src/Submission.php:233
-msgid "I dati archiviati non rispettano la configurazione attuale del modulo."
+#: src/Settings/Admin/Page.php:86
+msgid "Secret key"
 msgstr ""
 
-#: src/Submission.php:243
-msgid "Non è stato possibile preparare l’inoltro."
+#: src/Settings/Admin/Page.php:86
+msgid "Leave empty to keep the saved key."
 msgstr ""
 
-#: src/Submission.php:246
-msgid "Non è stato possibile approvare l’invio."
+#: src/Settings/Admin/Page.php:87
+msgid "Remove data"
+msgstr ""
+
+#: src/Settings/Admin/Page.php:87
+msgid "On uninstall, permanently delete the plugin's forms, submissions, settings and credentials. Deactivating alone keeps the data."
+msgstr ""
+
+#. translators: %s: number of domains.
+#: src/Settings/Admin/Page.php:120
+#, php-format
+msgid "%s domains in the local list"
+msgstr ""
+
+#. translators: %s: date and time of the synchronization, or date of the bundled snapshot.
+#: src/Settings/Admin/Page.php:122
+#, php-format
+msgid "Last synchronization: %s"
+msgstr ""
+
+#. translators: %s: date and time of the synchronization, or date of the bundled snapshot.
+#: src/Settings/Admin/Page.php:122
+#, php-format
+msgid "Copy included in the plugin, updated on %s"
+msgstr ""
+
+#: src/Settings/Admin/Page.php:127
+msgid "Synchronize list"
+msgstr ""
+
+#: src/Settings/Admin/Page.php:143
+msgid "Automatic from the site language"
+msgstr ""
+
+#: src/Settings/Admin/Page.php:157
+msgid "Configured"
+msgstr ""
+
+#: src/Settings/Admin/Page.php:164
+msgid "Remove the saved credential"
+msgstr ""
+
+#: src/Settings/Admin/Page.php:195
+msgid "An anti-spam value is not valid; the previous one was kept."
+msgstr ""
+
+#: src/Settings/Admin/Page.php:204
+msgid "An anti-spam list is not valid; the previous one was kept."
+msgstr ""
+
+#: src/Settings/Admin/Page.php:209
+msgid "The site key is not valid; the previous one was kept."
+msgstr ""
+
+#: src/Settings/Admin/Page.php:216
+msgid "The credential contains invalid characters; the previous one was kept."
+msgstr ""
+
+#: src/Settings/Admin/Page.php:224
+msgid "A value was not valid and was reset to its default."
+msgstr ""
+
+#: src/Settings/Admin/Page.php:261
+msgid "Action not allowed."
+msgstr ""
+
+#. translators: %s: number of domains.
+#: src/Settings/Admin/Page.php:267
+#, php-format
+msgid "Synchronization complete: %s domains in the local list."
+msgstr ""
+
+#: src/Submissions/Admin/EntryScreen.php:47
+msgid "Submission data"
+msgstr ""
+
+#: src/Submissions/Admin/EntryScreen.php:100
+msgid "A new attempt is scheduled for destinations that are temporarily unavailable."
+msgstr ""
+
+#: src/Submissions/Admin/EntryScreen.php:105
+msgid "I have checked the destinations with unconfirmed outcomes and want to repeat these deliveries too."
+msgstr ""
+
+#: src/Submissions/Admin/EntryScreen.php:106
+msgid "Retry failed destinations"
+msgstr ""
+
+#: src/Submissions/Admin/EntryScreen.php:106
+msgid "Uses the form's current configuration. Deliveries already accepted are kept. Without the check selected, unconfirmed outcomes stay held."
+msgstr ""
+
+#: src/Submissions/Admin/EntryScreen.php:111
+msgid "Permanently delete this submission"
+msgstr ""
+
+#: src/Submissions/Endpoint.php:184
+#: src/Submissions/Endpoint.php:217
+msgid "Form not available."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:187
+msgid "Too many requests in a short time. Wait a few minutes."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:203
+msgid "The message is too long."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:220
+msgid "Too many attempts in a short time. Wait a few minutes."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:225
+msgid "The form session has expired. Reload the page."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:228
+#: src/Submissions/Endpoint.php:256
+msgid "The form is not valid."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:233
+msgid "The selected country is not valid."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:240
+msgid "The form is not valid. Reload the page."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:261
+msgid "This submission has already been processed. Contact the site before sending another message."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:268
+msgid "Check the highlighted fields."
+msgstr ""
+
+#: src/Submissions/Endpoint.php:294
+msgid "Form submission"
+msgstr ""
+
+#: src/Submissions/Submission.php:54
+msgid "The submission is in progress. Wait a few seconds."
+msgstr ""
+
+#: src/Submissions/Submission.php:60
+msgid "This submission has already been processed. Reload the form for a new message."
+msgstr ""
+
+#: src/Submissions/Submission.php:68
+msgid "The form has been updated. Reload the page before sending again."
+msgstr ""
+
+#: src/Submissions/Submission.php:71
+msgid "Too many submissions in a short time. Wait a few minutes."
+msgstr ""
+
+#: src/Submissions/Submission.php:83
+msgid "The submission could not be accepted. Check your data and message or use another contact for the site."
+msgstr ""
+
+#: src/Submissions/Submission.php:88
+msgid "The submission could not be accepted. Use another contact for the site."
+msgstr ""
+
+#: src/Submissions/Submission.php:146
+msgid "The message could not be stored for review. Try again later."
+msgstr ""
+
+#: src/Submissions/Submission.php:188
+msgid "The message could not be received. Try again later or use another contact."
+msgstr ""
+
+#: src/Submissions/Submission.php:226
+msgid "The submission is held. Use Approve and send after reviewing it."
+msgstr ""
+
+#: src/Submissions/Submission.php:232
+msgid "This submission has already been approved or is not in quarantine."
+msgstr ""
+
+#: src/Submissions/Submission.php:240
+msgid "The original form is not available for delivery."
+msgstr ""
+
+#: src/Submissions/Submission.php:251
+msgid "The archived data does not match the form's current configuration."
+msgstr ""
+
+#: src/Submissions/Submission.php:261
+msgid "Delivery could not be prepared."
+msgstr ""
+
+#: src/Submissions/Submission.php:264
+msgid "The submission could not be approved."
 msgstr ""
