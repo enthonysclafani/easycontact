@@ -75,10 +75,13 @@ abstract class TestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Clear request globals that tests change.
+	 * Clear request globals and queued assets that tests change.
 	 */
 	public function tear_down(): void {
 		unset( $_SERVER['REMOTE_ADDR'], $_REQUEST['_wpnonce'] );
+		// A rendered form enqueues its assets: the next test starts without them.
+		$GLOBALS['wp_scripts'] = null;
+		$GLOBALS['wp_styles']  = null;
 		parent::tear_down();
 	}
 

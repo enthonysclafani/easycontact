@@ -45,7 +45,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
 | `$wpdb` solo in allowlist | nessun uso | 🟡 3 file | ✅ 2 file in allowlist con motivo (lock atomici, disinstallazione) | |
 | Cron | vietato | 🟡 5 eventi | ✅ un solo evento (`easycontact_retry_delivery`), pulizie senza cron | D1, Fase 4.1 |
 | Asset nel frontend | vietati | 🟡 solo con un modulo | 🟡 in allowlist, verificato da test | D2 |
-| HTTP | solo admin/REST/CLI | 🟡 solo invio e admin | 🟡 in allowlist | D3, Fase 4.3 |
+| HTTP | solo admin/REST/CLI | ✅ solo invio e admin (più i nuovi tentativi, D1) | ✅ in allowlist, `tests/HttpTest.php` | D3, Fase 4.3 |
 | Dipendenze PHP a runtime | nessuna | 🟡 libphonenumber, polyfill mbstring | 🟡 escluse dai controlli, documentate | D4 |
 | Query sul percorso caldo | zero in più, verificato da test | ❌ 3 letture a ogni richiesta | ✅ zero, verificato da test | |
 | Struttura `src/` PSR-4, `register()` | ✅ | ❌ classi statiche in `includes/` | ✅ una cartella per funzionalità, hook verificati da `hooks-in-register` | Fasi 3.1–3.3 |

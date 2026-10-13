@@ -38,8 +38,10 @@ The plugin has no telemetry. External requests depend on the form's configuratio
 **Optional email DNS check**: when explicitly enabled, the server asks its DNS resolver for the email domain's MX/A/AAAA records. The mailbox name and message are not sent. Results are cached for up to fifteen minutes; resolver errors are treated as inconclusive. This does not prove that the mailbox exists. Phone validation and disposable-domain checks use local data.
 
 **Manual disposable-domain synchronization**: only when an administrator presses Sincronizza lista, the server downloads the public lists from disposable-email-domains/disposable-email-domains and disposable/disposable-email-domains through raw.githubusercontent.com. No submitted address, mailbox name or message is sent. Both sources are validated before replacing the non-autoloaded local cache; failures keep the last complete list. There is no synchronization cron, automatic download or remote lookup during form submissions. The plugin includes a combined snapshot for use before the first synchronization. Sources and licenses are documented in THIRD-PARTY.md.
+Terms: https://docs.github.com/en/site-policy/github-terms/github-terms-of-service
+Privacy: https://docs.github.com/en/site-policy/privacy-policies/github-privacy-statement
 
-**MailerLite**: after a valid submission, if the integration is enabled and newsletter consent is checked, the server sends the email address, optional name, and group IDs to the current MailerLite API. The plugin does not force reactivation of opted-out subscribers. Double opt-in is configured in the MailerLite account settings for API and integrations. MailerLite Classic is not supported in this version.
+**MailerLite**: after a valid submission, if the integration is enabled and newsletter consent is checked, the server sends the email address, optional name, and group IDs to the current MailerLite API. The plugin sends neither a status nor a resubscribe flag, so it never asks MailerLite to reactivate opted-out subscribers. Double opt-in is configured in the MailerLite account settings for API and integrations. MailerLite Classic is not supported in this version.
 Documentation: https://developers.mailerlite.com/api/subscribers
 Terms: https://www.mailerlite.com/legal/terms-of-service
 Privacy: https://www.mailerlite.com/legal/privacy-policy
@@ -47,12 +49,12 @@ Privacy: https://www.mailerlite.com/legal/privacy-policy
 **Slack**: after a valid submission, if enabled, the server sends the form title and values of only the selected visible fields to the configured hooks.slack.com webhook. User content is sent in plain-text blocks so it cannot generate mentions or execute markup.
 Documentation: https://docs.slack.dev/messaging/sending-messages-using-incoming-webhooks/
 Terms: https://slack.com/terms-of-service
-Privacy: https://slack.com/privacy-policy
+Privacy: https://slack.com/trust/privacy/privacy-policy
 
 **Cloudflare Turnstile**: when viewing a form with CAPTCHA enabled, the browser loads the widget from challenges.cloudflare.com. The widget can process browser and connection information according to Cloudflare's privacy policy. On submission, the server sends the response token and secret key to the verification API. The plugin does not include the visitor IP address in that verification request.
 Documentation: https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
 Terms: https://www.cloudflare.com/website-terms/
-Privacy: https://www.cloudflare.com/privacypolicy/
+Privacy: https://www.cloudflare.com/privacypolicy/ and https://www.cloudflare.com/turnstile-privacy-policy/
 
 WordPress erasure removes local archived copies only. Copies already sent by email or to MailerLite or Slack must be managed in those services.
 
