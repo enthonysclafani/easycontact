@@ -121,7 +121,13 @@ final class State {
 	 * @return int|null Count in the window, or null when the counter is busy.
 	 */
 	public static function count( string $context, string $identity, int $window = 300, int $cap = 100 ): ?int {
-		$key   = 'rate_' . substr( hash_hmac( 'sha256', get_current_blog_id() . '|' . $context . '|' . $identity, wp_salt( 'auth' ) ), 0, 40 );
+		$key = 'rate_' . substr( hash_hmac( 'sha256', get_current_blog_id() . '|' . $context . '|' . $identity, wp_salt( 'auth' ) ), 0, 40 );
+		if ( wp_using_ext_object_cache() ) {
+			// A persistent cache increments atomically: no lease and no database write (D6).
+			wp_cache_add( $key, 0, 'easycontact_rate', max( 1, $window ) );
+			$count = wp_cache_incr( $key, 1, 'easycontact_rate' );
+			return false === $count ? null : min( $cap, (int) $count );
+		}
 		$owner = null;
 		// Simultaneous requests from one identity wait briefly instead of failing; the short lease bounds a crashed holder.
 		for ( $attempt = 0; $attempt < 8 && null === $owner; ++$attempt ) {

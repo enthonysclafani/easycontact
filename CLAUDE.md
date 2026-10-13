@@ -51,10 +51,9 @@ blocca la CI. Ogni file ammesso in un'allowlist ha un commento con il motivo o c
 
 1. **Zero tabelle custom** (A). Mai `CREATE TABLE`, `ALTER TABLE`, `DROP TABLE`, `dbDelta()`. I dati vanno in Options
    API, post meta, post type non pubblici, tassonomie nascoste, transient.
-2. **`$wpdb` solo in allowlist** (A), sempre con `$wpdb->prepare()`. Oggi: `class-state.php` (solo i lock atomici, D6;
-   i contatori passano a transient nella Fase 2.2),
-   `class-submission.php` (query da sostituire con `WP_Query`, Fase 2.1), `uninstall.php` (ricerca per prefisso,
-   Fase 2.3). Nessun file nuovo nell'allowlist senza approvazione.
+2. **`$wpdb` solo in allowlist** (A), sempre con `$wpdb->prepare()`. Solo due file: `class-state.php` (lock atomici e
+   pulizia dei lock scaduti, D6; con una cache a oggetti persistente i contatori non usano lock) e `uninstall.php`
+   (ricerca per prefisso dei nomi dinamici, una volta sola). Nessun file nuovo nell'allowlist senza approvazione.
 3. **Niente cron, con una sola eccezione** (D1). Retention e pulizie si fanno a lotti, pigre, su `admin_init` e dopo
    un invio, con il cursore in un'option. L'unico evento ammesso è `easycontact_retry_delivery` (singolo) per i nuovi
    tentativi di consegna. Finché la Fase 4.1 non è fatta, gli eventi attuali restano nei file in allowlist (A);

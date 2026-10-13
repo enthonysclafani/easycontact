@@ -119,12 +119,18 @@ Fasi 0 e 1.
 
 ### Fase 2 — Database: zero SQL non motivato
 
-- [ ] 2.1 `class-submission.php:309`: query su `postmeta` sostituita da `WP_Query` con `meta_query`
+- [x] 2.1 `class-submission.php:309`: query su `postmeta` sostituita da `WP_Query` con `meta_query`
       (`fields => ids`, `no_found_rows`), test di regressione sul riavvio dei nuovi tentativi
-- [ ] 2.2 Lock e rate limit secondo D6; allowlist `$wpdb` ridotta al minimo deciso
-- [ ] 2.3 `uninstall.php` secondo D5; ricerca delle chiavi dinamiche ridotta (se possibile, chiavi tracciate in
+      _Fatto con paginazione per chiave (`ID >` cursore) e `tests/RetryResumeTest.php`, verde con il codice vecchio e
+      con il nuovo._
+- [x] 2.2 Lock e rate limit secondo D6; allowlist `$wpdb` ridotta al minimo deciso
+      _Con una cache a oggetti persistente i contatori usano `wp_cache_add()`/`wp_cache_incr()`, atomici e senza
+      lock né scritture nel database; senza, resta il lock breve, perché lì un transient da solo non è atomico
+      (`tests/RateLimitTest.php`)._
+- [x] 2.3 `uninstall.php` secondo D5; ricerca delle chiavi dinamiche ridotta (se possibile, chiavi tracciate in
       un'option indice invece del `LIKE`); `tests/UninstallTest.php` singolo sito e multisite
-      _Il test esiste già (Fase 0) e copre il comportamento attuale, che coincide con la proposta di D5._
+      _Il test esiste già (Fase 0) e il comportamento coincide con D5. Il `LIKE` resta: gira una volta sola, mentre
+      un'option indice costerebbe una scrittura a ogni invio. Motivo scritto nell'allowlist._
 - [x] 2.4 `composer architecture` blocca `CREATE TABLE`, `dbDelta`, `ALTER TABLE` e `$wpdb` fuori allowlist
 
 ### Fase 3 — Struttura

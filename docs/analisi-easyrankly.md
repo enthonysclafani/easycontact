@@ -42,7 +42,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
 | Subagenti | `ricercatore`, `esecutore`, `verificatore` | ❌ | ✅ adattati | |
 | Pacchetto distribuibile | solo file di runtime | ❌ test, strumenti e documenti nello zip | ✅ `.gitattributes`, `tools/build-dist.sh`, verificato in CI | |
 | Zero tabelle custom | ✅ | ✅ | ✅ bloccato in CI | |
-| `$wpdb` solo in allowlist | nessun uso | 🟡 3 file | 🟡 3 file in allowlist con motivo | Fase 2 (D6) |
+| `$wpdb` solo in allowlist | nessun uso | 🟡 3 file | ✅ 2 file in allowlist con motivo (lock atomici, disinstallazione) | |
 | Cron | vietato | 🟡 5 eventi | 🟡 in allowlist | D1, Fase 4.1 |
 | Asset nel frontend | vietati | 🟡 solo con un modulo | 🟡 in allowlist, verificato da test | D2 |
 | HTTP | solo admin/REST/CLI | 🟡 solo invio e admin | 🟡 in allowlist | D3, Fase 4.3 |

@@ -45,11 +45,11 @@ final class ArchitectureChecker {
 	 * @var list<string>
 	 */
 	private const WPDB_ALLOWLIST = array(
-		// Atomic leases (INSERT IGNORE on the unique option_name) and cache-bypassing reads: D6.
+		// Atomic leases (INSERT IGNORE on the unique option_name), cache-bypassing reads and the bounded cleanup of
+		// expired leases and states: D6. Rate counters use no lease with a persistent object cache.
 		'includes/class-state.php',
-		// TODO 2.1: replace the postmeta query with WP_Query.
-		'includes/class-submission.php',
-		// TODO 2.3: enumeration of dynamic option names at uninstall.
+		// Runs once: finds this plugin's dynamic option names (leases, states, transients) by prefix and deletes them
+		// through the Options API. An index option would cost a write on every submission instead (plan point 2.3).
 		'uninstall.php',
 	);
 
