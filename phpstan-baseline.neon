@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Constant EASYCONTACT_URL not found\.$#'
-			identifier: constant.notFound
-			count: 2
-			path: src/Admin/Admin.php
-
-		-
 			message: '#^Method EasyContact\\Forms\\Admin\\Editor\:\:checkbox\(\) has parameter \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -59,18 +53,6 @@ parameters:
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Forms/Admin/Editor.php
-
-		-
-			message: '#^Method EasyContact\\Admin\\Admin\:\:row_actions\(\) has parameter \$actions with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Admin/Admin.php
-
-		-
-			message: '#^Method EasyContact\\Admin\\Admin\:\:row_actions\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Admin/Admin.php
 
 		-
 			message: '#^Method EasyContact\\Forms\\Admin\\Editor\:\:rule_row\(\) has parameter \$fields with no value type specified in iterable type array\.$#'
@@ -134,84 +116,6 @@ parameters:
 			path: src/Forms/Admin/Editor.php
 
 		-
-			message: '#^Argument of an invalid type list\<string\>\|false supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:assess\(\) has parameter \$context with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:assess\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:assess\(\) has parameter \$values with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:assess\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:enabled\(\) has parameter \$config with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:level\(\) has parameter \$config with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:listing\(\) has parameter \$config with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:listing\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:reason_labels\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Parameter \#1 \$array of function array_filter expects array, list\<string\>\|false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Parameter \#1 \$string of function trim expects string, string\|null given\.$#'
-			identifier: argument.type
-			count: 2
-			path: src/AntiSpam/AntiSpam.php
-
-		-
-			message: '#^Parameter \#1 \$value of function count expects array\|Countable, list\<string\>\|false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/AntiSpam/AntiSpam.php
-
-		-
 			message: '#^Method EasyContact\\Delivery\\Delivery\:\:mail\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -270,54 +174,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Delivery/Delivery.php
-
-		-
-			message: '#^Argument of an invalid type list\<string\>\|false supplied for foreach, only iterables are supported\.$#'
-			identifier: foreach.nonIterable
-			count: 1
-			path: src/AntiSpam/DisposableDomains.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\DisposableDomains\:\:snapshot\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/DisposableDomains.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\DisposableDomains\:\:sources\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/DisposableDomains.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\DisposableDomains\:\:status\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/AntiSpam/DisposableDomains.php
-
-		-
-			message: '#^Method EasyContact\\AntiSpam\\DisposableDomains\:\:sync\(\) has no return type specified\.$#'
-			identifier: missingType.return
-			count: 1
-			path: src/AntiSpam/DisposableDomains.php
-
-		-
-			message: '#^Parameter \#1 \$value of function count expects array\|Countable, list\<string\>\|false given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/AntiSpam/DisposableDomains.php
-
-		-
-			message: '#^Parameter \#2 \$subject of function preg_split expects string, string\|null given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/AntiSpam/DisposableDomains.php
-
-		-
-			message: '#^Constant EASYCONTACT_URL not found\.$#'
-			identifier: constant.notFound
-			count: 2
-			path: src/Forms/Renderer.php
 
 		-
 			message: '#^Method EasyContact\\Forms\\Renderer\:\:attributes\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
@@ -396,48 +252,6 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Submissions/Endpoint.php
-
-		-
-			message: '#^Access to constant E164 on an unknown class EasyContact\\Vendor\\Phone\\PhoneNumberFormat\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Phone/Phone.php
-
-		-
-			message: '#^Access to constant FIXED_LINE_OR_MOBILE on an unknown class EasyContact\\Vendor\\Phone\\PhoneNumberType\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Phone/Phone.php
-
-		-
-			message: '#^Access to constant MOBILE on an unknown class EasyContact\\Vendor\\Phone\\PhoneNumberType\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/Phone/Phone.php
-
-		-
-			message: '#^Call to static method getInstance\(\) on an unknown class EasyContact\\Vendor\\Phone\\PhoneNumberUtil\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/Phone/Phone.php
-
-		-
-			message: '#^Method EasyContact\\Phone\\Phone\:\:countries\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Phone/Phone.php
-
-		-
-			message: '#^Method EasyContact\\Phone\\Phone\:\:default_country\(\) has parameter \$config with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Phone/Phone.php
-
-		-
-			message: '#^Method EasyContact\\Phone\\Phone\:\:default_country\(\) has parameter \$field with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Phone/Phone.php
 
 		-
 			message: '#^Cannot access offset ''fields'' on array\|WP_Error\.$#'
@@ -828,15 +642,3 @@ parameters:
 			identifier: identical.alwaysTrue
 			count: 1
 			path: src/Submissions/Submission.php
-
-		-
-			message: '#^Call to static method getInstance\(\) on an unknown class libphonenumber\\PhoneNumberUtil\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tools/bundle-phone.php
-
-		-
-			message: '#^Parameter \#1 \$code of function token_get_all expects string, string\|false given\.$#'
-			identifier: argument.type
-			count: 2
-			path: tools/bundle-phone.php

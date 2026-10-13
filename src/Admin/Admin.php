@@ -47,11 +47,11 @@ final class Admin {
 		if ( ! $screen || ( ! in_array( $screen->post_type, array( Plugin::FORM, Plugin::ENTRY ), true ) && ! str_contains( $screen->id, 'easycontact-settings' ) && ! str_contains( $screen->id, 'easycontact-support' ) ) ) {
 			return;
 		}
-		wp_enqueue_style( 'easycontact-admin', EASYCONTACT_URL . 'assets/admin.css', array(), EASYCONTACT_VERSION );
+		wp_enqueue_style( 'easycontact-admin', plugins_url( 'assets/admin.css', EASYCONTACT_FILE ), array(), EASYCONTACT_VERSION );
 		if ( str_contains( $screen->id, 'easycontact-support' ) ) {
 			return;
 		}
-		wp_enqueue_script( 'easycontact-admin', EASYCONTACT_URL . 'assets/admin.js', array(), EASYCONTACT_VERSION, true );
+		wp_enqueue_script( 'easycontact-admin', plugins_url( 'assets/admin.js', EASYCONTACT_FILE ), array(), EASYCONTACT_VERSION, true );
 		wp_localize_script(
 			'easycontact-admin',
 			'easycontactAdmin',
@@ -91,9 +91,9 @@ final class Admin {
 	/**
 	 * Remove unsupported inline editing and public view actions.
 	 *
-	 * @param array   $actions Native row actions.
-	 * @param WP_Post $post Native WordPress post.
-	 * @return array Result of this operation.
+	 * @param array<string, string> $actions Native row actions.
+	 * @param WP_Post               $post Native WordPress post.
+	 * @return array<string, string> Result of this operation.
 	 */
 	public static function row_actions( array $actions, WP_Post $post ): array {
 		if ( in_array( $post->post_type, array( Plugin::FORM, Plugin::ENTRY ), true ) ) {

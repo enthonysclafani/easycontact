@@ -21,7 +21,7 @@ final class AntiSpam {
 	/**
 	 * Resolve the protection level of a form, 1 to 3.
 	 *
-	 * @param array $config Validated form configuration.
+	 * @param array<string, mixed> $config Validated form configuration.
 	 * @return int Protection level.
 	 */
 	public static function level( array $config ): int {
@@ -32,8 +32,8 @@ final class AntiSpam {
 	/**
 	 * Resolve an inherited yes/no preference of a form.
 	 *
-	 * @param array  $config Validated form configuration.
-	 * @param string $key    Preference name.
+	 * @param array<string, mixed> $config Validated form configuration.
+	 * @param string               $key    Preference name.
 	 * @return bool Whether the preference is on.
 	 */
 	public static function enabled( array $config, string $key ): bool {
@@ -110,7 +110,7 @@ final class AntiSpam {
 	 */
 	public static function phrase_list( string $value ) {
 		$lines = preg_split( '/[\r\n]+/', sanitize_textarea_field( $value ) );
-		if ( strlen( $value ) > 5000 || count( $lines ) > 30 ) {
+		if ( false === $lines || strlen( $value ) > 5000 || count( $lines ) > 30 ) {
 			return new WP_Error( 'phrases', __( 'Enter at most 30 short phrases, one per line.', 'easycontact' ) );
 		}
 		$phrases = array();
@@ -130,22 +130,23 @@ final class AntiSpam {
 	/**
 	 * Site-wide and form lines of a list preference, combined.
 	 *
-	 * @param array  $config Validated form configuration.
-	 * @param string $key    Preference name.
-	 * @return array Non-empty lines.
+	 * @param array<string, mixed> $config Validated form configuration.
+	 * @param string               $key    Preference name.
+	 * @return array<int, string> Non-empty lines.
 	 */
 	private static function listing( array $config, string $key ): array {
-		return array_filter( preg_split( '/[\r\n]+/', Settings::get()[ $key ] . "\n" . ( $config[ $key ] ?? '' ) ) );
+		$lines = preg_split( '/[\r\n]+/', Settings::get()[ $key ] . "\n" . ( $config[ $key ] ?? '' ) );
+		return false === $lines ? array() : array_filter( $lines );
 	}
 
 	/**
 	 * Assess once per new ticket; receipt retries reuse this assessment and its counters.
 	 *
-	 * @param int   $form_id    Published form ID.
-	 * @param array $definition Validated form definition.
-	 * @param array $values     Sanitized visible field values.
-	 * @param array $context    Request signals: honeypot, elapsed seconds.
-	 * @return array Status, detected category, score, reasons, level and observation flag.
+	 * @param int                   $form_id    Published form ID.
+	 * @param array<string, mixed>  $definition Validated form definition.
+	 * @param array<string, string> $values     Sanitized visible field values.
+	 * @param array<string, mixed>  $context    Request signals: honeypot, elapsed seconds.
+	 * @return array{status: string, detected: string, score: int, reasons: list<string>, level: int, observe: bool} Status, detected category, score, reasons, level and observation flag.
 	 */
 	public static function assess( int $form_id, array $definition, array $values, array $context = array() ): array {
 		$config   = $definition['config'];
@@ -223,7 +224,7 @@ final class AntiSpam {
 						break;
 					}
 				}
-				$template = preg_replace( array( '~(?:https?://|www\.)[^\s<>]+~iu', '/[\p{N}\p{P}\p{Z}\s]+/u' ), array( ' link ', ' ' ), $message );
+				$template = preg_replace( array( '~(?:https?://|www\.)[^\s<>]+~iu', '/[\p{N}\p{P}\p{Z}\s]+/u' ), array( ' link ', ' ' ), $message ) ?? '';
 				if ( mb_strlen( trim( $template ), 'UTF-8' ) >= 20 ) {
 					$count = State::count( 'message_' . $form_id, trim( $template ), 30 * MINUTE_IN_SECONDS, 30 );
 					if ( null !== $count && $count >= ( 3 === $level ? 3 : 4 ) ) {
@@ -253,7 +254,7 @@ final class AntiSpam {
 	/**
 	 * Localized labels of the assessment reasons.
 	 *
-	 * @return array Labels keyed by reason.
+	 * @return array<string, string> Labels keyed by reason.
 	 */
 	public static function reason_labels(): array {
 		return array(
