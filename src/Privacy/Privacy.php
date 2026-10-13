@@ -5,7 +5,11 @@
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\Privacy;
+
+use EasyContact\AntiSpam;
+use EasyContact\Plugin;
+use EasyContact\Review;
 
 defined( 'ABSPATH' ) || exit;
 
