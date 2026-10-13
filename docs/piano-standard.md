@@ -194,8 +194,13 @@ Fasi 0 e 1.
       _Fatto: la regola `one-stylesheet` di `tools/check-architecture.php` ammette solo `assets/admin.css` e
       `assets/frontend.css` e vuole ogni selettore sotto una classe o un ID `easycontact`; `no-inline-css` c'era già.
       I due fogli rispettavano già la regola: nessun cambiamento visibile._
-- [ ] 5.2 Azioni `admin_post_*` con nonce e capability verificate da test; valutare il passaggio a REST dove
+- [x] 5.2 Azioni `admin_post_*` con nonce e capability verificate da test; valutare il passaggio a REST dove
       serve interazione
+      _Fatto: `tests/AdminActionsTest.php` elenca ogni azione `admin_post_*` del plugin e, per classificazione,
+      approvazione, nuovo tentativo, anteprima e sincronizzazione delle liste, verifica che un editor, una richiesta
+      senza nonce e una con il nonce di un altro oggetto vengano fermati da `wp_die()` senza effetti, e che
+      l'amministratore con il nonce giusto ottenga l'effetto e il ritorno alla schermata. REST non serve: sono form
+      classici con ricarica della pagina, come prevede la tabella delle API native in CLAUDE.md._
 - [ ] 5.3 Testi delle schermate brevi e coerenti
 
 ### Fase 6 — Controllo finale
