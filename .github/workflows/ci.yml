@@ -102,6 +102,7 @@ jobs:
           mkdir -p dist-extracted
           unzip -q .dist/easycontact.zip -d dist-extracted
           test -f dist-extracted/easycontact/easycontact.php
+          test -f dist-extracted/easycontact/src/autoload.php
           test -f dist-extracted/easycontact/includes/data/countries.json
           test ! -e dist-extracted/easycontact/tests
           test ! -e dist-extracted/easycontact/tools
@@ -118,6 +119,6 @@ jobs:
           exclude-checks: plugin_updater
           # The two public disposable-domain lists are plain-text data that an administrator downloads on request,
           # not offloaded assets. PHPCS, PHPStan and composer architecture still read this file.
-          exclude-files: includes/class-disposable-domains.php
+          exclude-files: src/DisposableDomains.php
           categories: |
             plugin_repo

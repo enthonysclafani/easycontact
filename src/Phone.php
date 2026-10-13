@@ -21,8 +21,8 @@ final class Phone {
 	/** Load only our isolated upstream namespace, never another plugin's version. */
 	public static function boot(): void {
 		if ( ! function_exists( 'mb_strtoupper' ) || ! function_exists( 'mb_strtolower' ) ) {
-			require_once __DIR__ . '/vendor/mbstring/Mbstring.php';
-			require_once __DIR__ . '/vendor/mbstring/bootstrap.php';
+			require_once EASYCONTACT_DIR . 'includes/vendor/mbstring/Mbstring.php';
+			require_once EASYCONTACT_DIR . 'includes/vendor/mbstring/bootstrap.php';
 		}
 		spl_autoload_register(
 			static function ( string $class_name ): void {
@@ -34,7 +34,7 @@ final class Phone {
 				if ( ! preg_match( '/^[A-Za-z0-9_\\\\]+$/D', $relative ) ) {
 					return;
 				}
-				$path = __DIR__ . '/vendor/phone/' . str_replace( '\\', '/', $relative ) . '.php';
+				$path = EASYCONTACT_DIR . 'includes/vendor/phone/' . str_replace( '\\', '/', $relative ) . '.php';
 				if ( is_file( $path ) ) {
 					require_once $path;
 				}
@@ -46,7 +46,7 @@ final class Phone {
 	public static function countries(): array {
 		static $countries;
 		if ( null === $countries ) {
-			$countries = wp_json_file_decode( __DIR__ . '/data/countries.json', array( 'associative' => true ) );
+			$countries = wp_json_file_decode( EASYCONTACT_DIR . 'includes/data/countries.json', array( 'associative' => true ) );
 			$countries = is_array( $countries ) ? $countries : array();
 		}
 		return $countries;

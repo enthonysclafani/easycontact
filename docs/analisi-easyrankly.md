@@ -48,7 +48,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
 | HTTP | solo admin/REST/CLI | 🟡 solo invio e admin | 🟡 in allowlist | D3, Fase 4.3 |
 | Dipendenze PHP a runtime | nessuna | 🟡 libphonenumber, polyfill mbstring | 🟡 escluse dai controlli, documentate | D4 |
 | Query sul percorso caldo | zero in più, verificato da test | ❌ 3 letture a ogni richiesta | ✅ zero, verificato da test | |
-| Struttura `src/` PSR-4, `register()` | ✅ | ❌ classi statiche in `includes/` | ❌ | Fase 3 |
+| Struttura `src/` PSR-4, `register()` | ✅ | ❌ classi statiche in `includes/` | 🟡 `src/` PSR-4 con autoload, `Plugin::register()` | Fasi 3.2–3.3 |
 | `register_setting()` / `register_post_meta()` con schema | ✅ | ❌ | ❌ | Fase 3.4 |
 | `args` tipizzati sulle route REST | ✅ | 🟡 | 🟡 | Fase 3.5 |
 | Disinstallazione completa e testata | ✅ | 🟡 completa, non testata | ✅ testata anche in multisito | D5 |
