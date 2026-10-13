@@ -214,8 +214,11 @@ Fasi 0 e 1.
       _Fatto in quattro PR (AntiSpam, Phone, Admin e strumenti; Delivery, Privacy e Review; moduli; invii): i 159
       errori della baseline sono corretti nel codice e `phpstan-baseline.neon` non c'è più. I 34 `phpcs:ignore`
       nominano la regola e hanno la motivazione nella stessa riga._
-- [ ] 6.2 Controllo di sicurezza (lista sul modello di `docs/sicurezza.md` di EasyRankly): input dell'invio,
+- [x] 6.2 Controllo di sicurezza (lista sul modello di `docs/sicurezza.md` di EasyRankly): input dell'invio,
       upload (se presenti), segreti delle integrazioni, SSRF sui webhook, rate limit
+      _Fatto in `docs/sicurezza.md`, area per area con il test che verifica ogni difesa. Il documento di EasyRankly
+      non era raggiungibile, quindi la struttura segue le aree di questo punto. Aggiunti `tests/SecretsTest.php`
+      (nessun segreto esce dal server) e il limite di 2048 caratteri sul token CAPTCHA nella route di invio._
 - [ ] 6.3 Verifica manuale sul sito Studio locale (`~/Studio/form-a-caso`) con Query Monitor
 - [ ] 6.4 Merge di `Refactory` in `main` e nuova versione
 

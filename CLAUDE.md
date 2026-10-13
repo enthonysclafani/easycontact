@@ -14,6 +14,7 @@ Documenti di riferimento (tutti in questo branch):
   aperta fermati e chiedi: non si sceglie da soli.
 - `docs/data-model.md`: ogni dato salvato dal plugin. Se non è lì, il plugin non lo crea.
 - `docs/analisi-easyrankly.md`: confronto con EasyRankly e lista per la produzione.
+- `docs/sicurezza.md`: le difese per area e il test che verifica ciascuna.
 - `ANTI-SPAM.md`: come funziona l'anti-spam (anche per gli utenti).
 
 ## Branch e ambienti
