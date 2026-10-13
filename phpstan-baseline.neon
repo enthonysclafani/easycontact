@@ -430,43 +430,43 @@ parameters:
 			message: '#^Access to constant E164 on an unknown class EasyContact\\Vendor\\Phone\\PhoneNumberFormat\.$#'
 			identifier: class.notFound
 			count: 1
-			path: src/Phone.php
+			path: src/Phone/Phone.php
 
 		-
 			message: '#^Access to constant FIXED_LINE_OR_MOBILE on an unknown class EasyContact\\Vendor\\Phone\\PhoneNumberType\.$#'
 			identifier: class.notFound
 			count: 1
-			path: src/Phone.php
+			path: src/Phone/Phone.php
 
 		-
 			message: '#^Access to constant MOBILE on an unknown class EasyContact\\Vendor\\Phone\\PhoneNumberType\.$#'
 			identifier: class.notFound
 			count: 1
-			path: src/Phone.php
+			path: src/Phone/Phone.php
 
 		-
 			message: '#^Call to static method getInstance\(\) on an unknown class EasyContact\\Vendor\\Phone\\PhoneNumberUtil\.$#'
 			identifier: class.notFound
 			count: 2
-			path: src/Phone.php
+			path: src/Phone/Phone.php
 
 		-
-			message: '#^Method EasyContact\\Phone\:\:countries\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Phone\\Phone\:\:countries\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Phone.php
+			path: src/Phone/Phone.php
 
 		-
-			message: '#^Method EasyContact\\Phone\:\:default_country\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Phone\\Phone\:\:default_country\(\) has parameter \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Phone.php
+			path: src/Phone/Phone.php
 
 		-
-			message: '#^Method EasyContact\\Phone\:\:default_country\(\) has parameter \$field with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Phone\\Phone\:\:default_country\(\) has parameter \$field with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Phone.php
+			path: src/Phone/Phone.php
 
 		-
 			message: '#^Cannot access offset ''fields'' on array\|WP_Error\.$#'

@@ -7,6 +7,7 @@
 
 namespace EasyContact;
 
+use EasyContact\Phone\Phone;
 use WP_Error;
 use WP_Post;
 
