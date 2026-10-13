@@ -16,7 +16,7 @@ final class Outcomes {
 	/**
 	 * Render localized delivery outcomes without provider payloads.
 	 *
-	 * @param array $outcomes Status codes keyed by destination.
+	 * @param array<string, string> $outcomes Status codes keyed by destination.
 	 * @return void
 	 */
 	public static function render( array $outcomes ): void {

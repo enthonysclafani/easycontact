@@ -32,8 +32,8 @@ final class Privacy {
 	/**
 	 * Register the native personal data exporter.
 	 *
-	 * @param array $items Registered WordPress privacy callbacks.
-	 * @return array Result of this operation.
+	 * @param array<string, array<string, mixed>> $items Registered WordPress privacy callbacks.
+	 * @return array<string, array<string, mixed>> Result of this operation.
 	 */
 	public static function exporters( array $items ): array {
 		$items['easycontact'] = array(
@@ -46,8 +46,8 @@ final class Privacy {
 	/**
 	 * Register the native personal data eraser.
 	 *
-	 * @param array $items Registered WordPress privacy callbacks.
-	 * @return array Result of this operation.
+	 * @param array<string, array<string, mixed>> $items Registered WordPress privacy callbacks.
+	 * @return array<string, array<string, mixed>> Result of this operation.
 	 */
 	public static function erasers( array $items ): array {
 		$items['easycontact'] = array(
@@ -62,7 +62,7 @@ final class Privacy {
 	 *
 	 * @param string $email Email identity supplied by WordPress privacy tools.
 	 * @param int    $page One-based privacy batch page.
-	 * @return array Result of this operation.
+	 * @return array<int, \WP_Post> Result of this operation.
 	 */
 	private static function entries( string $email, int $page ): array {
 		// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key,WordPress.DB.SlowDBQuery.slow_db_query_meta_value -- Core privacy tools require email matching; native metadata is queried in batches of 50.
@@ -87,7 +87,7 @@ final class Privacy {
 	 *
 	 * @param string $email Email identity supplied by WordPress privacy tools.
 	 * @param int    $page One-based privacy batch page.
-	 * @return array Result of this operation.
+	 * @return array{data: list<array{group_id: string, group_label: string, item_id: string, data: list<array{name: string, value: string}>}>, done: bool} Result of this operation.
 	 */
 	public static function export( string $email, int $page = 1 ): array {
 		$posts = is_email( $email ) ? self::entries( $email, $page ) : array();
@@ -144,7 +144,7 @@ final class Privacy {
 	 *
 	 * @param string $email Email identity supplied by WordPress privacy tools.
 	 * @param int    $page One-based privacy batch page.
-	 * @return array Result of this operation.
+	 * @return array{items_removed: bool, items_retained: bool, messages: list<string>, done: bool} Result of this operation.
 	 */
 	public static function erase( string $email, int $page = 1 ): array {
 		$allowed = (bool) Settings::get()['allow_erasure'];

@@ -70,9 +70,9 @@ final class Delivery {
 	/**
 	 * Pass a plain-text notification to the native WordPress mail API.
 	 *
-	 * @param int   $form_id Published form ID.
-	 * @param array $definition Validated form definition.
-	 * @param array $values Sanitized visible field values.
+	 * @param int                   $form_id Published form ID.
+	 * @param array<string, mixed>  $definition Validated form definition.
+	 * @param array<string, string> $values Sanitized visible field values.
 	 * @return true|WP_Error Result of this operation.
 	 */
 	public static function mail( int $form_id, array $definition, array $values ) {
@@ -90,10 +90,10 @@ final class Delivery {
 	/**
 	 * Replace only documented email placeholders.
 	 *
-	 * @param string $template Restricted tag or email template.
-	 * @param int    $form_id Published form ID.
-	 * @param array  $definition Validated form definition.
-	 * @param array  $values Sanitized visible field values.
+	 * @param string                $template Restricted tag or email template.
+	 * @param int                   $form_id Published form ID.
+	 * @param array<string, mixed>  $definition Validated form definition.
+	 * @param array<string, string> $values Sanitized visible field values.
 	 * @return string Result of this operation.
 	 */
 	private static function replace( string $template, int $form_id, array $definition, array $values ): string {
@@ -119,8 +119,8 @@ final class Delivery {
 	/**
 	 * Upsert an explicitly consented subscriber without changing opt-out status.
 	 *
-	 * @param array $config Validated delivery and privacy configuration.
-	 * @param array $values Sanitized visible field values.
+	 * @param array<string, mixed>  $config Validated delivery and privacy configuration.
+	 * @param array<string, string> $values Sanitized visible field values.
 	 * @return true|string|WP_Error Result of this operation.
 	 */
 	public static function mailerlite( array $config, array $values ) {
@@ -141,6 +141,10 @@ final class Delivery {
 		if ( '' !== $name ) {
 			$body['fields'] = array( 'name' => $name );
 		}
+		$json = wp_json_encode( $body );
+		if ( false === $json ) {
+			return new WP_Error( 'mailerlite_configuration', 'mailerlite_configuration' );
+		}
 		// Do not force status=active or resubscribe: existing opt-outs remain intact.
 		$response = wp_safe_remote_post(
 			'https://connect.mailerlite.com/api/subscribers',
@@ -153,7 +157,7 @@ final class Delivery {
 					'Content-Type'  => 'application/json',
 					'Accept'        => 'application/json',
 				),
-				'body'                => wp_json_encode( $body ),
+				'body'                => $json,
 			)
 		);
 		if ( is_wp_error( $response ) ) {
@@ -182,9 +186,9 @@ final class Delivery {
 	/**
 	 * Send selected visible fields as plain text to Slack.
 	 *
-	 * @param int   $form_id Published form ID.
-	 * @param array $definition Validated form definition.
-	 * @param array $values Sanitized visible field values.
+	 * @param int                   $form_id Published form ID.
+	 * @param array<string, mixed>  $definition Validated form definition.
+	 * @param array<string, string> $values Sanitized visible field values.
 	 * @return true|WP_Error Result of this operation.
 	 */
 	public static function slack( int $form_id, array $definition, array $values ) {
@@ -219,6 +223,17 @@ final class Delivery {
 				),
 			);
 		}
+		$json = wp_json_encode(
+			array(
+				'text'         => str_replace( array( '&', '<', '>' ), array( '&amp;', '&lt;', '&gt;' ), $title ),
+				'blocks'       => $blocks,
+				'unfurl_links' => false,
+				'unfurl_media' => false,
+			)
+		);
+		if ( false === $json ) {
+			return new WP_Error( 'slack_configuration', 'slack_configuration' );
+		}
 		$response = wp_safe_remote_post(
 			$config['slack_webhook'],
 			array(
@@ -226,14 +241,7 @@ final class Delivery {
 				'limit_response_size' => 65536,
 				'redirection'         => 0,
 				'headers'             => array( 'Content-Type' => 'application/json' ),
-				'body'                => wp_json_encode(
-					array(
-						'text'         => str_replace( array( '&', '<', '>' ), array( '&amp;', '&lt;', '&gt;' ), $title ),
-						'blocks'       => $blocks,
-						'unfurl_links' => false,
-						'unfurl_media' => false,
-					)
-				),
+				'body'                => $json,
 			)
 		);
 		if ( is_wp_error( $response ) ) {
