@@ -116,5 +116,11 @@ jobs:
           build-dir: ./dist-extracted/easycontact
           slug: easycontact
           ignore-warnings: true
+          # EasyContact is distributed outside WordPress.org: `Update URI: false` in the header is deliberate (no
+          # updates from a WordPress.org plugin with the same slug), and plugin_updater reports it as an error.
+          exclude-checks: plugin_updater
+          # The two public disposable-domain lists are plain-text data that an administrator downloads on request,
+          # not offloaded assets. PHPCS, PHPStan and composer architecture still read this file.
+          exclude-files: includes/class-disposable-domains.php
           categories: |
             plugin_repo
