@@ -571,58 +571,58 @@ parameters:
 			path: src/Privacy/Privacy.php
 
 		-
-			message: '#^Method EasyContact\\Review\:\:bulk\(\) has parameter \$ids with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Review\\Admin\\Screen\:\:bulk\(\) has parameter \$ids with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Review.php
+			path: src/Review/Admin/Screen.php
 
 		-
-			message: '#^Method EasyContact\\Review\:\:bulk_actions\(\) has parameter \$actions with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Review\\Admin\\Screen\:\:bulk_actions\(\) has parameter \$actions with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Review.php
+			path: src/Review/Admin/Screen.php
 
 		-
-			message: '#^Method EasyContact\\Review\:\:bulk_actions\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Review\\Admin\\Screen\:\:bulk_actions\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Review.php
+			path: src/Review/Admin/Screen.php
 
 		-
-			message: '#^Method EasyContact\\Review\:\:columns\(\) has parameter \$columns with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Review\\Admin\\Screen\:\:columns\(\) has parameter \$columns with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Review.php
+			path: src/Review/Admin/Screen.php
 
 		-
-			message: '#^Method EasyContact\\Review\:\:columns\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Review\\Admin\\Screen\:\:columns\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Review.php
+			path: src/Review/Admin/Screen.php
 
 		-
-			message: '#^Method EasyContact\\Review\:\:initialize\(\) has parameter \$assessment with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Review\\Review\:\:initialize\(\) has parameter \$assessment with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Review.php
+			path: src/Review/Review.php
 
 		-
-			message: '#^Method EasyContact\\Review\:\:labels\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Review\\Review\:\:labels\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Review.php
+			path: src/Review/Review.php
 
 		-
-			message: '#^Method EasyContact\\Review\:\:views\(\) has parameter \$views with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Review\\Admin\\Screen\:\:views\(\) has parameter \$views with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Review.php
+			path: src/Review/Admin/Screen.php
 
 		-
-			message: '#^Method EasyContact\\Review\:\:views\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Review\\Admin\\Screen\:\:views\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Review.php
+			path: src/Review/Admin/Screen.php
 
 		-
 			message: '#^Method EasyContact\\Schema\:\:number_valid\(\) has parameter \$limits with no value type specified in iterable type array\.$#'

@@ -17,7 +17,8 @@ use EasyContact\Frontend;
 use EasyContact\Phone\Phone;
 use EasyContact\Plugin;
 use EasyContact\Privacy\Privacy;
-use EasyContact\Review;
+use EasyContact\Review\Admin\Screen;
+use EasyContact\Review\Review;
 use EasyContact\Schema;
 use EasyContact\State;
 use EasyContact\Submission;
@@ -444,7 +445,7 @@ class SubmissionTest extends TestCase {
 
 		$this->login_admin();
 		$_REQUEST['_wpnonce'] = wp_create_nonce( 'bulk-posts' );
-		Review::bulk( admin_url( 'edit.php' ), 'easycontact-classify-suspect', array( $accepted, $suspect ) );
+		Screen::bulk( admin_url( 'edit.php' ), 'easycontact-classify-suspect', array( $accepted, $suspect ) );
 		$this->assertSame( array( 'suspect', 'suspect' ), array( Review::category( $accepted ), Review::category( $suspect ) ), 'Bulk classification handles multiple entries' );
 
 		update_option(
