@@ -9,7 +9,7 @@ namespace EasyContact\Privacy;
 
 use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Plugin;
-use EasyContact\Review;
+use EasyContact\Review\Review;
 
 defined( 'ABSPATH' ) || exit;
 

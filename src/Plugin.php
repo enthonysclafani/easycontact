@@ -10,6 +10,8 @@ namespace EasyContact;
 use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Phone\Phone;
 use EasyContact\Privacy\Privacy;
+use EasyContact\Review\Admin\Screen;
+use EasyContact\Review\Review;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -37,9 +39,9 @@ final class Plugin {
 		Frontend::boot();
 		Privacy::boot();
 		Phone::boot();
-		Review::boot();
 		if ( is_admin() ) {
 			Admin::boot();
+			Screen::boot();
 		}
 	}
 
