@@ -71,7 +71,7 @@ final class Endpoint {
 					'nonce'     => self::arg( 'string', array( 'maxLength' => 64 ) ),
 					'ticket'    => self::arg( 'string', array( 'maxLength' => 200 ) ),
 					'clock'     => self::arg( 'string', array( 'maxLength' => 200 ) ),
-					'captcha'   => self::arg( 'string' ),
+					'captcha'   => self::arg( 'string', array( 'maxLength' => 2048 ) ),
 					'fields'    => self::arg( 'object' ),
 					'countries' => self::arg( 'object' ),
 					'honeypot'  => self::arg( 'object' ),

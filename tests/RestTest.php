@@ -77,6 +77,7 @@ class RestTest extends TestCase {
 		$token = new WP_REST_Request( 'GET', '/easycontact/v1/forms/' . $id . '/token' );
 		$token->set_query_params( array( 'clock' => str_repeat( '1', 201 ) ) );
 		$this->assertSame( 400, rest_do_request( $token )->get_status(), 'An oversized clock is refused' );
+		$this->assertSame( 2048, $routes['/easycontact/v1/forms/(?P<id>\\d+)/submit'][0]['args']['captcha']['maxLength'], 'The CAPTCHA token has the same limit as Delivery::captcha()' );
 
 		$request = new WP_REST_Request( 'POST', '/easycontact/v1/forms/' . $id . '/submit' );
 		$request->set_header( 'Content-Type', 'application/json' );

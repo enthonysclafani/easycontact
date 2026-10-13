@@ -96,5 +96,5 @@ Prima del merge di `Refactory` in `main` e del rilascio (Fase 6.4 del piano, da 
       invio riuscito, invio sospetto in revisione, approvazione, nuovo tentativo dopo un errore di Slack/MailerLite
 - [ ] Prova di aggiornamento da 1.0.0 a una copia del sito reale: impostazioni, moduli e invii intatti
 - [ ] Versione alzata (`EASYCONTACT_VERSION`, intestazione del plugin, `Stable tag`) e changelog in `readme.txt`
-- [ ] Controllo di sicurezza della Fase 6.2 sul codice che va in produzione
+- [x] Controllo di sicurezza della Fase 6.2 sul codice che va in produzione (`docs/sicurezza.md`)
 - [x] Decisioni D1–D9 prese (13 ottobre 2026)
