@@ -24,7 +24,7 @@ final class Schema {
 	 * Parse our small tag language. It intentionally does not execute shortcodes or HTML.
 	 *
 	 * @param string $template Restricted tag or email template.
-	 * @return array|WP_Error Result of this operation.
+	 * @return array{fields: array<string, array<string, mixed>>, items: list<array<string, mixed>>, submit: string}|WP_Error Result of this operation.
 	 */
 	public static function parse( string $template ) {
 		if ( strlen( $template ) > 20000 ) {
@@ -118,16 +118,16 @@ final class Schema {
 				return new WP_Error( 'template', __( 'Check the select options or the number limits.', 'easycontact' ) );
 			}
 			$fields[ $name ] = $field;
-			if ( $joined ) {
-				$row = array_pop( $items );
-				if ( 'field' === $row['type'] ) {
-					$row = array(
-						'type'  => 'row',
-						'names' => array( $row['name'] ),
-					);
-				}
-				$row['names'][] = $name;
-				$items[]        = $row;
+			// A joined field always follows a field or a row, checked above with the previous type.
+			$previous = $joined ? array_pop( $items ) : null;
+			if ( isset( $previous['names'] ) ) {
+				$previous['names'][] = $name;
+				$items[]             = $previous;
+			} elseif ( isset( $previous['name'] ) ) {
+				$items[] = array(
+					'type'  => 'row',
+					'names' => array( $previous['name'], $name ),
+				);
 			} else {
 				$items[] = array(
 					'type' => 'field',
@@ -149,7 +149,7 @@ final class Schema {
 	 * Tokenize quoted tag arguments and reject malformed quoting.
 	 *
 	 * @param string $input Untrusted input to validate.
-	 * @return array|WP_Error Result of this operation.
+	 * @return list<array{value: string, quoted: bool}>|WP_Error Result of this operation.
 	 */
 	private static function tokens( string $input ) {
 		$tokens = array();
@@ -173,9 +173,9 @@ final class Schema {
 	/**
 	 * Validate a directed acyclic graph so both browser and server can evaluate it identically.
 	 *
-	 * @param array $fields Field definitions keyed by name.
-	 * @param array $input Untrusted input to validate.
-	 * @return array|WP_Error Result of this operation.
+	 * @param array<string, array<string, mixed>> $fields Field definitions keyed by name.
+	 * @param array<mixed>                        $input Untrusted input to validate.
+	 * @return array{rules: list<array{target: string, source: string, operator: string, value: string}>, order: list<string>}|WP_Error Result of this operation.
 	 */
 	public static function rules( array $fields, array $input ) {
 		if ( count( $input ) > 80 ) {
@@ -223,11 +223,11 @@ final class Schema {
 	/**
 	 * Calculate visibility in dependency order.
 	 *
-	 * @param array  $schema Parsed field schema.
-	 * @param array  $conditions Validated conditional dependency graph.
-	 * @param string $mode Conditional matching mode: all or any.
-	 * @param array  $values Sanitized visible field values.
-	 * @return array Result of this operation.
+	 * @param array<string, mixed>  $schema Parsed field schema.
+	 * @param array<string, mixed>  $conditions Validated conditional dependency graph.
+	 * @param string                $mode Conditional matching mode: all or any.
+	 * @param array<string, string> $values Sanitized visible field values.
+	 * @return array<string, bool> Result of this operation.
 	 */
 	public static function visible( array $schema, array $conditions, string $mode, array $values ): array {
 		$visible = array();
@@ -270,11 +270,11 @@ final class Schema {
 	/**
 	 * Validate visible values and discard hidden submitted values.
 	 *
-	 * @param array $definition Validated form definition.
-	 * @param array $input Untrusted input to validate.
-	 * @param array $countries Country selected for each telephone field.
-	 * @param bool  $archived Whether the values are re-validated from an archived entry.
-	 * @return array Result of this operation.
+	 * @param array<string, mixed>  $definition Validated form definition.
+	 * @param array<mixed>          $input Untrusted input to validate.
+	 * @param array<string, string> $countries Country selected for each telephone field.
+	 * @param bool                  $archived Whether the values are re-validated from an archived entry.
+	 * @return array{values: array<string, string>, visible: array<string, bool>, errors: array<string, string>} Result of this operation.
 	 */
 	public static function validate( array $definition, array $input, array $countries = array(), bool $archived = false ): array {
 		$values     = array();
@@ -354,8 +354,8 @@ final class Schema {
 	/**
 	 * Validate a finite number against bounds and step.
 	 *
-	 * @param string $value Validated plugin-specific value.
-	 * @param array  $limits Finite number constraints.
+	 * @param string               $value Validated plugin-specific value.
+	 * @param array<string, float> $limits Finite number constraints.
 	 * @return bool Result of this operation.
 	 */
 	private static function number_valid( string $value, array $limits ): bool {

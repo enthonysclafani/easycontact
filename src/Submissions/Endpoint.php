@@ -213,7 +213,8 @@ final class Endpoint {
 	 * @return array|WP_Error Result of this operation.
 	 */
 	public static function submit( int $id, array $input ) {
-		if ( ! self::available( $id ) ) {
+		$definition = self::available( $id ) ? Forms::definition( $id ) : null;
+		if ( null === $definition ) {
 			return new WP_Error( 'unavailable', __( 'Form not available.', 'easycontact' ), array( 'status' => 404 ) );
 		}
 		if ( ! State::rate_allowed( $id, 40, 'attempt' ) ) {
@@ -260,8 +261,7 @@ final class Endpoint {
 		if ( isset( $receipt['response'], $receipt['input_fingerprint'] ) ) {
 			return hash_equals( $receipt['input_fingerprint'], $input_fingerprint ) ? $receipt['response'] : new WP_Error( 'used', __( 'This submission has already been processed. Contact the site before sending another message.', 'easycontact' ), array( 'status' => 409 ) );
 		}
-		$definition = Forms::definition( $id );
-		$validated  = Schema::validate( $definition, $input['fields'], $countries );
+		$validated = Schema::validate( $definition, $input['fields'], $countries );
 		if ( $validated['errors'] ) {
 			return new WP_Error(
 				'validation',

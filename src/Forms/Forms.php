@@ -63,7 +63,7 @@ final class Forms {
 	/**
 	 * Return defaults for a new form.
 	 *
-	 * @return array Result of this operation.
+	 * @return array<string, mixed> Result of this operation.
 	 */
 	public static function config_defaults(): array {
 		return array(
@@ -94,24 +94,34 @@ final class Forms {
 	}
 
 	/**
-	 * Read a saved form definition or provide editor defaults.
+	 * Read a saved form definition.
 	 *
-	 * @param int  $form_id Published form ID.
-	 * @param bool $with_default Validated plugin-specific value.
-	 * @return array|null Result of this operation.
+	 * @param int $form_id Published form ID.
+	 * @return array<string, mixed>|null Validated definition, or null when the form has none.
 	 */
-	public static function definition( int $form_id, bool $with_default = false ): ?array {
+	public static function definition( int $form_id ): ?array {
 		$definition = get_post_meta( $form_id, '_easycontact_definition', true );
 		if ( is_array( $definition ) && isset( $definition['schema']['fields'], $definition['conditions']['order'], $definition['config'] ) ) {
 			$definition['config'] = array_merge( self::config_defaults(), $definition['config'] );
 			return $definition;
 		}
-		if ( ! $with_default ) {
-			return null;
+		return null;
+	}
+
+	/**
+	 * Read a saved form definition, or the default form for the editor.
+	 *
+	 * @param int $form_id Form ID.
+	 * @return array<string, mixed> Saved or default definition.
+	 */
+	public static function editor_definition( int $form_id ): array {
+		$definition = self::definition( $form_id );
+		if ( null !== $definition ) {
+			return $definition;
 		}
 		$template   = self::default_template();
 		$schema     = Schema::parse( $template );
-		$conditions = Schema::rules(
+		$conditions = is_wp_error( $schema ) ? $schema : Schema::rules(
 			$schema['fields'],
 			array(
 				array(
@@ -122,6 +132,19 @@ final class Forms {
 				),
 			)
 		);
+		if ( is_wp_error( $schema ) || is_wp_error( $conditions ) ) {
+			// Only a broken translation of the default labels gets here: the editor then starts empty.
+			$template   = '';
+			$schema     = array(
+				'fields' => array(),
+				'items'  => array(),
+				'submit' => '',
+			);
+			$conditions = array(
+				'rules' => array(),
+				'order' => array(),
+			);
+		}
 		return array(
 			'template'   => $template,
 			'schema'     => $schema,
