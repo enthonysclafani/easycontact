@@ -43,7 +43,7 @@ Sotto ogni decisione la riga "Decisione" dice cosa è stato scelto e cosa resta 
   variante con l'eccezione dichiarata sembra la più sicura per la produzione.
 - Decisione (13 ottobre 2026): proposta approvata, variante con l'eccezione. Retention e pulizia di lock e stati
   senza cron, a lotti su `admin_init` e dopo un invio; `easycontact_retry_delivery` resta come unico evento, eccezione
-  dichiarata in `CRON_ALLOWLIST`. Da fare: Fase 4.1.
+  dichiarata in `CRON_ALLOWLIST`. Fatto nella Fase 4.1: `Maintenance` con il cursore in `easycontact_maintenance`.
 
 **D2 — Asset nel frontend.** Un plugin di moduli non può avere zero CSS/JS.
 - Stato attuale: già conforme alla proposta. `assets/frontend.css` e `assets/frontend.js` si caricano solo quando

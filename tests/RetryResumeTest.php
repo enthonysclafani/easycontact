@@ -55,12 +55,12 @@ class RetryResumeTest extends TestCase {
 		$foreign = self::factory()->post->create();
 		update_post_meta( $foreign, '_easycontact_retry', array( 'hash' => 'fixture' ) );
 
-		Submission::resume();
+		$cursor = Submission::resume();
 		foreach ( array_slice( $ids, 0, 50 ) as $id ) {
 			$this->assertNotFalse( wp_next_scheduled( 'easycontact_retry_delivery', array( $id ) ), 'The first batch schedules its retries' );
 		}
 		$this->assertFalse( wp_next_scheduled( 'easycontact_retry_delivery', array( $ids[50] ) ), 'A batch holds at most 50 jobs' );
-		$this->assertNotFalse( wp_next_scheduled( 'easycontact_resume_retries', array( $ids[49] ) ), 'The next batch starts after the last processed entry' );
+		$this->assertSame( $ids[49], $cursor, 'The next batch starts after the last processed entry' );
 		$this->assertFalse( wp_next_scheduled( 'easycontact_retry_delivery', array( $without ) ), 'Entries without a job are ignored' );
 		$this->assertFalse( wp_next_scheduled( 'easycontact_retry_delivery', array( $foreign ) ), 'Posts that are not entries are ignored' );
 
@@ -68,9 +68,8 @@ class RetryResumeTest extends TestCase {
 		foreach ( array_slice( $ids, 0, 10 ) as $id ) {
 			Submission::cancel( $id );
 		}
-		Submission::resume( $ids[49] );
+		$this->assertNull( Submission::resume( $ids[49] ), 'A short batch is the last one' );
 		$this->assertNotFalse( wp_next_scheduled( 'easycontact_retry_delivery', array( $ids[50] ) ), 'The second batch picks up the remaining job' );
-		$this->assertFalse( wp_next_scheduled( 'easycontact_resume_retries', array( $ids[50] ) ), 'A short batch is the last one' );
 	}
 
 	public function test_resume_does_not_schedule_a_job_twice(): void {

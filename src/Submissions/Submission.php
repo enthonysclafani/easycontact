@@ -28,7 +28,6 @@ final class Submission {
 	 */
 	public static function boot(): void {
 		add_action( 'easycontact_retry_delivery', array( self::class, 'retry' ) );
-		add_action( 'easycontact_resume_retries', array( self::class, 'resume' ) );
 		add_action( 'before_delete_post', array( self::class, 'cancel_entry' ) );
 		add_action( 'wp_trash_post', array( self::class, 'cancel_entry' ) );
 	}
@@ -320,9 +319,9 @@ final class Submission {
 	 * Resume pending archive jobs after an update or activation, in bounded native metadata batches.
 	 *
 	 * @param int $after_id Last processed ID for keyset pagination.
-	 * @return void
+	 * @return int|null Cursor of the next batch, or null when no job is left; Maintenance keeps it between runs.
 	 */
-	public static function resume( int $after_id = 0 ): void {
+	public static function resume( int $after_id = 0 ): ?int {
 		// Keyset pagination: retries that finish between batches delete their job, which would shift an offset.
 		// Only the posts table has an ID column, so the condition stays unambiguous with the meta join.
 		$after = static fn( string $where ): string => $where . ' AND ID > ' . $after_id;
@@ -347,9 +346,7 @@ final class Submission {
 				wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_retry_delivery', array( (int) $entry_id ) );
 			}
 		}
-		if ( count( $ids ) === 50 ) {
-			wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_resume_retries', array( (int) end( $ids ) ) );
-		}
+		return count( $ids ) === 50 ? (int) end( $ids ) : null;
 	}
 
 	/**

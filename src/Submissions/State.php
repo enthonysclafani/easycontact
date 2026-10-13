@@ -158,12 +158,12 @@ final class State {
 	}
 
 	/**
-	 * Remove expired records in bounded batches, resuming through WP-Cron when necessary.
+	 * Remove expired records in bounded batches; Maintenance keeps the cursor between runs.
 	 *
 	 * @param int $after_id Last processed ID for keyset pagination.
-	 * @return void
+	 * @return int|null Cursor for the next run, or null when the whole table was walked.
 	 */
-	public static function cleanup( int $after_id = 0 ): void {
+	public static function cleanup( int $after_id = 0 ): ?int {
 		global $wpdb;
 		for ( $batch = 0; $batch < 10; ++$batch ) {
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Bounded housekeeping of this plugin's non-autoloaded core options; keyset pagination must reflect deletions.
@@ -177,10 +177,10 @@ final class State {
 				}
 			}
 			if ( count( $rows ) < 100 ) {
-				return;
+				return null;
 			}
 		}
-		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_state_cleanup', array( $after_id ) );
+		return $after_id;
 	}
 
 	/**

@@ -12,6 +12,7 @@ use EasyContact\Plugin;
 use EasyContact\Review\Review;
 use EasyContact\Settings\Settings;
 use EasyContact\Submissions\Entries;
+use EasyContact\Submissions\Maintenance;
 use EasyContact\Submissions\State;
 
 /**
@@ -79,6 +80,7 @@ class UninstallTest extends TestCase {
 		update_option( DisposableDomains::OPTION, array( 'version' => 1 ), false );
 		State::write( 'uninstall-fixture', array( 'entry' => $entry ), time() + HOUR_IN_SECONDS );
 		State::claim( 'uninstall-fixture' );
+		Maintenance::resume_retries();
 		set_transient( 'easycontact_uninstall_fixture', 1, HOUR_IN_SECONDS );
 		wp_schedule_single_event( time() + HOUR_IN_SECONDS, 'easycontact_retry_delivery', array( $entry ) );
 		return array(

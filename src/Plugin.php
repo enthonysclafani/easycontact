@@ -19,7 +19,7 @@ use EasyContact\Settings\Admin\Page;
 use EasyContact\Settings\Settings;
 use EasyContact\Submissions\Admin\EntryScreen;
 use EasyContact\Submissions\Endpoint;
-use EasyContact\Submissions\State;
+use EasyContact\Submissions\Maintenance;
 use EasyContact\Submissions\Submission;
 
 defined( 'ABSPATH' ) || exit;
@@ -32,17 +32,21 @@ final class Plugin {
 	public const ENTRY = 'easycontact_entry';
 
 	/**
+	 * Events of version 1.0.0, replaced by Maintenance (D1): removed by the setup after an update.
+	 *
+	 * @var list<string>
+	 */
+	private const LEGACY_EVENTS = array( 'easycontact_daily_cleanup', 'easycontact_retention_cleanup', 'easycontact_state_cleanup', 'easycontact_resume_retries' );
+
+	/**
 	 * Register the hooks of every part of the plugin, one line each.
 	 *
 	 * @return void
 	 */
 	public static function register(): void {
 		add_action( 'init', array( self::class, 'init' ) );
-		add_action( 'easycontact_daily_cleanup', array( self::class, 'cleanup' ) );
-		add_action( 'easycontact_retention_cleanup', array( self::class, 'cleanup' ) );
-		add_action( 'easycontact_daily_cleanup', array( State::class, 'cleanup' ) );
-		add_action( 'easycontact_state_cleanup', array( State::class, 'cleanup' ) );
 		Submission::boot();
+		Maintenance::boot();
 		Renderer::boot();
 		Endpoint::boot();
 		Privacy::boot();
@@ -57,13 +61,12 @@ final class Plugin {
 	}
 
 	/**
-	 * Initialize non-autoloaded settings and scheduled maintenance.
+	 * Initialize non-autoloaded settings.
 	 *
 	 * @return void
 	 */
 	public static function activate(): void {
 		add_option( Settings::OPTION, Settings::defaults(), '', false );
-		self::schedule();
 	}
 
 	/**
@@ -97,23 +100,12 @@ final class Plugin {
 	}
 
 	/**
-	 * Schedule bounded background work.
-	 *
-	 * @return void
-	 */
-	private static function schedule(): void {
-		if ( ! wp_next_scheduled( 'easycontact_daily_cleanup' ) ) {
-			wp_schedule_event( time() + HOUR_IN_SECONDS, 'daily', 'easycontact_daily_cleanup' );
-		}
-	}
-
-	/**
 	 * Stop all plugin jobs while retaining preferences and archived data.
 	 *
 	 * @return void
 	 */
 	private static function unschedule(): void {
-		foreach ( array( 'easycontact_daily_cleanup', 'easycontact_retention_cleanup', 'easycontact_state_cleanup', 'easycontact_retry_delivery', 'easycontact_resume_retries' ) as $hook ) {
+		foreach ( array_merge( self::LEGACY_EVENTS, array( 'easycontact_retry_delivery' ) ) as $hook ) {
 			wp_unschedule_hook( $hook );
 		}
 		delete_option( 'easycontact_version' );
@@ -176,8 +168,6 @@ final class Plugin {
 		);
 		Forms::register_meta();
 		Review::register();
-		// Reads the autoloaded cron option: no query.
-		self::schedule();
 		// The version is autoloaded, so the check costs no query; setup runs only after an update.
 		if ( EASYCONTACT_VERSION !== get_option( 'easycontact_version' ) ) {
 			self::setup();
@@ -195,79 +185,10 @@ final class Plugin {
 			// Retried on the next request.
 			return;
 		}
+		foreach ( self::LEGACY_EVENTS as $hook ) {
+			wp_unschedule_hook( $hook );
+		}
 		update_option( 'easycontact_version', EASYCONTACT_VERSION, true );
-		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_resume_retries' );
-	}
-
-	/**
-	 * Delete expired data in bounded batches.
-	 *
-	 * @return void
-	 */
-	public static function cleanup(): void {
-		$settings = Settings::get();
-		$started  = microtime( true );
-		$pending  = false;
-		foreach ( array(
-			'IN'     => 'spam_retention_days',
-			'NOT IN' => 'retention_days',
-		) as $operator => $setting ) {
-			$days = (int) $settings[ $setting ];
-			if ( $days < 1 ) {
-				continue;
-			}
-			for ( $batch = 0; $batch < 5; ++$batch ) {
-				if ( microtime( true ) - $started > 10 ) {
-					$pending = true;
-					break;
-				}
-				$ids     = get_posts(
-					array(
-						'post_type'      => self::ENTRY,
-						'post_status'    => array( 'private', 'trash', 'publish', 'draft', 'pending', 'future', 'auto-draft' ),
-						'posts_per_page' => 100,
-						'fields'         => 'ids',
-						'orderby'        => 'ID',
-						'order'          => 'ASC',
-						'date_query'     => array(
-							array(
-								'column'    => 'post_date_gmt',
-								'before'    => gmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS ),
-								'inclusive' => false,
-							),
-						),
-						'tax_query'      => array(
-							array(
-								'taxonomy' => Review::TAXONOMY,
-								'field'    => 'slug',
-								'terms'    => array( 'suspect', 'spam' ),
-								'operator' => $operator,
-							),
-						),
-					)
-				); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Separate bounded retention for quarantine and ordinary entries.
-				$removed = 0;
-				foreach ( $ids as $id ) {
-					$lease = 'retry_' . $id;
-					$owner = State::claim( $lease );
-					if ( null === $owner ) {
-						$pending = true;
-						continue;
-					}
-					try {
-						$removed += wp_delete_post( $id, true ) ? 1 : 0;
-					} finally {
-						State::release( $lease, $owner );
-					}
-				}
-				if ( count( $ids ) < 100 || 0 === $removed ) {
-					break;
-				}
-				$pending = true;
-			}
-		}
-		if ( $pending && ! wp_next_scheduled( 'easycontact_retention_cleanup' ) ) {
-			wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_retention_cleanup' );
-		}
+		Maintenance::resume_retries();
 	}
 }

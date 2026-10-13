@@ -138,7 +138,7 @@ All interface strings use the easycontact text domain. The package includes a PO
 This version uses its own small tag syntax. It does not include automatic imports, a drag-and-drop builder, file uploads, payments, multiple steps, or separate confirmation emails to the submitter.
 
 = Does it support multisite? =
-Settings, submissions, signed tickets, and background recovery are scoped per site. Network activation initializes each site on its first visit. Uninstall honors each site's data-removal preference. Scheduled retention and recovery depend on WP-Cron being operational. Deactivation stops the plugin's scheduled work; activation resumes eligible archive jobs. This build's functional verification was performed on a single-site installation.
+Settings, submissions, signed tickets, and background recovery are scoped per site. Network activation initializes each site on its first visit. Uninstall honors each site's data-removal preference. Retention and the cleanup of expired technical records run in small batches when an administrator opens the dashboard and after a submission, at most once a day, without WP-Cron. Delivery retries depend on WP-Cron being operational. Deactivation stops the plugin's scheduled retries; the next maintenance run after activation or an update resumes eligible archive jobs. This build's functional verification was performed on a single-site installation.
 
 == Changelog ==
 
