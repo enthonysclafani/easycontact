@@ -145,7 +145,12 @@ Fasi 0 e 1.
       `Admin/EntryScreen.php`) e `Admin/Admin.php` per menu, asset e pagina di supporto condivisi. In `Plugin`
       restano post type, attivazione e la retention `cleanup()`, che pianifica un evento: si sposta in
       `Submissions/` con la Fase 4.1, senza aggiungere file all'allowlist del cron._
-- [ ] 3.3 Hook solo dentro `register()`; niente metodi statici usati come registro globale dove non serve
+- [x] 3.3 Hook solo dentro `register()`; niente metodi statici usati come registro globale dove non serve
+      _Fatto: `Plugin::register()` chiama il `boot()` di ogni funzionalità; la regola `hooks-in-register` di
+      `composer architecture` vieta `add_action()`, `add_filter()` e `add_shortcode()` a livello di file in
+      `src/`, come in EasyRankly. Restano un filtro `posts_where` aggiunto e tolto intorno a una sola query in
+      `Submission::resume()` (paginazione per ID) e la cache per richiesta `DisposableDomains::$lists`, che evita
+      di rileggere fino a 8 MB per ogni controllo: nessun registro globale._
 - [ ] 3.4 `register_setting()` con schema completo per `easycontact_settings`; `register_post_meta()` con schema
       e `auth_callback` per i meta dei moduli
 - [ ] 3.5 REST: `args` con `type`, `sanitize_callback`, `validate_callback` per le route pubbliche; motivazione

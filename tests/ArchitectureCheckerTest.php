@@ -44,6 +44,7 @@ class ArchitectureCheckerTest extends Base {
 				'src/Extra.php:6 http',
 				'src/Extra.php:7 assets',
 				'src/Extra.php:8 forbidden-php',
+				'src/Extra.php:9 hooks-in-register',
 				'uninstall.php:1 direct-access-guard',
 				'composer.json:1 no-runtime-deps',
 			),
