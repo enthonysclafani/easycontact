@@ -51,7 +51,7 @@ Sotto ogni decisione la riga "Decisione" dice cosa è stato scelto e cosa resta 
   funziona senza JS (invio via `admin-post.php`).
 - Proposta: regola riformulata come "asset solo sulle pagine che stampano un modulo (enqueue al rendering),
   nessun JS inline, il modulo funziona anche senza JS". Turnstile solo sui moduli che lo attivano.
-  `composer architecture` verifica che l'enqueue stia solo in `src/Frontend.php` e `src/Admin.php`.
+  `composer architecture` verifica che l'enqueue stia solo in `src/Forms/Renderer.php` e `src/Admin.php`.
 - Decisione (13 ottobre 2026): proposta approvata. Il comportamento attuale la rispetta già.
 
 **D3 — Chiamate HTTP.** EasyRankly: mai nel frontend, solo admin/REST/WP-CLI.

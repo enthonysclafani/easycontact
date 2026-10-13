@@ -72,7 +72,7 @@ final class ArchitectureChecker {
 	 *
 	 * @var list<string>
 	 */
-	private const ASSET_ALLOWLIST = array( 'src/Frontend.php', 'src/Admin.php' );
+	private const ASSET_ALLOWLIST = array( 'src/Forms/Renderer.php', 'src/Admin.php' );
 
 	/**
 	 * Files allowed to make HTTP requests (D3): delivery on submission and the manual list synchronization.

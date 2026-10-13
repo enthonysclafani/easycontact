@@ -38,7 +38,7 @@ Sui moduli (`easycontact_form`):
 
 | Chiave | Contenuto |
 |---|---|
-| `_easycontact_definition` | `template` (testo con i tag), `schema` (campi analizzati da `Schema::parse()`), `conditions` (regole dei campi condizionali), `config` (impostazioni del modulo, `Plugin::config_defaults()`: destinatari, archivio, anti-spam, Turnstile, MailerLite, Slack con `slack_webhook`, messaggio di conferma). |
+| `_easycontact_definition` | `template` (testo con i tag), `schema` (campi analizzati da `Schema::parse()`), `conditions` (regole dei campi condizionali), `config` (impostazioni del modulo, `Forms::config_defaults()`: destinatari, archivio, anti-spam, Turnstile, MailerLite, Slack con `slack_webhook`, messaggio di conferma). |
 | `_easycontact_last_delivery` | Esito dell'ultima consegna, mostrato nell'elenco dei moduli. |
 
 Sugli invii (`easycontact_entry`):

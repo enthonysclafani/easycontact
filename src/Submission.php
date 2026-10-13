@@ -9,6 +9,8 @@ namespace EasyContact;
 
 use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Delivery\Delivery;
+use EasyContact\Forms\Forms;
+use EasyContact\Forms\Schema;
 use EasyContact\Review\Review;
 use EasyContact\Settings\Settings;
 use WP_Error;
@@ -230,7 +232,7 @@ final class Submission {
 				return new WP_Error( 'approved', __( 'Questo invio è già stato approvato oppure non è in quarantena.', 'easycontact' ) );
 			}
 			$form_id    = (int) get_post_meta( $entry_id, '_easycontact_form_id', true );
-			$definition = Plugin::definition( $form_id );
+			$definition = Forms::definition( $form_id );
 			$job        = get_post_meta( $entry_id, '_easycontact_retry', true );
 			$status     = get_post_meta( $entry_id, '_easycontact_delivery', true );
 			if ( ! is_array( $status ) || ! $definition || 'publish' !== get_post_status( $form_id ) || ( ! $manual && ! Plugin::stores_quarantine( $definition['config'] ) ) ) {

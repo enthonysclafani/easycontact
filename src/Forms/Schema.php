@@ -5,7 +5,7 @@
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\Forms;
 
 use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Phone\Phone;

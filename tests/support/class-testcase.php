@@ -8,9 +8,10 @@
 namespace EasyContact\Tests;
 
 use EasyContact\AntiSpam\DisposableDomains;
+use EasyContact\Forms\Forms;
+use EasyContact\Forms\Schema;
 use EasyContact\Frontend;
 use EasyContact\Plugin;
-use EasyContact\Schema;
 use EasyContact\Settings\Settings;
 use EasyContact\State;
 use WP_Error;
@@ -136,7 +137,7 @@ abstract class TestCase extends WP_UnitTestCase {
 			'schema'     => $schema,
 			'conditions' => Schema::rules( $schema['fields'], array() ),
 			'config'     => array_merge(
-				Plugin::config_defaults(),
+				Forms::config_defaults(),
 				array(
 					'antispam_level'   => '2',
 					'antispam_observe' => 'no',

@@ -8,6 +8,8 @@
 namespace EasyContact;
 
 use EasyContact\AntiSpam\AntiSpam;
+use EasyContact\Forms\Admin\Editor;
+use EasyContact\Forms\Renderer;
 use EasyContact\Phone\Phone;
 use EasyContact\Privacy\Privacy;
 use EasyContact\Review\Admin\Screen;
@@ -37,11 +39,13 @@ final class Plugin {
 		add_action( 'easycontact_daily_cleanup', array( State::class, 'cleanup' ) );
 		add_action( 'easycontact_state_cleanup', array( State::class, 'cleanup' ) );
 		Submission::boot();
+		Renderer::boot();
 		Frontend::boot();
 		Privacy::boot();
 		Phone::boot();
 		if ( is_admin() ) {
 			Page::boot();
+			Editor::boot();
 			Admin::boot();
 			Screen::boot();
 		}
@@ -187,85 +191,6 @@ final class Plugin {
 		}
 		update_option( 'easycontact_version', EASYCONTACT_VERSION, true );
 		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_resume_retries' );
-	}
-
-	/**
-	 * Return the initial minimal form template.
-	 *
-	 * @return string Result of this operation.
-	 */
-	public static function default_template(): string {
-		return '[text* nome "Nome"]' . "\n" . '[email* email "Email"]' . "\n" . '[select* motivo "Motivo" "Informazioni" "Preventivo"]' . "\n" . '[number budget "Budget indicativo" min:0 step:1]' . "\n" . '[textarea* messaggio "Messaggio"]' . "\n" . '[checkbox newsletter "Desidero ricevere la newsletter"]' . "\n" . '[acceptance* privacy "Ho letto l’informativa sulla privacy"]' . "\n" . '[submit "Invia messaggio"]';
-	}
-
-	/**
-	 * Return defaults for a new form.
-	 *
-	 * @return array Result of this operation.
-	 */
-	public static function config_defaults(): array {
-		return array(
-			'mail_enabled'       => true,
-			'mail_to'            => get_option( 'admin_email' ),
-			'mail_subject'       => __( 'Nuovo messaggio: [form]', 'easycontact' ),
-			'mail_reply_to'      => 'email',
-			'mail_body'          => '[fields]',
-			'store_entries'      => 'inherit',
-			'conditions_match'   => 'all',
-			'captcha'            => false,
-			'antispam_level'     => 'inherit',
-			'antispam_observe'   => 'inherit',
-			'quarantine_entries' => 'inherit',
-			'email_dns_check'    => 'inherit',
-			'phone_country'      => '',
-			'spam_phrases'       => '',
-			'mailerlite_enabled' => false,
-			'mailerlite_email'   => 'email',
-			'mailerlite_name'    => 'nome',
-			'mailerlite_consent' => 'newsletter',
-			'mailerlite_groups'  => '',
-			'slack_enabled'      => false,
-			'slack_webhook'      => '',
-			'slack_fields'       => 'nome,email,messaggio',
-			'success_message'    => __( 'Grazie, il messaggio è stato acquisito.', 'easycontact' ),
-		);
-	}
-
-	/**
-	 * Read a saved form definition or provide editor defaults.
-	 *
-	 * @param int  $form_id Published form ID.
-	 * @param bool $with_default Validated plugin-specific value.
-	 * @return array|null Result of this operation.
-	 */
-	public static function definition( int $form_id, bool $with_default = false ): ?array {
-		$definition = get_post_meta( $form_id, '_easycontact_definition', true );
-		if ( is_array( $definition ) && isset( $definition['schema']['fields'], $definition['conditions']['order'], $definition['config'] ) ) {
-			$definition['config'] = array_merge( self::config_defaults(), $definition['config'] );
-			return $definition;
-		}
-		if ( ! $with_default ) {
-			return null;
-		}
-		$template   = self::default_template();
-		$schema     = Schema::parse( $template );
-		$conditions = Schema::rules(
-			$schema['fields'],
-			array(
-				array(
-					'target'   => 'budget',
-					'source'   => 'motivo',
-					'operator' => 'equals',
-					'value'    => 'Preventivo',
-				),
-			)
-		);
-		return array(
-			'template'   => $template,
-			'schema'     => $schema,
-			'conditions' => $conditions,
-			'config'     => self::config_defaults(),
-		);
 	}
 
 	/**
