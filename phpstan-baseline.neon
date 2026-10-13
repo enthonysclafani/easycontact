@@ -97,18 +97,6 @@ parameters:
 			path: src/Admin.php
 
 		-
-			message: '#^Method EasyContact\\Admin\:\:sanitize_settings\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Admin.php
-
-		-
-			message: '#^Method EasyContact\\Admin\:\:setting_field\(\) has parameter \$args with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Admin.php
-
-		-
 			message: '#^Method EasyContact\\Admin\:\:status\(\) has parameter \$outcomes with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
@@ -481,19 +469,7 @@ parameters:
 			path: src/Plugin.php
 
 		-
-			message: '#^Method EasyContact\\Plugin\:\:defaults\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Plugin.php
-
-		-
 			message: '#^Method EasyContact\\Plugin\:\:definition\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Plugin.php
-
-		-
-			message: '#^Method EasyContact\\Plugin\:\:settings\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Plugin.php

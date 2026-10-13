@@ -8,7 +8,7 @@
 namespace EasyContact\AntiSpam;
 
 use EasyContact\Phone\Phone;
-use EasyContact\Plugin;
+use EasyContact\Settings\Settings;
 use EasyContact\State;
 use WP_Error;
 
@@ -26,7 +26,7 @@ final class AntiSpam {
 	 */
 	public static function level( array $config ): int {
 		$value = $config['antispam_level'] ?? 'inherit';
-		return max( 1, min( 3, (int) ( 'inherit' === $value ? Plugin::settings()['antispam_level'] : $value ) ) );
+		return max( 1, min( 3, (int) ( 'inherit' === $value ? Settings::get()['antispam_level'] : $value ) ) );
 	}
 
 	/**
@@ -38,7 +38,7 @@ final class AntiSpam {
 	 */
 	public static function enabled( array $config, string $key ): bool {
 		$value = $config[ $key ] ?? 'inherit';
-		return 'inherit' === $value ? (bool) Plugin::settings()[ $key ] : 'yes' === $value;
+		return 'inherit' === $value ? (bool) Settings::get()[ $key ] : 'yes' === $value;
 	}
 
 	/**
@@ -135,7 +135,7 @@ final class AntiSpam {
 	 * @return array Non-empty lines.
 	 */
 	private static function listing( array $config, string $key ): array {
-		return array_filter( preg_split( '/[\r\n]+/', Plugin::settings()[ $key ] . "\n" . ( $config[ $key ] ?? '' ) ) );
+		return array_filter( preg_split( '/[\r\n]+/', Settings::get()[ $key ] . "\n" . ( $config[ $key ] ?? '' ) ) );
 	}
 
 	/**

@@ -7,7 +7,7 @@
 
 namespace EasyContact\Phone;
 
-use EasyContact\Plugin;
+use EasyContact\Settings\Settings;
 use EasyContact\Vendor\Phone\PhoneNumberFormat;
 use EasyContact\Vendor\Phone\PhoneNumberType;
 use EasyContact\Vendor\Phone\PhoneNumberUtil;
@@ -69,7 +69,7 @@ final class Phone {
 	 * @param array $field  Field definition.
 	 */
 	public static function default_country( array $config = array(), array $field = array() ): string {
-		foreach ( array( $field['phone_country'] ?? '', $config['phone_country'] ?? '', Plugin::settings()['phone_country'] ) as $country ) {
+		foreach ( array( $field['phone_country'] ?? '', $config['phone_country'] ?? '', Settings::get()['phone_country'] ) as $country ) {
 			if ( self::valid_country( $country ) ) {
 				return $country;
 			}

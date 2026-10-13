@@ -10,6 +10,7 @@ namespace EasyContact;
 use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Delivery\Delivery;
 use EasyContact\Review\Review;
+use EasyContact\Settings\Settings;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -79,7 +80,7 @@ final class Submission {
 					if ( ! Plugin::stores_quarantine( $definition['config'] ) ) {
 						return new WP_Error( 'spam', __( 'Non è stato possibile accettare l’invio. Controlla i dati e il messaggio oppure usa un altro contatto del sito.', 'easycontact' ), array( 'status' => 422 ) );
 					}
-					$limit = max( 1, (int) Plugin::settings()['quarantine_limit'] );
+					$limit = max( 1, (int) Settings::get()['quarantine_limit'] );
 					$count = State::count( 'quarantine_budget', 'site', DAY_IN_SECONDS, $limit + 1 );
 					if ( null === $count || $count > $limit ) {
 						return new WP_Error( 'spam', __( 'Non è stato possibile accettare l’invio. Usa un altro contatto del sito.', 'easycontact' ), array( 'status' => 422 ) );

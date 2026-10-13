@@ -9,8 +9,8 @@
 
 namespace EasyContact\Tests;
 
-use EasyContact\Admin;
 use EasyContact\AntiSpam\DisposableDomains;
+use EasyContact\Settings\Admin\Page;
 use RuntimeException;
 use WP_Error;
 
@@ -128,9 +128,9 @@ class DisposableDomainsTest extends TestCase {
 		$this->assertDenied( 'Synchronization requires a valid administrator nonce' );
 		$this->assertSame( 0, $this->downloads, 'Refused synchronizations download nothing' );
 
-		Admin::settings();
+		Page::settings();
 		ob_start();
-		Admin::settings_page();
+		Page::settings_page();
 		$html = (string) ob_get_clean();
 		$this->assertStringContainsString( 'Sincronizza lista', $html, 'Settings offer the manual synchronization' );
 		$this->assertStringContainsString( 'form="easycontact-disposable-sync"', $html, 'The button submits a separate form' );
@@ -199,7 +199,7 @@ class DisposableDomainsTest extends TestCase {
 	 */
 	private function assertDenied( string $message ): void {
 		try {
-			Admin::sync_disposable_domains();
+			Page::sync_disposable_domains();
 			$this->fail( $message );
 		} catch ( RuntimeException $error ) {
 			$this->assertSame( 'denied', $error->getMessage(), $message );

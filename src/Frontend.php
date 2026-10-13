@@ -8,6 +8,7 @@
 namespace EasyContact;
 
 use EasyContact\Phone\Phone;
+use EasyContact\Settings\Settings;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -285,7 +286,7 @@ final class Frontend {
 	 */
 	public static function render( int $id, array $definition, bool $preview = false ): string {
 		$config   = $definition['config'];
-		$settings = Plugin::settings();
+		$settings = Settings::get();
 		wp_enqueue_style( 'easycontact-frontend', EASYCONTACT_URL . 'assets/frontend.css', array(), EASYCONTACT_VERSION );
 		wp_enqueue_script( 'easycontact-frontend', EASYCONTACT_URL . 'assets/frontend.js', array(), EASYCONTACT_VERSION, true );
 		if ( $config['captcha'] && ! $preview ) {
