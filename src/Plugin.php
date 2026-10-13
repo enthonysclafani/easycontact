@@ -119,7 +119,7 @@ final class Plugin {
 	public static function init(): void {
 		// The Italian translation ships with the plugin (D9); files in wp-content/languages still take precedence.
 		// Registering the folder only when it has the current locale spares other sites a lookup on every string.
-		if ( is_readable( EASYCONTACT_DIR . 'languages/easycontact-' . determine_locale() . '.mo' ) ) {
+		if ( is_readable( plugin_dir_path( EASYCONTACT_FILE ) . 'languages/easycontact-' . determine_locale() . '.mo' ) ) {
 			load_plugin_textdomain( 'easycontact', false, dirname( plugin_basename( EASYCONTACT_FILE ) ) . '/languages' );
 		}
 		$capabilities = array_fill_keys( array( 'edit_post', 'read_post', 'delete_post', 'edit_posts', 'edit_others_posts', 'publish_posts', 'read_private_posts', 'delete_posts', 'delete_private_posts', 'delete_published_posts', 'delete_others_posts', 'edit_private_posts', 'edit_published_posts', 'create_posts' ), 'manage_options' );
