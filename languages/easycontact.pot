@@ -1,0 +1,1274 @@
+# Copyright (C) 2026 
+# This file is distributed under the GPL-3.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: EasyContact 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/easycontact\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-13T09:26:58+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: easycontact\n"
+
+#. Plugin Name of the plugin
+#: easycontact.php
+msgid "EasyContact"
+msgstr ""
+
+#. Description of the plugin
+#: easycontact.php
+msgid "Moduli con anti-spam locale, telefoni internazionali, campi condizionali, MailerLite, Slack e Turnstile."
+msgstr ""
+
+#: includes/class-admin.php:55
+#: includes/class-admin.php:676
+msgid "Impostazioni"
+msgstr ""
+
+#: includes/class-admin.php:56
+#: includes/class-admin.php:718
+msgid "Supporto"
+msgstr ""
+
+#: includes/class-admin.php:78
+msgid "Opzione 1"
+msgstr ""
+
+#: includes/class-admin.php:79
+msgid "Opzione 2"
+msgstr ""
+
+#: includes/class-admin.php:90
+#: includes/class-plugin.php:165
+msgid "Modulo"
+msgstr ""
+
+#: includes/class-admin.php:91
+msgid "Campi condizionali"
+msgstr ""
+
+#: includes/class-admin.php:92
+msgid "Email"
+msgstr ""
+
+#: includes/class-admin.php:93
+msgid "Integrazioni"
+msgstr ""
+
+#: includes/class-admin.php:94
+#: includes/class-admin.php:517
+msgid "Anti-spam e telefono internazionale"
+msgstr ""
+
+#: includes/class-admin.php:95
+msgid "Opzioni"
+msgstr ""
+
+#: includes/class-admin.php:96
+msgid "Dati dell’invio"
+msgstr ""
+
+#: includes/class-admin.php:113
+msgid "Testo"
+msgstr ""
+
+#: includes/class-admin.php:115
+#: includes/class-admin.php:200
+msgid "Messaggio"
+msgstr ""
+
+#: includes/class-admin.php:116
+msgid "Selezione"
+msgstr ""
+
+#: includes/class-admin.php:117
+msgid "Numero"
+msgstr ""
+
+#: includes/class-admin.php:118
+msgid "Telefono"
+msgstr ""
+
+#: includes/class-admin.php:119
+msgid "Checkbox"
+msgstr ""
+
+#: includes/class-admin.php:120
+msgid "Consenso"
+msgstr ""
+
+#: includes/class-admin.php:124
+msgid "Definizione del modulo"
+msgstr ""
+
+#: includes/class-admin.php:129
+msgid "Anteprima salvata"
+msgstr ""
+
+#: includes/class-admin.php:147
+msgid "Nessuno"
+msgstr ""
+
+#: includes/class-admin.php:169
+msgid "Configurato; lascia vuoto per mantenerlo"
+msgstr ""
+
+#: includes/class-admin.php:196
+msgid "Invia una notifica email"
+msgstr ""
+
+#: includes/class-admin.php:197
+msgid "Destinatari"
+msgstr ""
+
+#: includes/class-admin.php:197
+msgid "Indirizzi email separati da virgola."
+msgstr ""
+
+#: includes/class-admin.php:198
+msgid "Oggetto"
+msgstr ""
+
+#: includes/class-admin.php:199
+msgid "Rispondi all’indirizzo del campo"
+msgstr ""
+
+#: includes/class-admin.php:200
+msgid "[fields] include i campi visibili; [form] il titolo del modulo; [site] il nome del sito. Puoi usare anche [nome_del_campo]."
+msgstr ""
+
+#: includes/class-admin.php:213
+msgid "Attiva MailerLite per questo modulo"
+msgstr ""
+
+#: includes/class-admin.php:215
+msgid "Nome"
+msgstr ""
+
+#: includes/class-admin.php:216
+msgid "Campo del consenso newsletter"
+msgstr ""
+
+#: includes/class-admin.php:217
+msgid "ID dei gruppi MailerLite"
+msgstr ""
+
+#: includes/class-admin.php:217
+msgid "Uno o più ID separati da virgola. L’iscrizione avviene solo con il consenso selezionato. Il double opt-in si configura in MailerLite, nelle impostazioni API e integrazioni."
+msgstr ""
+
+#: includes/class-admin.php:219
+msgid "Invia una notifica Slack"
+msgstr ""
+
+#: includes/class-admin.php:220
+msgid "Webhook del canale"
+msgstr ""
+
+#: includes/class-admin.php:221
+msgid "Rimuovi il webhook salvato"
+msgstr ""
+
+#: includes/class-admin.php:222
+msgid "Campi da includere nella notifica"
+msgstr ""
+
+#: includes/class-admin.php:222
+msgid "Nomi dei campi separati da virgola. Solo i campi visibili scelti qui saranno inviati a Slack."
+msgstr ""
+
+#: includes/class-admin.php:223
+msgid "Configura token MailerLite e CAPTCHA nelle impostazioni"
+msgstr ""
+
+#: includes/class-admin.php:234
+msgid "Verifica con Cloudflare Turnstile"
+msgstr ""
+
+#: includes/class-admin.php:235
+#: includes/class-admin.php:534
+msgid "Archivio degli invii"
+msgstr ""
+
+#: includes/class-admin.php:237
+#: includes/class-admin.php:264
+#: includes/class-admin.php:273
+msgid "Usa impostazioni generali"
+msgstr ""
+
+#: includes/class-admin.php:238
+#: includes/class-admin.php:264
+msgid "Disattivato"
+msgstr ""
+
+#: includes/class-admin.php:239
+#: includes/class-admin.php:264
+msgid "Attivato"
+msgstr ""
+
+#: includes/class-admin.php:244
+msgid "Messaggio di conferma"
+msgstr ""
+
+#: includes/class-admin.php:247
+msgid "Ultimo esito"
+msgstr ""
+
+#: includes/class-admin.php:272
+msgid "Livello anti-spam"
+msgstr ""
+
+#: includes/class-admin.php:273
+#: includes/class-admin.php:585
+msgid "1 — Base"
+msgstr ""
+
+#: includes/class-admin.php:273
+#: includes/class-admin.php:585
+msgid "2 — Equilibrato"
+msgstr ""
+
+#: includes/class-admin.php:273
+#: includes/class-admin.php:585
+msgid "3 — Rigoroso"
+msgstr ""
+
+#: includes/class-admin.php:276
+msgid "I controlli di validità e l’honeypot sono sempre attivi. I livelli 2 e 3 aggiungono controlli sul contenuto, domini temporanei, ripetizioni e frequenza. Il livello 3 è più sensibile e può richiedere più revisioni."
+msgstr ""
+
+#: includes/class-admin.php:277
+#: includes/class-admin.php:527
+msgid "Quarantena con archivio disattivato"
+msgstr ""
+
+#: includes/class-admin.php:277
+msgid "Conserva spam e sospetti anche quando l’archivio normale è disattivato. Con archivio attivo, i sospetti sono sempre salvati con inoltro sospeso. Senza conservazione, vengono rifiutati."
+msgstr ""
+
+#: includes/class-admin.php:278
+#: includes/class-admin.php:526
+msgid "Modalità osservazione"
+msgstr ""
+
+#: includes/class-admin.php:278
+msgid "Calcola il punteggio senza fermare gli invii per i segnali euristici. L’honeypot resta attivo. Per esaminare i risultati, attiva l’archivio."
+msgstr ""
+
+#: includes/class-admin.php:279
+msgid "Controllo DNS del dominio email"
+msgstr ""
+
+#: includes/class-admin.php:279
+msgid "Verifica la capacità del dominio di ricevere posta. Non verifica l’esistenza della casella. Gli errori temporanei del resolver non bloccano l’invio."
+msgstr ""
+
+#: includes/class-admin.php:280
+#: includes/class-admin.php:531
+msgid "Paese iniziale del telefono"
+msgstr ""
+
+#: includes/class-admin.php:281
+msgid "Usa impostazioni generali o lingua del sito"
+msgstr ""
+
+#: includes/class-admin.php:282
+msgid "Il visitatore può scegliere qualsiasi paese. Per lingue senza un paese riconoscibile, configura un valore iniziale oppure lascia la scelta al visitatore."
+msgstr ""
+
+#: includes/class-admin.php:283
+msgid "I domini temporanei vengono riconosciuti tramite le liste pubbliche condivise da tutti i moduli nei livelli 2 e 3."
+msgstr ""
+
+#: includes/class-admin.php:283
+msgid "Gestisci la lista nelle impostazioni"
+msgstr ""
+
+#: includes/class-admin.php:284
+msgid "Frasi sospette per questo modulo"
+msgstr ""
+
+#: includes/class-admin.php:285
+msgid "Una frase per riga. Le frasi del modulo si aggiungono a quelle generali e contribuiscono al punteggio nei livelli 2 e 3; non provano da sole che il messaggio sia spam."
+msgstr ""
+
+#: includes/class-admin.php:295
+msgid "È uguale a"
+msgstr ""
+
+#: includes/class-admin.php:296
+msgid "È diverso da"
+msgstr ""
+
+#: includes/class-admin.php:297
+msgid "Contiene"
+msgstr ""
+
+#: includes/class-admin.php:298
+msgid "È vuoto"
+msgstr ""
+
+#: includes/class-admin.php:299
+msgid "Non è vuoto"
+msgstr ""
+
+#: includes/class-admin.php:300
+msgid "È maggiore di"
+msgstr ""
+
+#: includes/class-admin.php:301
+msgid "È minore di"
+msgstr ""
+
+#: includes/class-admin.php:316
+msgid "Campo da mostrare"
+msgstr ""
+
+#: includes/class-admin.php:317
+msgid "Campo da confrontare"
+msgstr ""
+
+#: includes/class-admin.php:325
+#: includes/class-admin.php:341
+msgid "Confronto"
+msgstr ""
+
+#: includes/class-admin.php:329
+#: includes/class-admin.php:341
+msgid "Valore"
+msgstr ""
+
+#: includes/class-admin.php:329
+msgid "Rimuovi"
+msgstr ""
+
+#: includes/class-admin.php:340
+msgid "Mostra un campo quando il confronto è soddisfatto. I campi nascosti non vengono validati né trasmessi. Per una checkbox usa il valore 1 quando selezionata."
+msgstr ""
+
+#: includes/class-admin.php:340
+msgid "Per le regole dello stesso campo richiedi"
+msgstr ""
+
+#: includes/class-admin.php:340
+msgid "tutte le condizioni (AND)"
+msgstr ""
+
+#: includes/class-admin.php:340
+msgid "almeno una condizione (OR)"
+msgstr ""
+
+#: includes/class-admin.php:341
+msgid "Mostra"
+msgstr ""
+
+#: includes/class-admin.php:341
+msgid "Quando"
+msgstr ""
+
+#: includes/class-admin.php:345
+msgid "Aggiungi regola"
+msgstr ""
+
+#: includes/class-admin.php:386
+msgid "Non è stato possibile salvare il modulo. Riprova."
+msgstr ""
+
+#: includes/class-admin.php:406
+msgid "Un’opzione è troppo lunga."
+msgstr ""
+
+#: includes/class-admin.php:414
+msgid "Seleziona un livello anti-spam da 1 a 3."
+msgstr ""
+
+#: includes/class-admin.php:420
+msgid "Una preferenza anti-spam non è valida."
+msgstr ""
+
+#: includes/class-admin.php:426
+msgid "Seleziona un paese iniziale valido."
+msgstr ""
+
+#: includes/class-admin.php:431
+msgid "Le regole anti-spam devono essere testo."
+msgstr ""
+
+#: includes/class-admin.php:439
+msgid "Il webhook Slack è troppo lungo."
+msgstr ""
+
+#: includes/class-admin.php:442
+msgid "Controlla la lunghezza dei messaggi e inserisci una conferma per il visitatore."
+msgstr ""
+
+#: includes/class-admin.php:447
+msgid "Controlla destinatari, oggetto, messaggio e campo Reply-To della notifica email."
+msgstr ""
+
+#: includes/class-admin.php:452
+msgid "MailerLite richiede token, campo email, consenso newsletter e ID di almeno un gruppo."
+msgstr ""
+
+#: includes/class-admin.php:455
+msgid "Inserisci un webhook HTTPS valido di hooks.slack.com."
+msgstr ""
+
+#: includes/class-admin.php:459
+msgid "Slack richiede almeno un campo esistente da includere."
+msgstr ""
+
+#: includes/class-admin.php:464
+msgid "Configura entrambe le chiavi Turnstile prima di attivare il CAPTCHA."
+msgstr ""
+
+#: includes/class-admin.php:467
+msgid "Attiva almeno una destinazione o l’archivio degli invii."
+msgstr ""
+
+#: includes/class-admin.php:494
+msgid "La definizione del modulo non è stata aggiornata: "
+msgstr ""
+
+#: includes/class-admin.php:516
+msgid "Privacy dei moduli"
+msgstr ""
+
+#: includes/class-admin.php:518
+msgid "MailerLite"
+msgstr ""
+
+#: includes/class-admin.php:520
+msgid "Disinstallazione"
+msgstr ""
+
+#: includes/class-admin.php:525
+msgid "Livello predefinito"
+msgstr ""
+
+#: includes/class-admin.php:525
+msgid "Consigliato: 2 — Equilibrato. I moduli esistenti mantengono il livello 1 finché non viene modificato nelle loro opzioni."
+msgstr ""
+
+#: includes/class-admin.php:526
+msgid "Registra i segnali euristici senza fermare gli invii. Per esaminare i risultati, attiva l’archivio. L’honeypot resta attivo."
+msgstr ""
+
+#: includes/class-admin.php:527
+msgid "Conserva spam e sospetti per la revisione anche senza archivio normale; notifiche e integrazioni restano sospese."
+msgstr ""
+
+#: includes/class-admin.php:528
+msgid "Conservazione di spam e sospetti"
+msgstr ""
+
+#: includes/class-admin.php:528
+msgid "Giorni prima della cancellazione automatica di spam e probabile spam. Minimo 1; gli invii accettati seguono la conservazione normale."
+msgstr ""
+
+#: includes/class-admin.php:529
+msgid "Limite giornaliero della quarantena"
+msgstr ""
+
+#: includes/class-admin.php:529
+msgid "Numero massimo di nuovi invii sospetti archiviabili in una finestra di 24 ore. Oltre il limite vengono rifiutati."
+msgstr ""
+
+#: includes/class-admin.php:530
+msgid "Controllo DNS delle email"
+msgstr ""
+
+#: includes/class-admin.php:530
+msgid "Controlla il dominio tramite il resolver del server, con cache e tolleranza agli errori temporanei. Non verifica la casella."
+msgstr ""
+
+#: includes/class-admin.php:531
+msgid "La selezione automatica segue la lingua del sito. Il visitatore può sempre cambiare paese."
+msgstr ""
+
+#: includes/class-admin.php:532
+msgid "Lista domini temporanei"
+msgstr ""
+
+#: includes/class-admin.php:532
+msgid "Usata nei livelli 2 e 3. Sincronizza su richiesta le fonti pubbliche e conserva la copia locale se una fonte non è disponibile. Nessun aggiornamento automatico."
+msgstr ""
+
+#: includes/class-admin.php:533
+msgid "Frasi sospette"
+msgstr ""
+
+#: includes/class-admin.php:533
+msgid "Una frase per riga, da 4 a 150 caratteri. Aumenta il sospetto; usa frasi specifiche, evitando parole generiche."
+msgstr ""
+
+#: includes/class-admin.php:534
+msgid "Salva gli invii locali per impostazione predefinita. Ogni modulo può cambiare questa scelta."
+msgstr ""
+
+#: includes/class-admin.php:535
+msgid "Conservazione"
+msgstr ""
+
+#: includes/class-admin.php:535
+msgid "Giorni di conservazione. 0 mantiene gli invii fino alla cancellazione manuale. La pulizia usa la pianificazione di WordPress."
+msgstr ""
+
+#: includes/class-admin.php:536
+msgid "Richieste di cancellazione"
+msgstr ""
+
+#: includes/class-admin.php:536
+msgid "Consenti agli strumenti privacy di WordPress di eliminare gli invii associati all’indirizzo email confermato."
+msgstr ""
+
+#: includes/class-admin.php:537
+msgid "Token API"
+msgstr ""
+
+#: includes/class-admin.php:537
+msgid "Token della versione attuale di MailerLite. Lascia vuoto per mantenere il token salvato."
+msgstr ""
+
+#: includes/class-admin.php:538
+msgid "Site key"
+msgstr ""
+
+#: includes/class-admin.php:538
+msgid "Il CAPTCHA si attiva nelle opzioni di ciascun modulo."
+msgstr ""
+
+#: includes/class-admin.php:539
+msgid "Secret key"
+msgstr ""
+
+#: includes/class-admin.php:539
+msgid "Lascia vuoto per mantenere la chiave salvata."
+msgstr ""
+
+#: includes/class-admin.php:540
+msgid "Rimuovi i dati"
+msgstr ""
+
+#: includes/class-admin.php:540
+msgid "Alla disinstallazione elimina definitivamente moduli, invii, impostazioni e credenziali del plugin. La sola disattivazione conserva i dati."
+msgstr ""
+
+#. translators: %s: number of domains.
+#: includes/class-admin.php:573
+#, php-format
+msgid "%s domini nella lista locale"
+msgstr ""
+
+#. translators: %s: date and time of the synchronization, or date of the bundled snapshot.
+#: includes/class-admin.php:575
+#, php-format
+msgid "Ultima sincronizzazione: %s"
+msgstr ""
+
+#. translators: %s: date and time of the synchronization, or date of the bundled snapshot.
+#: includes/class-admin.php:575
+#, php-format
+msgid "Copia inclusa nel plugin, aggiornata al %s"
+msgstr ""
+
+#: includes/class-admin.php:580
+msgid "Sincronizza lista"
+msgstr ""
+
+#: includes/class-admin.php:592
+msgid "Automatico dalla lingua del sito"
+msgstr ""
+
+#: includes/class-admin.php:606
+msgid "Configurato"
+msgstr ""
+
+#: includes/class-admin.php:613
+msgid "Rimuovi la credenziale salvata"
+msgstr ""
+
+#: includes/class-admin.php:640
+msgid "Un valore anti-spam non è valido; è stato mantenuto quello precedente."
+msgstr ""
+
+#: includes/class-admin.php:649
+msgid "Una lista anti-spam non è valida; è stata mantenuta quella precedente."
+msgstr ""
+
+#: includes/class-admin.php:654
+msgid "La site key non è valida; è stata mantenuta quella precedente."
+msgstr ""
+
+#: includes/class-admin.php:661
+msgid "La credenziale contiene caratteri non validi; è stata mantenuta quella precedente."
+msgstr ""
+
+#: includes/class-admin.php:695
+msgid "Operazione non consentita."
+msgstr ""
+
+#. translators: %s: number of domains.
+#: includes/class-admin.php:701
+#, php-format
+msgid "Sincronizzazione completata: %s domini nella lista locale."
+msgstr ""
+
+#: includes/class-admin.php:719
+msgid "Sintassi ed esempi"
+msgstr ""
+
+#: includes/class-admin.php:720
+msgid "Separa i campi sulla stessa riga con | per affiancarli in colonne di uguale larghezza. Vai a capo per iniziare una nuova riga. L’asterisco rende il campo obbligatorio. Salva il modulo per aggiornare i campi disponibili nelle regole."
+msgstr ""
+
+#: includes/class-admin.php:721
+msgid "Due colonne (50% ciascuna):"
+msgstr ""
+
+#: includes/class-admin.php:723
+msgid "Tre colonne (33,33% ciascuna):"
+msgstr ""
+
+#: includes/class-admin.php:725
+msgid "Le larghezze tengono conto dello spazio tra le colonne. Su schermi piccoli i campi si dispongono uno sotto l’altro. Note e pulsante devono restare separati."
+msgstr ""
+
+#: includes/class-admin.php:728
+msgid "Il telefono include il selettore del paese. country:IT imposta il paese iniziale del campo, mobile richiede un cellulare e allow-repeated consente numeri interamente ripetitivi. Sono disponibili anche email, textarea e url. Usa nomi unici in minuscolo."
+msgstr ""
+
+#: includes/class-admin.php:744
+msgid "Esito invii"
+msgstr ""
+
+#: includes/class-admin.php:792
+msgid "Archivio"
+msgstr ""
+
+#: includes/class-admin.php:797
+msgid "Accettata dal servizio email"
+msgstr ""
+
+#: includes/class-admin.php:797
+msgid "Inviato"
+msgstr ""
+
+#: includes/class-admin.php:799
+msgid "Salvato"
+msgstr ""
+
+#: includes/class-admin.php:801
+msgid "Inoltro sospeso in attesa di approvazione"
+msgstr ""
+
+#: includes/class-admin.php:803
+msgid "Destinazione disattivata"
+msgstr ""
+
+#: includes/class-admin.php:805
+msgid "Non inviato: consenso non selezionato"
+msgstr ""
+
+#: includes/class-admin.php:807
+msgid "Esito non confermato; verifica la destinazione prima di reinviare"
+msgstr ""
+
+#. translators: %s: HTTP response code from an external integration.
+#: includes/class-admin.php:810
+#, php-format
+msgid "Errore del servizio (HTTP %s)"
+msgstr ""
+
+#: includes/class-admin.php:812
+msgid "Invio non riuscito; controlla le impostazioni"
+msgstr ""
+
+#: includes/class-admin.php:841
+msgid "È programmato un nuovo tentativo per le destinazioni temporaneamente non disponibili."
+msgstr ""
+
+#: includes/class-admin.php:846
+msgid "Ho verificato le destinazioni con esito non confermato e desidero ripetere anche questi invii."
+msgstr ""
+
+#: includes/class-admin.php:847
+msgid "Riprova le destinazioni non riuscite"
+msgstr ""
+
+#: includes/class-admin.php:847
+msgid "Usa la configurazione attuale del modulo. Gli invii già accettati vengono conservati. Senza la verifica selezionata, gli esiti non confermati restano sospesi."
+msgstr ""
+
+#: includes/class-admin.php:852
+msgid "Elimina definitivamente questo invio"
+msgstr ""
+
+#: includes/class-admin.php:864
+msgid "Anteprima non disponibile."
+msgstr ""
+
+#: includes/class-admin.php:872
+msgid "Anteprima modulo"
+msgstr ""
+
+#: includes/class-admin.php:874
+msgid "Anteprima della versione salvata. L’invio e le integrazioni sono disattivati."
+msgstr ""
+
+#: includes/class-admin.php:889
+#: includes/class-review.php:274
+#: includes/class-submission.php:204
+msgid "Invio non disponibile."
+msgstr ""
+
+#: includes/class-antispam.php:67
+msgid "Inserisci al massimo 30 frasi brevi, una per riga."
+msgstr ""
+
+#: includes/class-antispam.php:76
+msgid "Ogni frase deve contenere da 4 a 150 caratteri."
+msgstr ""
+
+#: includes/class-antispam.php:186
+msgid "Campo anti-bot compilato"
+msgstr ""
+
+#: includes/class-antispam.php:187
+msgid "Compilazione estremamente rapida"
+msgstr ""
+
+#: includes/class-antispam.php:188
+msgid "Dominio email temporaneo"
+msgstr ""
+
+#: includes/class-antispam.php:189
+msgid "Dominio email bloccato nelle impostazioni"
+msgstr ""
+
+#: includes/class-antispam.php:190
+msgid "Email con sequenza ripetitiva"
+msgstr ""
+
+#: includes/class-antispam.php:191
+msgid "Molti invii dalla stessa email"
+msgstr ""
+
+#: includes/class-antispam.php:192
+msgid "Molti invii dallo stesso telefono"
+msgstr ""
+
+#: includes/class-antispam.php:193
+msgid "Numero telefonico interamente ripetitivo"
+msgstr ""
+
+#: includes/class-antispam.php:194
+msgid "Testo composto da ripetizioni"
+msgstr ""
+
+#: includes/class-antispam.php:195
+msgid "Elevata presenza di collegamenti"
+msgstr ""
+
+#: includes/class-antispam.php:196
+msgid "Schema promozionale ricorrente"
+msgstr ""
+
+#: includes/class-antispam.php:197
+msgid "Frase segnalata nelle regole del modulo"
+msgstr ""
+
+#: includes/class-antispam.php:198
+msgid "Contenuto ripetuto in più invii"
+msgstr ""
+
+#: includes/class-delivery.php:29
+#: includes/class-frontend.php:298
+msgid "Completa la verifica CAPTCHA."
+msgstr ""
+
+#: includes/class-delivery.php:49
+msgid "La verifica CAPTCHA non è riuscita. Riprova."
+msgstr ""
+
+#: includes/class-delivery.php:107
+#: includes/class-delivery.php:211
+msgid "Sì"
+msgstr ""
+
+#: includes/class-delivery.php:107
+#: includes/class-delivery.php:211
+msgid "No"
+msgstr ""
+
+#: includes/class-delivery.php:194
+msgid "Nuovo messaggio: "
+msgstr ""
+
+#. translators: %s: public domain-list source name.
+#: includes/class-disposable-domains.php:111
+#, php-format
+msgid "La fonte %s non è disponibile o ha restituito una lista incompleta o non valida. La lista precedente è stata mantenuta."
+msgstr ""
+
+#: includes/class-disposable-domains.php:117
+msgid "La lista ricevuta è troppo grande. La lista precedente è stata mantenuta."
+msgstr ""
+
+#: includes/class-disposable-domains.php:123
+msgid "Non è stato possibile salvare la lista. La lista precedente è stata mantenuta."
+msgstr ""
+
+#: includes/class-frontend.php:129
+#: includes/class-frontend.php:162
+msgid "Modulo non disponibile."
+msgstr ""
+
+#: includes/class-frontend.php:132
+msgid "Troppe richieste ravvicinate. Attendi qualche minuto."
+msgstr ""
+
+#: includes/class-frontend.php:148
+msgid "Il messaggio è troppo lungo."
+msgstr ""
+
+#: includes/class-frontend.php:165
+msgid "Troppi tentativi ravvicinati. Attendi qualche minuto."
+msgstr ""
+
+#: includes/class-frontend.php:170
+msgid "La sessione del modulo è scaduta. Ricarica la pagina."
+msgstr ""
+
+#: includes/class-frontend.php:173
+#: includes/class-frontend.php:196
+msgid "Il modulo non è valido."
+msgstr ""
+
+#: includes/class-frontend.php:178
+msgid "Il paese selezionato non è valido."
+msgstr ""
+
+#: includes/class-frontend.php:185
+msgid "Il modulo non è valido. Ricarica la pagina."
+msgstr ""
+
+#: includes/class-frontend.php:201
+msgid "Questo invio è già stato elaborato. Contatta il sito prima di inviare un altro messaggio."
+msgstr ""
+
+#: includes/class-frontend.php:208
+msgid "Controlla i campi evidenziati."
+msgstr ""
+
+#: includes/class-frontend.php:232
+msgid "Invio del modulo"
+msgstr ""
+
+#: includes/class-frontend.php:254
+msgid "Pubblica un modulo valido prima di usare lo shortcode."
+msgstr ""
+
+#: includes/class-frontend.php:294
+msgid "Invio in corso…"
+msgstr ""
+
+#: includes/class-frontend.php:295
+msgid "Invio non riuscito. Riprova."
+msgstr ""
+
+#: includes/class-frontend.php:296
+msgid "Connessione interrotta. Riprova senza ricaricare la pagina per verificare questo invio."
+msgstr ""
+
+#: includes/class-frontend.php:297
+msgid "La sessione è scaduta. I campi compilati sono stati mantenuti: riprova."
+msgstr ""
+
+#: includes/class-frontend.php:299
+msgid "La verifica CAPTCHA non è disponibile. Riprova più tardi."
+msgstr ""
+
+#: includes/class-frontend.php:300
+#: includes/class-submission.php:435
+msgid "Non è stato possibile confermare l’invio. Contatta il sito prima di inviare di nuovo il messaggio."
+msgstr ""
+
+#: includes/class-frontend.php:338
+msgid "Lascia vuoto questo campo"
+msgstr ""
+
+#: includes/class-frontend.php:357
+msgid "Attiva JavaScript per completare il CAPTCHA e inviare il modulo."
+msgstr ""
+
+#: includes/class-frontend.php:371
+#: includes/class-submission.php:140
+msgid "Il messaggio è stato ricevuto ed è in attesa di verifica."
+msgstr ""
+
+#: includes/class-frontend.php:409
+msgid "Seleziona…"
+msgstr ""
+
+#. translators: %s: telephone field label.
+#: includes/class-frontend.php:417
+#, php-format
+msgid "Paese per %s"
+msgstr ""
+
+#: includes/class-frontend.php:418
+msgid "Cerca paese…"
+msgstr ""
+
+#: includes/class-frontend.php:418
+msgid "Cerca un paese"
+msgstr ""
+
+#: includes/class-frontend.php:418
+msgid "Seleziona paese"
+msgstr ""
+
+#: includes/class-frontend.php:442
+msgid "Informativa privacy (si apre in una nuova finestra)"
+msgstr ""
+
+#: includes/class-frontend.php:442
+msgid "Informativa privacy"
+msgstr ""
+
+#: includes/class-phone.php:105
+#: includes/class-schema.php:318
+msgid "Controlla il numero e il paese selezionato."
+msgstr ""
+
+#: includes/class-plugin.php:164
+#: includes/class-plugin.php:169
+msgid "Moduli"
+msgstr ""
+
+#: includes/class-plugin.php:167
+msgid "Aggiungi un modulo"
+msgstr ""
+
+#: includes/class-plugin.php:168
+msgid "Modifica modulo"
+msgstr ""
+
+#: includes/class-plugin.php:183
+#: includes/class-plugin.php:186
+msgid "Invii"
+msgstr ""
+
+#: includes/class-plugin.php:184
+msgid "Invio"
+msgstr ""
+
+#: includes/class-plugin.php:185
+msgid "Dettaglio invio"
+msgstr ""
+
+#: includes/class-plugin.php:222
+msgid "Nuovo messaggio: [form]"
+msgstr ""
+
+#: includes/class-plugin.php:242
+msgid "Grazie, il messaggio è stato acquisito."
+msgstr ""
+
+#: includes/class-privacy.php:95
+msgid "Data invio"
+msgstr ""
+
+#: includes/class-privacy.php:107
+#: includes/class-review.php:50
+msgid "Classificazione anti-spam"
+msgstr ""
+
+#: includes/class-privacy.php:111
+msgid "Punteggio anti-spam"
+msgstr ""
+
+#: includes/class-privacy.php:113
+msgid "Motivi del controllo"
+msgstr ""
+
+#: includes/class-privacy.php:117
+msgid "Invii dei moduli"
+msgstr ""
+
+#: includes/class-privacy.php:150
+msgid "Alcuni invii sono stati conservati secondo le impostazioni del sito o non è stato possibile eliminarli."
+msgstr ""
+
+#: includes/class-privacy.php:153
+msgid "Le copie locali sono state eliminate. Le eventuali copie in email, MailerLite e Slack vanno gestite nei rispettivi servizi."
+msgstr ""
+
+#: includes/class-privacy.php:172
+msgid "I moduli inviano i dati compilati ai destinatari email configurati. Se attivato, l’archivio locale conserva i campi e la data dell’invio per il periodo impostato dall’amministratore. Gli strumenti di esportazione e cancellazione di WordPress possono gestire queste copie tramite gli indirizzi email presenti nell’invio. Il plugin non archivia indirizzi IP o user agent negli invii; usa temporaneamente un’impronta dell’IP, non reversibile senza la chiave del sito, per limitare gli invii ripetuti. Se abilitati per il modulo, MailerLite riceve email, nome e gruppo dell’iscritto dopo la selezione del consenso; Slack riceve solo i campi scelti dall’amministratore; Cloudflare Turnstile verifica il CAPTCHA e può trattare dati del browser. La cancellazione locale non elimina le copie già trasmesse ai servizi esterni. Adattare questo testo alla configurazione effettiva del sito e alle informative dei servizi utilizzati."
+msgstr ""
+
+#: includes/class-privacy.php:173
+msgid "I controlli anti-spam usano regole locali, senza intelligenza artificiale. Contatori temporanei con impronte protette dalla chiave del sito misurano la frequenza di email, telefoni e messaggi simili per un massimo di 30 minuti. La quarantena, se consentita dall’archivio o attivata separatamente, conserva gli invii sospetti, il punteggio, i motivi e la revisione manuale per il periodo configurato. Gli invii sospesi non vengono inoltrati ai destinatari prima dell’approvazione. La verifica DNS delle email è facoltativa: interroga il resolver del server per il solo dominio e conserva il risultato per un massimo di 15 minuti; non verifica l’esistenza della singola casella. I metadati internazionali dei telefoni e una copia dell’elenco dei domini temporanei sono inclusi nel plugin. L’amministratore può sincronizzare manualmente l’elenco scaricando le liste pubbliche da GitHub, senza trasmettere indirizzi email o contenuti degli invii. I controlli dei domini temporanei usano sempre la copia locale."
+msgstr ""
+
+#: includes/class-review.php:15
+msgid "Accettato"
+msgstr ""
+
+#: includes/class-review.php:15
+msgid "Probabile spam"
+msgstr ""
+
+#: includes/class-review.php:15
+msgid "Spam"
+msgstr ""
+
+#: includes/class-review.php:133
+#: includes/class-submission.php:198
+#: includes/class-submission.php:211
+msgid "Questo invio è in elaborazione. Riprova tra qualche secondo."
+msgstr ""
+
+#: includes/class-review.php:137
+msgid "Questo invio non è disponibile per la revisione. Riprova tra qualche secondo."
+msgstr ""
+
+#: includes/class-review.php:140
+msgid "Non è stato possibile aggiornare la classificazione."
+msgstr ""
+
+#: includes/class-review.php:158
+msgid "Classificazione"
+msgstr ""
+
+#: includes/class-review.php:167
+#: includes/class-review.php:186
+#: includes/class-review.php:213
+msgid "Da classificare"
+msgstr ""
+
+#: includes/class-review.php:170
+msgid "Revisione manuale"
+msgstr ""
+
+#: includes/class-review.php:170
+msgid "Controllo automatico"
+msgstr ""
+
+#: includes/class-review.php:173
+msgid "Inoltro sospeso"
+msgstr ""
+
+#: includes/class-review.php:211
+msgid "Categoria"
+msgstr ""
+
+#: includes/class-review.php:218
+msgid "Aggiorna categoria"
+msgstr ""
+
+#. translators: 1: anti-spam score, 2: protection level.
+#: includes/class-review.php:222
+#, php-format
+msgid "Punteggio: %1$d/100 · Livello %2$d"
+msgstr ""
+
+#. translators: %s: category detected in observation mode.
+#: includes/class-review.php:225
+#, php-format
+msgid "Modalità osservazione: rilevato come %s."
+msgstr ""
+
+#: includes/class-review.php:237
+msgid "La revisione manuale ha precedenza sul controllo automatico."
+msgstr ""
+
+#: includes/class-review.php:240
+msgid "Inoltro sospeso. Cambiare categoria non invia notifiche."
+msgstr ""
+
+#: includes/class-review.php:240
+msgid "Approva e invia"
+msgstr ""
+
+#. translators: %s: classification label.
+#: includes/class-review.php:247
+#, php-format
+msgid "Segna come %s"
+msgstr ""
+
+#. translators: 1: updated entries, 2: selected entries.
+#: includes/class-review.php:267
+#, php-format
+msgid "Classificazione aggiornata per %1$d invii su %2$d selezionati."
+msgstr ""
+
+#: includes/class-review.php:280
+msgid "Invio approvato. Controlla gli esiti delle destinazioni nel dettaglio."
+msgstr ""
+
+#: includes/class-review.php:283
+msgid "Seleziona una categoria valida."
+msgstr ""
+
+#: includes/class-review.php:284
+msgid "Classificazione aggiornata."
+msgstr ""
+
+#: includes/class-schema.php:29
+msgid "Il modulo è troppo lungo."
+msgstr ""
+
+#: includes/class-schema.php:35
+msgid "Invia"
+msgstr ""
+
+#: includes/class-schema.php:42
+msgid "Usa i tag documentati e | per affiancare i campi sulla stessa riga; testo libero e HTML non sono supportati."
+msgstr ""
+
+#: includes/class-schema.php:47
+msgid "Un tag non è valido. Controlla le virgolette."
+msgstr ""
+
+#: includes/class-schema.php:50
+msgid "Il tipo di campo non è valido."
+msgstr ""
+
+#: includes/class-schema.php:55
+msgid "Usa | solo tra due campi sulla stessa riga. Note e pulsante devono restare separati."
+msgstr ""
+
+#: includes/class-schema.php:60
+msgid "Note e pulsante richiedono una sola etichetta tra virgolette."
+msgstr ""
+
+#: includes/class-schema.php:75
+msgid "Sintassi: [tipo nome \"Etichetta\"]."
+msgstr ""
+
+#: includes/class-schema.php:79
+msgid "Ogni campo richiede un nome unico in minuscolo. I nomi form, site e fields sono riservati."
+msgstr ""
+
+#: includes/class-schema.php:90
+msgid "Inserisci un’etichetta breve per ogni campo."
+msgstr ""
+
+#: includes/class-schema.php:98
+msgid "Le opzioni della selezione devono avere un testo breve."
+msgstr ""
+
+#: includes/class-schema.php:103
+msgid "I limiti numerici non sono validi."
+msgstr ""
+
+#: includes/class-schema.php:111
+msgid "Questo tag contiene un’opzione non supportata."
+msgstr ""
+
+#: includes/class-schema.php:116
+msgid "Controlla le opzioni della selezione o i limiti numerici."
+msgstr ""
+
+#: includes/class-schema.php:137
+msgid "Inserisci da 1 a 40 campi validi, usando solo i tag documentati."
+msgstr ""
+
+#: includes/class-schema.php:180
+msgid "Sono consentite al massimo 80 regole."
+msgstr ""
+
+#: includes/class-schema.php:185
+msgid "Una regola non è valida."
+msgstr ""
+
+#: includes/class-schema.php:195
+msgid "Le regole richiedono campi esistenti e valori coerenti. Un campo non può dipendere da sé stesso."
+msgstr ""
+
+#: includes/class-schema.php:212
+msgid "Le regole formano un ciclo. Rimuovi una delle dipendenze."
+msgstr ""
+
+#: includes/class-schema.php:297
+msgid "Controlla questo campo."
+msgstr ""
+
+#: includes/class-schema.php:306
+msgid "Inserisci un indirizzo email valido."
+msgstr ""
+
+#: includes/class-schema.php:308
+msgid "Il dominio email non risulta in grado di ricevere posta. Controlla l’indirizzo."
+msgstr ""
+
+#: includes/class-schema.php:320
+msgid "Il numero contiene una sequenza interamente ripetitiva. Controlla il recapito."
+msgstr ""
+
+#: includes/class-schema.php:334
+msgid "Inserisci un valore valido."
+msgstr ""
+
+#: includes/class-submission.php:47
+msgid "L’invio è in corso. Attendi qualche secondo."
+msgstr ""
+
+#: includes/class-submission.php:53
+msgid "Questo invio è già stato elaborato. Ricarica il modulo per un nuovo messaggio."
+msgstr ""
+
+#: includes/class-submission.php:61
+msgid "Il modulo è stato aggiornato. Ricarica la pagina prima di un nuovo invio."
+msgstr ""
+
+#: includes/class-submission.php:64
+msgid "Troppi invii ravvicinati. Attendi qualche minuto."
+msgstr ""
+
+#: includes/class-submission.php:76
+msgid "Non è stato possibile accettare l’invio. Controlla i dati e il messaggio oppure usa un altro contatto del sito."
+msgstr ""
+
+#: includes/class-submission.php:81
+msgid "Non è stato possibile accettare l’invio. Usa un altro contatto del sito."
+msgstr ""
+
+#: includes/class-submission.php:132
+msgid "Non è stato possibile conservare il messaggio per la verifica. Riprova più tardi."
+msgstr ""
+
+#: includes/class-submission.php:170
+msgid "Non è stato possibile acquisire il messaggio. Riprova più tardi o usa un altro contatto."
+msgstr ""
+
+#: includes/class-submission.php:208
+msgid "L’invio è sospeso. Usa Approva e invia dopo la verifica."
+msgstr ""
+
+#: includes/class-submission.php:214
+msgid "Questo invio è già stato approvato oppure non è in quarantena."
+msgstr ""
+
+#: includes/class-submission.php:222
+msgid "Il modulo originale non è disponibile per l’inoltro."
+msgstr ""
+
+#: includes/class-submission.php:233
+msgid "I dati archiviati non rispettano la configurazione attuale del modulo."
+msgstr ""
+
+#: includes/class-submission.php:243
+msgid "Non è stato possibile preparare l’inoltro."
+msgstr ""
+
+#: includes/class-submission.php:246
+msgid "Non è stato possibile approvare l’invio."
+msgstr ""

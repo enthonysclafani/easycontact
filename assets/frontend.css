@@ -1,0 +1,172 @@
+.easycontact-form {
+
+	max-width: 42rem;
+	font: inherit;
+}
+
+.easycontact-form *,
+.easycontact-form *::before,
+.easycontact-form *::after {
+
+	box-sizing: border-box;
+}
+
+.easycontact-form .easycontact-field {
+
+	margin-block: 0 1.25rem;
+}
+
+.easycontact-form .easycontact-row {
+
+	display: flex;
+	gap: 1rem;
+	align-items: flex-start;
+}
+
+.easycontact-form .easycontact-row > .easycontact-field {
+
+	flex: 1 1 0;
+	min-width: 0;
+	overflow-wrap: anywhere;
+}
+
+.easycontact-form label {
+
+	display: block;
+	margin-block-end: 0.35rem;
+}
+
+.easycontact-form .easycontact-check input {
+
+	margin: 0.35rem 0 0;
+}
+
+.easycontact-form input:not([type="checkbox"]):not([type="hidden"]),
+.easycontact-form textarea,
+.easycontact-form select {
+
+	width: 100%;
+	padding: 0.65rem 0.75rem;
+	border: 1px solid #949494;
+	border-radius: 3px;
+	background: var(--wp--preset--color--base, #fff);
+	color: inherit;
+	font: inherit;
+}
+
+.easycontact-form textarea {
+
+	resize: vertical;
+}
+
+.easycontact-form .easycontact-phone {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 0.5rem;
+}
+
+.easycontact-form .easycontact-phone-country {
+	flex: 1 1 12rem;
+	min-width: 0;
+}
+
+.easycontact-form .easycontact-phone > input {
+	flex: 1 1 10rem;
+	min-width: 0;
+	width: 0;
+}
+
+.easycontact-form .easycontact-phone .easycontact-country-search {
+	margin-block-end: 0.35rem;
+	padding: 0.35rem 0.5rem;
+	font-size: 0.9em;
+}
+
+.easycontact-form button {
+
+	padding: 0.65rem 1.15rem;
+	border: 1px solid currentcolor;
+	border-radius: 3px;
+	font: inherit;
+	cursor: pointer;
+}
+
+.easycontact-form button:disabled {
+
+	opacity: 0.6;
+	cursor: wait;
+}
+
+.easycontact-form .easycontact-check {
+
+	display: grid;
+	grid-template-columns: 1.3rem 1fr;
+	gap: 0.3rem 0.5rem;
+	align-items: start;
+}
+
+.easycontact-form .easycontact-error {
+
+	display: block;
+	color: #a51b16;
+	margin-block-start: 0.3rem;
+	font-size: 0.9em;
+}
+
+.easycontact-form .easycontact-check a,
+.easycontact-form .easycontact-check .easycontact-error {
+
+	grid-column: 2;
+}
+
+.easycontact-form .easycontact-result {
+
+	margin-block-start: 1rem;
+}
+
+.easycontact-form .easycontact-error:empty,
+.easycontact-form .easycontact-result:empty,
+.easycontact-form [hidden] {
+
+	display: none !important;
+}
+
+.easycontact-form [aria-invalid="true"] {
+
+	border-color: #a51b16 !important;
+}
+
+.easycontact-form .easycontact-honeypot {
+
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+}
+
+.easycontact-form [data-easycontact-captcha] {
+
+	margin-block: 0 1rem;
+}
+
+.easycontact-form :focus-visible {
+	outline: 2px solid currentcolor;
+	outline-offset: 2px;
+}
+
+.easycontact-preview-body {
+	max-width: 42rem;
+	margin: 2rem auto;
+	padding: 0 1rem;
+	font: 16px/1.5 system-ui;
+}
+
+@media (max-width: 600px) {
+
+	.easycontact-form .easycontact-row {
+
+		display: block;
+	}
+}

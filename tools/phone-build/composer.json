@@ -1,0 +1,5 @@
+{
+  "name": "easycontact/phone-build",
+  "require": {"giggsey/libphonenumber-for-php-lite": "^9.0"},
+  "config": {"platform": {"php": "8.1.0"}, "allow-plugins": false}
+}
