@@ -7,7 +7,7 @@
 
 namespace EasyContact\Privacy;
 
-use EasyContact\AntiSpam;
+use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Plugin;
 use EasyContact\Review;
 

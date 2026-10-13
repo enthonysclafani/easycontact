@@ -166,79 +166,79 @@ parameters:
 			message: '#^Argument of an invalid type list\<string\>\|false supplied for foreach, only iterables are supported\.$#'
 			identifier: foreach.nonIterable
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\AntiSpam\:\:assess\(\) has parameter \$context with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:assess\(\) has parameter \$context with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\AntiSpam\:\:assess\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:assess\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\AntiSpam\:\:assess\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:assess\(\) has parameter \$values with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\AntiSpam\:\:assess\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:assess\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\AntiSpam\:\:enabled\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:enabled\(\) has parameter \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\AntiSpam\:\:level\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:level\(\) has parameter \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\AntiSpam\:\:listing\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:listing\(\) has parameter \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\AntiSpam\:\:listing\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:listing\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
-			message: '#^Method EasyContact\\AntiSpam\:\:reason_labels\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\AntiSpam\:\:reason_labels\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
 			message: '#^Parameter \#1 \$array of function array_filter expects array, list\<string\>\|false given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
 			message: '#^Parameter \#1 \$string of function trim expects string, string\|null given\.$#'
 			identifier: argument.type
 			count: 2
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
 			message: '#^Parameter \#1 \$value of function count expects array\|Countable, list\<string\>\|false given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/AntiSpam.php
+			path: src/AntiSpam/AntiSpam.php
 
 		-
 			message: '#^Method EasyContact\\Delivery\:\:mail\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
@@ -304,43 +304,43 @@ parameters:
 			message: '#^Argument of an invalid type list\<string\>\|false supplied for foreach, only iterables are supported\.$#'
 			identifier: foreach.nonIterable
 			count: 1
-			path: src/DisposableDomains.php
+			path: src/AntiSpam/DisposableDomains.php
 
 		-
-			message: '#^Method EasyContact\\DisposableDomains\:\:snapshot\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\DisposableDomains\:\:snapshot\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/DisposableDomains.php
+			path: src/AntiSpam/DisposableDomains.php
 
 		-
-			message: '#^Method EasyContact\\DisposableDomains\:\:sources\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\DisposableDomains\:\:sources\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/DisposableDomains.php
+			path: src/AntiSpam/DisposableDomains.php
 
 		-
-			message: '#^Method EasyContact\\DisposableDomains\:\:status\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\DisposableDomains\:\:status\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/DisposableDomains.php
+			path: src/AntiSpam/DisposableDomains.php
 
 		-
-			message: '#^Method EasyContact\\DisposableDomains\:\:sync\(\) has no return type specified\.$#'
+			message: '#^Method EasyContact\\AntiSpam\\DisposableDomains\:\:sync\(\) has no return type specified\.$#'
 			identifier: missingType.return
 			count: 1
-			path: src/DisposableDomains.php
+			path: src/AntiSpam/DisposableDomains.php
 
 		-
 			message: '#^Parameter \#1 \$value of function count expects array\|Countable, list\<string\>\|false given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/DisposableDomains.php
+			path: src/AntiSpam/DisposableDomains.php
 
 		-
 			message: '#^Parameter \#2 \$subject of function preg_split expects string, string\|null given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/DisposableDomains.php
+			path: src/AntiSpam/DisposableDomains.php
 
 		-
 			message: '#^Constant EASYCONTACT_URL not found\.$#'

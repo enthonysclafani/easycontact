@@ -7,6 +7,7 @@
 
 namespace EasyContact;
 
+use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Phone\Phone;
 use WP_Error;
 

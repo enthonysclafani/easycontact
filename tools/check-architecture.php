@@ -79,7 +79,7 @@ final class ArchitectureChecker {
 	 *
 	 * @var list<string>
 	 */
-	private const HTTP_ALLOWLIST = array( 'src/Delivery.php', 'src/DisposableDomains.php' );
+	private const HTTP_ALLOWLIST = array( 'src/Delivery.php', 'src/AntiSpam/DisposableDomains.php' );
 
 	/**
 	 * Functions forbidden everywhere, grouped by the rule they break.

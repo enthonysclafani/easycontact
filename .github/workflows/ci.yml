@@ -130,6 +130,6 @@ jobs:
           exclude-checks: plugin_updater
           # The two public disposable-domain lists are plain-text data that an administrator downloads on request,
           # not offloaded assets. PHPCS, PHPStan and composer architecture still read this file.
-          exclude-files: src/DisposableDomains.php
+          exclude-files: src/AntiSpam/DisposableDomains.php
           categories: |
             plugin_repo

@@ -127,10 +127,11 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
 ## PHP: stile e struttura
 
 - PHP minimo 8.1, WordPress minimo 6.4 (D7). Namespace `EasyContact`, classi `final` con metodi statici in
-  `src/`, un file per classe con nome PSR-4 (`src/AntiSpam.php` per `EasyContact\AntiSpam`), caricate da
-  `src/autoload.php`. `easycontact.php` registra solo l'autoload, attivazione e disattivazione e chiama
-  `Plugin::register()`. `includes/` contiene solo librerie (`vendor/`) e dati (`data/`) inclusi. Le cartelle per
-  funzionalità arrivano nella Fase 3.2 del piano, un PR per funzionalità.
+  `src/`, una cartella per funzionalità e un file per classe con nome PSR-4 (`src/AntiSpam/AntiSpam.php` per
+  `EasyContact\AntiSpam\AntiSpam`), caricate da `src/autoload.php`. `easycontact.php` registra solo l'autoload,
+  attivazione e disattivazione e chiama `Plugin::register()`. `includes/` contiene solo librerie (`vendor/`) e dati
+  (`data/`) inclusi. Le classi non ancora spostate nelle cartelle seguono la Fase 3.2 del piano, un PR per
+  funzionalità.
 - Standard: WordPress Coding Standards (`WordPress-Extra`, `WordPress-Docs`), PHPCompatibilityWP, PHPStan livello 8
   con `szepeviktor/phpstan-wordpress`. Zero errori PHPCS. PHPStan: zero errori nuovi; quelli del codice
   precedente sono in `phpstan-baseline.neon` e si tolgono da lì quando si correggono, mai se ne aggiungono.

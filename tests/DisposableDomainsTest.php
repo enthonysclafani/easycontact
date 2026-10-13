@@ -10,7 +10,7 @@
 namespace EasyContact\Tests;
 
 use EasyContact\Admin;
-use EasyContact\DisposableDomains;
+use EasyContact\AntiSpam\DisposableDomains;
 use RuntimeException;
 use WP_Error;
 

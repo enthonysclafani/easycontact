@@ -11,8 +11,8 @@
 namespace EasyContact\Tests;
 
 use EasyContact\Admin;
-use EasyContact\AntiSpam;
-use EasyContact\DisposableDomains;
+use EasyContact\AntiSpam\AntiSpam;
+use EasyContact\AntiSpam\DisposableDomains;
 use EasyContact\Frontend;
 use EasyContact\Phone\Phone;
 use EasyContact\Plugin;

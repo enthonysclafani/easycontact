@@ -5,9 +5,11 @@
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\AntiSpam;
 
 use EasyContact\Phone\Phone;
+use EasyContact\Plugin;
+use EasyContact\State;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
