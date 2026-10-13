@@ -45,7 +45,8 @@ final class Screen {
 	/**
 	 * Add the classification column to the archive list.
 	 *
-	 * @param array $columns List table columns.
+	 * @param array<string, string> $columns List table columns.
+	 * @return array<string, string>
 	 */
 	public static function columns( array $columns ): array {
 		$columns['easycontact-review'] = __( 'Classification', 'easycontact' );
@@ -76,7 +77,8 @@ final class Screen {
 	/**
 	 * One view per category, plus entries that predate classification.
 	 *
-	 * @param array $views List table views.
+	 * @param array<string, string> $views List table views.
+	 * @return array<string, string>
 	 */
 	public static function views( array $views ): array {
 		unset( $views['private'] );
@@ -208,7 +210,8 @@ final class Screen {
 	/**
 	 * One bulk action per category.
 	 *
-	 * @param array $actions List table bulk actions.
+	 * @param array<string, string> $actions List table bulk actions.
+	 * @return array<string, string>
 	 */
 	public static function bulk_actions( array $actions ): array {
 		foreach ( Review::labels() as $slug => $label ) {
@@ -221,9 +224,9 @@ final class Screen {
 	/**
 	 * Apply a bulk classification to at most one hundred entries.
 	 *
-	 * @param string $redirect Redirect URL.
-	 * @param string $action   Bulk action key.
-	 * @param array  $ids      Selected entry IDs.
+	 * @param string            $redirect Redirect URL.
+	 * @param string            $action   Bulk action key.
+	 * @param array<int|string> $ids      Selected entry IDs.
 	 */
 	public static function bulk( string $redirect, string $action, array $ids ): string {
 		$category = substr( $action, strlen( 'easycontact-classify-' ) );
@@ -233,8 +236,8 @@ final class Screen {
 		check_admin_referer( 'bulk-posts' );
 		$updated = 0;
 		if ( current_user_can( 'manage_options' ) ) {
-			foreach ( array_slice( $ids, 0, 100 ) as $id ) {
-				if ( Plugin::ENTRY === get_post_type( $id ) && 'private' === get_post_status( $id ) && ! is_wp_error( Review::change( (int) $id, $category ) ) ) {
+			foreach ( array_map( 'absint', array_slice( $ids, 0, 100 ) ) as $id ) {
+				if ( Plugin::ENTRY === get_post_type( $id ) && 'private' === get_post_status( $id ) && ! is_wp_error( Review::change( $id, $category ) ) ) {
 					++$updated;
 				}
 			}

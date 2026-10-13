@@ -22,6 +22,8 @@ final class Review {
 
 	/**
 	 * Category labels, keyed by term slug.
+	 *
+	 * @return array<string, string>
 	 */
 	public static function labels(): array {
 		return array(
@@ -113,8 +115,8 @@ final class Review {
 	/**
 	 * Record the first automatic assessment, exactly once per entry.
 	 *
-	 * @param int   $id         Entry ID.
-	 * @param array $assessment Result of AntiSpam::assess().
+	 * @param int                  $id         Entry ID.
+	 * @param array<string, mixed> $assessment Result of AntiSpam::assess().
 	 */
 	public static function initialize( int $id, array $assessment ): bool {
 		if ( ! add_post_meta( $id, '_easycontact_antispam', $assessment, true ) ) {
