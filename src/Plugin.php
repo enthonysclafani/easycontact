@@ -8,6 +8,7 @@
 namespace EasyContact;
 
 use EasyContact\Phone\Phone;
+use EasyContact\Privacy\Privacy;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;

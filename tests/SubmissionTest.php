@@ -16,7 +16,7 @@ use EasyContact\DisposableDomains;
 use EasyContact\Frontend;
 use EasyContact\Phone\Phone;
 use EasyContact\Plugin;
-use EasyContact\Privacy;
+use EasyContact\Privacy\Privacy;
 use EasyContact\Review;
 use EasyContact\Schema;
 use EasyContact\State;
