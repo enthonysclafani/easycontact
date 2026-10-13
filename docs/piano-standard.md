@@ -190,7 +190,10 @@ Fasi 0 e 1.
 
 ### Fase 5 — Admin
 
-- [ ] 5.1 Un solo foglio di stile admin (regola `one-stylesheet` come in EasyRankly), niente CSS inline
+- [x] 5.1 Un solo foglio di stile admin (regola `one-stylesheet` come in EasyRankly), niente CSS inline
+      _Fatto: la regola `one-stylesheet` di `tools/check-architecture.php` ammette solo `assets/admin.css` e
+      `assets/frontend.css` e vuole ogni selettore sotto una classe o un ID `easycontact`; `no-inline-css` c'era già.
+      I due fogli rispettavano già la regola: nessun cambiamento visibile._
 - [ ] 5.2 Azioni `admin_post_*` con nonce e capability verificate da test; valutare il passaggio a REST dove
       serve interazione
 - [ ] 5.3 Testi delle schermate brevi e coerenti

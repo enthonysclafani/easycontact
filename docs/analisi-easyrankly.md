@@ -53,7 +53,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
 | `args` tipizzati sulle route REST | ✅ | 🟡 | ✅ tipi e lunghezze, `__return_true` motivato | Fase 3.5 |
 | Disinstallazione completa e testata | ✅ | 🟡 completa, non testata | ✅ testata anche in multisito | D5 |
 | Stringhe sorgente in inglese | ✅ | ❌ italiano | ❌ | D9 |
-| Un solo foglio di stile admin | ✅ | 🟡 `admin.css` + `admin.js` | 🟡 | Fase 5.1 |
+| Un solo foglio di stile admin | ✅ | ✅ `admin.css` (più `frontend.css` per il modulo) | ✅ regola `one-stylesheet` | Fase 5.1 |
 
 ## Trovato e corretto
 

@@ -26,6 +26,13 @@ namespace EasyContact\Tools;
 final class ArchitectureChecker {
 
 	/**
+	 * The only stylesheets the plugin ships: one for its admin screens, one for the printed form.
+	 *
+	 * @var list<string>
+	 */
+	private const STYLESHEETS = array( 'assets/admin.css', 'assets/frontend.css' );
+
+	/**
 	 * Files and directories scanned, relative to the root.
 	 *
 	 * @var list<string>
@@ -206,6 +213,7 @@ final class ArchitectureChecker {
 		}
 
 		$this->check_composer_json();
+		$this->check_stylesheets();
 
 		return $this->violations;
 	}
@@ -421,6 +429,48 @@ final class ArchitectureChecker {
 		foreach ( array_keys( $require ) as $package ) {
 			if ( 'php' !== $package && ! str_starts_with( (string) $package, 'ext-' ) ) {
 				$this->add( 'composer.json', 1, 'no-runtime-deps', "Runtime dependency `{$package}` is forbidden: move it to require-dev or remove it." );
+			}
+		}
+	}
+
+	/**
+	 * Allows only the listed stylesheets, each with every selector scoped to the plugin's classes or IDs.
+	 */
+	private function check_stylesheets(): void {
+		$assets = $this->root . '/assets';
+		if ( is_dir( $assets ) ) {
+			$iterator = new \RecursiveIteratorIterator( new \RecursiveDirectoryIterator( $assets, \FilesystemIterator::SKIP_DOTS ) );
+			$found    = array();
+			foreach ( $iterator as $file ) {
+				if ( $file instanceof \SplFileInfo && $file->isFile() && in_array( $file->getExtension(), array( 'css', 'scss', 'less' ), true ) ) {
+					$found[] = substr( $file->getPathname(), strlen( $this->root ) + 1 );
+				}
+			}
+			sort( $found );
+			foreach ( array_diff( $found, self::STYLESHEETS ) as $relative ) {
+				$this->add( $relative, 1, 'one-stylesheet', 'Only ' . implode( ', ', self::STYLESHEETS ) . ' are allowed: add the rules there.' );
+			}
+		}
+
+		foreach ( self::STYLESHEETS as $relative ) {
+			$path = $this->root . '/' . $relative;
+			if ( ! is_file( $path ) ) {
+				continue;
+			}
+			// Blank out comments, keeping their newlines so line numbers stay right.
+			$css = (string) preg_replace_callback( '~/\*.*?\*/~s', static fn( array $comment ): string => (string) preg_replace( '/[^\n]/', ' ', $comment[0] ), (string) file_get_contents( $path ) );
+			preg_match_all( '/([^{}]+)\{/', $css, $blocks, PREG_OFFSET_CAPTURE );
+			foreach ( $blocks[1] as $block ) {
+				$prelude = trim( $block[0] );
+				if ( str_starts_with( $prelude, '@' ) || preg_match( '/^(from|to|\d+(\.\d+)?%)(\s*,\s*(from|to|\d+(\.\d+)?%))*$/', $prelude ) ) {
+					continue;
+				}
+				foreach ( explode( ',', $prelude ) as $selector ) {
+					if ( ! preg_match( '/[.#]easycontact[\w-]*/', $selector ) ) {
+						$line = substr_count( $css, "\n", 0, $block[1] + strlen( $block[0] ) - strlen( ltrim( $block[0] ) ) ) + 1;
+						$this->add( $relative, $line, 'one-stylesheet', 'Selector `' . trim( $selector ) . '` must be scoped to an .easycontact class or #easycontact ID.' );
+					}
+				}
 			}
 		}
 	}
