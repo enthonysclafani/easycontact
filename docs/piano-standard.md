@@ -143,8 +143,8 @@ Fasi 0 e 1.
       `Settings/` (con `Settings/Admin/Page.php`), `Forms/` (definizione, `Schema`, `Renderer`,
       `Admin/Editor.php`), `Submissions/` (`Submission`, `Endpoint`, `Entries`, `State`,
       `Admin/EntryScreen.php`) e `Admin/Admin.php` per menu, asset e pagina di supporto condivisi. In `Plugin`
-      restano post type, attivazione e la retention `cleanup()`, che pianifica un evento: si sposta in
-      `Submissions/` con la Fase 4.1, senza aggiungere file all'allowlist del cron._
+      restano post type e attivazione; la retention `cleanup()` è passata a `Submissions/Entries.php` con la
+      Fase 4.1._
 - [x] 3.3 Hook solo dentro `register()`; niente metodi statici usati come registro globale dove non serve
       _Fatto: `Plugin::register()` chiama il `boot()` di ogni funzionalità; la regola `hooks-in-register` di
       `composer architecture` vieta `add_action()`, `add_filter()` e `add_shortcode()` a livello di file in
@@ -166,7 +166,13 @@ Fasi 0 e 1.
 
 ### Fase 4 — Cron, asset, HTTP (secondo D1–D3)
 
-- [ ] 4.1 Pulizie senza cron (o con l'eccezione decisa), idempotenti e a lotti; test
+- [x] 4.1 Pulizie senza cron (o con l'eccezione decisa), idempotenti e a lotti; test
+      _Fatto: `src/Submissions/Maintenance.php` esegue retention (`Entries::cleanup()`), pulizia di lock e stati e
+      ripresa dei tentativi su `admin_init` e alla fine di una richiesta con un invio, sotto un lock, al massimo una
+      volta al giorno a giro finito; i cursori stanno in `easycontact_maintenance` (non autoload). Resta solo
+      `easycontact_retry_delivery`; il setup toglie gli eventi della 1.0.0 quando cambia `EASYCONTACT_VERSION`, quindi
+      il rilascio deve aumentare la versione. `State.php` esce dall'allowlist del cron. Test:
+      `tests/MaintenanceTest.php`._
 - [ ] 4.2 Asset del frontend caricati solo con un modulo nella pagina; test che una pagina senza modulo non
       carichi né CSS né JS del plugin e non faccia query in più (`tests/QueriesTest.php`)
       _`tests/QueriesTest.php` esiste già: niente asset senza modulo e nessuna query in `init`. Le tre letture in più

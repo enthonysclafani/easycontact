@@ -9,6 +9,7 @@ namespace EasyContact\Tests;
 
 use EasyContact\Plugin;
 use EasyContact\Settings\Settings;
+use EasyContact\Submissions\Maintenance;
 
 /**
  * A page without a form costs the same as WordPress without the plugin (CLAUDE.md, "Prestazioni").
@@ -46,7 +47,9 @@ class QueriesTest extends TestCase {
 		$this->assertSame( EASYCONTACT_VERSION, get_option( 'easycontact_version' ) );
 		$this->assertIsArray( get_option( Settings::OPTION ) );
 		$this->assertArrayHasKey( 'easycontact_version', wp_load_alloptions(), 'The version check is free on every request' );
-		$this->assertNotFalse( wp_next_scheduled( 'easycontact_daily_cleanup' ) );
+		$this->assertFalse( wp_next_scheduled( 'easycontact_daily_cleanup' ), 'Maintenance runs without WP-Cron (D1)' );
+		$this->assertSame( 0, get_option( Maintenance::OPTION )['resume'], 'Retries left by the update are resumed by the next maintenance run' );
+		$this->assertArrayNotHasKey( Maintenance::OPTION, wp_load_alloptions(), 'The cursors are not autoloaded' );
 	}
 
 	/**

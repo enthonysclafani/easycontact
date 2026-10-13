@@ -1,6 +1,6 @@
 <?php
 /**
- * Archived entries: storage preferences and storage.
+ * Archived entries: storage preferences, storage and retention.
  *
  * @package EasyContact
  */
@@ -16,7 +16,7 @@ use WP_Error;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Store accepted and quarantined entries with all their metadata, or none of it.
+ * Store accepted and quarantined entries with all their metadata, or none of it, and delete them after retention.
  */
 final class Entries {
 	/**
@@ -93,5 +93,77 @@ final class Entries {
 		}
 		delete_post_meta( $id, '_easycontact_initializing' );
 		return $id;
+	}
+
+	/**
+	 * Delete expired entries in bounded batches.
+	 *
+	 * Called by Maintenance, never by WP-Cron: a run stops after two batches per retention class or two seconds.
+	 *
+	 * @return bool Whether expired entries may remain for the next run.
+	 */
+	public static function cleanup(): bool {
+		$settings = Settings::get();
+		$started  = microtime( true );
+		$pending  = false;
+		foreach ( array(
+			'IN'     => 'spam_retention_days',
+			'NOT IN' => 'retention_days',
+		) as $operator => $setting ) {
+			$days = (int) $settings[ $setting ];
+			if ( $days < 1 ) {
+				continue;
+			}
+			for ( $batch = 0; $batch < 2; ++$batch ) {
+				if ( microtime( true ) - $started > 2 ) {
+					$pending = true;
+					break;
+				}
+				$ids     = get_posts(
+					array(
+						'post_type'      => Plugin::ENTRY,
+						'post_status'    => array( 'private', 'trash', 'publish', 'draft', 'pending', 'future', 'auto-draft' ),
+						'posts_per_page' => 100,
+						'fields'         => 'ids',
+						'orderby'        => 'ID',
+						'order'          => 'ASC',
+						'date_query'     => array(
+							array(
+								'column'    => 'post_date_gmt',
+								'before'    => gmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS ),
+								'inclusive' => false,
+							),
+						),
+						'tax_query'      => array(
+							array(
+								'taxonomy' => Review::TAXONOMY,
+								'field'    => 'slug',
+								'terms'    => array( 'suspect', 'spam' ),
+								'operator' => $operator,
+							),
+						),
+					)
+				); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Separate bounded retention for quarantine and ordinary entries.
+				$removed = 0;
+				foreach ( $ids as $id ) {
+					$lease = 'retry_' . $id;
+					$owner = State::claim( $lease );
+					if ( null === $owner ) {
+						$pending = true;
+						continue;
+					}
+					try {
+						$removed += wp_delete_post( $id, true ) ? 1 : 0;
+					} finally {
+						State::release( $lease, $owner );
+					}
+				}
+				if ( count( $ids ) < 100 || 0 === $removed ) {
+					break;
+				}
+				$pending = true;
+			}
+		}
+		return $pending;
 	}
 }

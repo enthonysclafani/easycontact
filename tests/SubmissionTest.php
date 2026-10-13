@@ -477,7 +477,7 @@ class SubmissionTest extends TestCase {
 			);
 			$retention[ $entry ] = $keep;
 		}
-		Plugin::cleanup();
+		Entries::cleanup();
 		foreach ( $retention as $entry => $keep ) {
 			$this->assertSame( $keep, (bool) get_post( $entry ), 'Retention honors category-specific duration for entry ' . $entry );
 		}

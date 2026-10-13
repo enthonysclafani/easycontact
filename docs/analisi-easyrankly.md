@@ -43,7 +43,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
 | Pacchetto distribuibile | solo file di runtime | ❌ test, strumenti e documenti nello zip | ✅ `.gitattributes`, `tools/build-dist.sh`, verificato in CI | |
 | Zero tabelle custom | ✅ | ✅ | ✅ bloccato in CI | |
 | `$wpdb` solo in allowlist | nessun uso | 🟡 3 file | ✅ 2 file in allowlist con motivo (lock atomici, disinstallazione) | |
-| Cron | vietato | 🟡 5 eventi | 🟡 in allowlist | D1, Fase 4.1 |
+| Cron | vietato | 🟡 5 eventi | ✅ un solo evento (`easycontact_retry_delivery`), pulizie senza cron | D1, Fase 4.1 |
 | Asset nel frontend | vietati | 🟡 solo con un modulo | 🟡 in allowlist, verificato da test | D2 |
 | HTTP | solo admin/REST/CLI | 🟡 solo invio e admin | 🟡 in allowlist | D3, Fase 4.3 |
 | Dipendenze PHP a runtime | nessuna | 🟡 libphonenumber, polyfill mbstring | 🟡 escluse dai controlli, documentate | D4 |

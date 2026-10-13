@@ -55,9 +55,9 @@ blocca la CI. Ogni file ammesso in un'allowlist ha un commento con il motivo o c
    (lock atomici e pulizia dei lock scaduti, D6; con una cache a oggetti persistente i contatori non usano lock) e
    `uninstall.php` (ricerca per prefisso dei nomi dinamici, una volta sola). Nessun file nuovo nell'allowlist senza approvazione.
 3. **Niente cron, con una sola eccezione** (D1). Retention e pulizie si fanno a lotti, pigre, su `admin_init` e dopo
-   un invio, con il cursore in un'option. L'unico evento ammesso è `easycontact_retry_delivery` (singolo) per i nuovi
-   tentativi di consegna. Finché la Fase 4.1 non è fatta, gli eventi attuali restano nei file in allowlist (A);
-   nessun evento nuovo.
+   un invio, con il cursore in `easycontact_maintenance` (`src/Submissions/Maintenance.php`). L'unico evento ammesso è
+   `easycontact_retry_delivery` (singolo) per i nuovi tentativi di consegna, pianificato solo da
+   `src/Submissions/Submission.php`; `src/Plugin.php` toglie soltanto gli eventi (A). Nessun evento nuovo.
 4. **Asset nel frontend solo al rendering di un modulo** (A per i file, test per il comportamento) (D2).
    `wp_enqueue_*` solo in `src/Forms/Renderer.php` (al rendering) e `src/Admin/Admin.php` (schermate del plugin).
    Nessun JS o CSS inline (A per `style="…"`). Una pagina senza modulo non carica niente del plugin: `tests/QueriesTest.php`.

@@ -59,9 +59,9 @@ final class ArchitectureChecker {
 	 * @var list<string>
 	 */
 	private const CRON_ALLOWLIST = array(
-		// TODO D1: retention, receipts and bounded delivery retries.
+		// Removes the events of version 1.0.0 once after the update, and every event on deactivation.
 		'src/Plugin.php',
-		'src/Submissions/State.php',
+		// D1: `easycontact_retry_delivery`, the only event, for the bounded delivery retries.
 		'src/Submissions/Submission.php',
 		// Removes the events above.
 		'uninstall.php',

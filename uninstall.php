@@ -19,6 +19,7 @@ function uninstall_site(): void {
 		wp_unschedule_hook( $hook );
 	}
 	delete_option( 'easycontact_version' );
+	delete_option( 'easycontact_maintenance' );
 	delete_option( 'easycontact_disposable_domains' );
 	// Read names in the existing core options table; delete through the Options API.
 	global $wpdb;

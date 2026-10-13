@@ -27,9 +27,10 @@ I nomi sono quelli della 1.0.0 e non si rinominano (D8).
 |---|---|---|---|
 | `easycontact_settings` | no | Impostazioni del sito, creata con i default all'attivazione e al setup (`Settings::defaults()`): `store_entries`, `retention_days` (30), `spam_retention_days` (14), `antispam_level` (2), `antispam_observe`, `quarantine_entries`, `quarantine_limit` (500), `email_dns_check`, `phone_country`, `spam_phrases`, `allow_erasure`, `delete_on_uninstall`, `mailerlite_token`, `turnstile_site_key`, `turnstile_secret`. Registrata con `register_setting()` e descritta da `Settings::schema()`, fuori dal REST perché contiene i segreti. | Solo con opt-in |
 | `easycontact_version` | sì | Versione per cui è girato il setup. Se diversa da `EASYCONTACT_VERSION`, `Plugin::init()` rifà il setup (impostazioni mancanti, categorie, ripresa dei tentativi). La disattivazione la cancella. Sui siti aggiornati dalla 1.0.0 resta non autoload fino al primo cambio di versione. | Sempre |
+| `easycontact_maintenance` | no | Cursori della manutenzione senza cron (`Maintenance`): `due` (timestamp della prossima esecuzione completa, una al giorno), `state` (ultimo `option_id` visto dalla pulizia di lock e stati, `null` a giro finito), `resume` (ultimo invio visto dalla ripresa dei tentativi, `null` se non c'è niente da riprendere). Letta solo in admin e dopo un invio. | Sempre |
 | `easycontact_review_terms_version` | no | `1` quando le tre categorie esistono. Letta solo durante il setup. | Sempre |
 | `easycontact_disposable_domains` | no | Ultima sincronizzazione completa della lista domini usa e getta: `version`, `domains` (testo, un dominio per riga, < 8 MB), `count` (≤ 250.000), `sources`, `updated_at`. Assente = lista inclusa nel plugin (`includes/data/`). Scritta solo dalla sincronizzazione manuale in admin. | Sempre |
-| `easycontact_lock_{chiave}` | no | Lease atomico (`State::claim()`, `INSERT IGNORE`): `scadenza.uuid`. Chiavi: `submit_{ticket}`, `retry_{entry}` e `rate_{hash}` (lease di 5 secondi attorno a un contatore). Si libera alla fine dell'operazione; quelli scaduti li toglie `State::cleanup()`. | Sempre |
+| `easycontact_lock_{chiave}` | no | Lease atomico (`State::claim()`, `INSERT IGNORE`): `scadenza.uuid`. Chiavi: `submit_{ticket}`, `retry_{entry}` e `rate_{hash}` (lease di 5 secondi attorno a un contatore). Si libera alla fine dell'operazione; quelli scaduti li toglie `State::cleanup()`, chiamata da `Maintenance`. | Sempre |
 | `easycontact_state_{ticket}` | no | Stato di un invio per renderlo idempotente (JSON): `fingerprint`, `input_fingerprint`, `hash` dei dati, `entry`, `attempts` (max 3), `outcomes`, `assessment`. Chiave = primi 40 caratteri dello SHA-256 del ticket. Scade e lo toglie `State::cleanup()`. | Sempre |
 
 ## Post meta
@@ -75,17 +76,17 @@ Tutti rimossi alla disinstallazione (ricerca per prefisso in `uninstall.php`, po
 
 ## Eventi cron
 
-In attesa della decisione D1.
+Uno solo, per D1:
 
 | Hook | Tipo | Cosa fa |
 |---|---|---|
-| `easycontact_daily_cleanup` | giornaliero | Retention degli invii (`Plugin::cleanup()`) e pulizia di lock e stati scaduti (`State::cleanup()`). |
-| `easycontact_retention_cleanup` | singolo | Lotto successivo della retention, se ne restano. |
-| `easycontact_state_cleanup` | singolo | Lotto successivo della pulizia di lock e stati, con il cursore come argomento. |
 | `easycontact_retry_delivery` | singolo | Nuovo tentativo di consegna di un invio (argomento: ID). |
-| `easycontact_resume_retries` | singolo | Dopo un aggiornamento, ripianifica i tentativi rimasti a metà, a lotti. |
 
-La disattivazione e la disinstallazione tolgono tutti e cinque gli hook (`wp_unschedule_hook()`).
+Retention, pulizia di lock e stati e ripresa dei tentativi dopo un aggiornamento non usano WP-Cron: le esegue
+`Maintenance::run()` a lotti su `admin_init` e alla fine di una richiesta che ha elaborato un invio (vedi
+`easycontact_maintenance`). Gli eventi della 1.0.0 (`easycontact_daily_cleanup`, `easycontact_retention_cleanup`,
+`easycontact_state_cleanup`, `easycontact_resume_retries`) li toglie il setup dopo l'aggiornamento; disattivazione e
+disinstallazione tolgono anche questi, per i siti non ancora aggiornati.
 
 ## Nonce, azioni e chiavi che non sono dati
 

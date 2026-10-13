@@ -272,7 +272,9 @@ final class Endpoint {
 				)
 			);
 		}
-		return Submission::process( $id, $definition, $validated['values'], $ticket, is_string( $input['captcha'] ?? null ) ? $input['captcha'] : '', $input_fingerprint, $context );
+		$result = Submission::process( $id, $definition, $validated['values'], $ticket, is_string( $input['captcha'] ?? null ) ? $input['captcha'] : '', $input_fingerprint, $context );
+		Maintenance::after_submission();
+		return $result;
 	}
 
 	/**
