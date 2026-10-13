@@ -10,19 +10,26 @@ solo in questo file. Quando una decisione viene presa: si scrive la data e il mo
 
 ## Riepilogo
 
-| | Tema | Stato | Cosa blocca |
+| | Tema | Stato | Cosa resta |
 |---|---|---|---|
-| D1 | Cron | aperta | Fase 4.1, `CRON_ALLOWLIST` |
-| D2 | Asset nel frontend | aperta | Fase 4.2, `ASSET_ALLOWLIST` |
-| D3 | Chiamate HTTP | aperta | Fase 4.3, `HTTP_ALLOWLIST` |
-| D4 | Dipendenze PHP a runtime | aperta | Fase 3, `includes/vendor/` |
-| D5 | Disinstallazione | aperta (proposta già implementata) | Fase 2.3 |
-| D6 | Lock atomici in `wp_options` | aperta | Fase 2.2, `WPDB_ALLOWLIST` |
-| D7 | Requisiti minimi | aperta (dati raccolti) | `readme.txt`, CI |
-| D8 | Nomi dei dati | aperta | nessuna rinomina finché aperta |
-| D9 | Lingua delle stringhe sorgente | aperta (nuova) | Fase 5.3 |
+| D1 | Cron | presa | Fase 4.1, `CRON_ALLOWLIST` |
+| D2 | Asset nel frontend | presa (già così) | `ASSET_ALLOWLIST` |
+| D3 | Chiamate HTTP | presa | Fase 4.3, `HTTP_ALLOWLIST` |
+| D4 | Dipendenze PHP a runtime | presa | Fase 3, `includes/vendor/` |
+| D5 | Disinstallazione | presa (già così) | Fase 2.3 |
+| D6 | Lock atomici in `wp_options` | presa | Fase 2.2, `WPDB_ALLOWLIST` |
+| D7 | Requisiti minimi | presa (già così) | |
+| D8 | Nomi dei dati | presa | |
+| D9 | Lingua delle stringhe sorgente | presa | Fase 5.3 |
 
-## Aperte
+## Prese
+
+Il 13 ottobre 2026 Enthony ha approvato tutte le proposte qui sotto così come sono scritte. Per D1 vale la
+variante con l'eccezione dichiarata: le pulizie diventano pigre e a lotti senza cron, e resta un solo evento singolo,
+`easycontact_retry_delivery`, per i nuovi tentativi di consegna. Il motivo comune: quasi tutte descrivono il
+comportamento attuale, e le altre tolgono codice o rischi senza cambiare ciò che vede l'utente.
+
+Sotto ogni decisione la riga "Decisione" dice cosa è stato scelto e cosa resta da fare.
 
 **D1 — Cron.** EasyRankly vieta ogni cron. EasyContact lo usa per pulizie e per ritentare le consegne fallite.
 - Stato attuale: `easycontact_daily_cleanup` (giornaliero), `easycontact_retention_cleanup`,
@@ -34,7 +41,9 @@ solo in questo file. Quando una decisione viene presa: si scrive la data e il mo
   in admin (più semplice, ma un invio fallito resta fermo finché qualcuno non entra).
 - Nota dall'analisi: per un modulo di contatto un invio fallito che resta fermo è una perdita di contatti. La
   variante con l'eccezione dichiarata sembra la più sicura per la produzione.
-- Decisione: _aperta_
+- Decisione (13 ottobre 2026): proposta approvata, variante con l'eccezione. Retention e pulizia di lock e stati
+  senza cron, a lotti su `admin_init` e dopo un invio; `easycontact_retry_delivery` resta come unico evento, eccezione
+  dichiarata in `CRON_ALLOWLIST`. Da fare: Fase 4.1.
 
 **D2 — Asset nel frontend.** Un plugin di moduli non può avere zero CSS/JS.
 - Stato attuale: già conforme alla proposta. `assets/frontend.css` e `assets/frontend.js` si caricano solo quando
@@ -43,7 +52,7 @@ solo in questo file. Quando una decisione viene presa: si scrive la data e il mo
 - Proposta: regola riformulata come "asset solo sulle pagine che stampano un modulo (enqueue al rendering),
   nessun JS inline, il modulo funziona anche senza JS". Turnstile solo sui moduli che lo attivano.
   `composer architecture` verifica che l'enqueue stia solo in `class-frontend.php` e `class-admin.php`.
-- Decisione: _aperta_
+- Decisione (13 ottobre 2026): proposta approvata. Il comportamento attuale la rispetta già.
 
 **D3 — Chiamate HTTP.** EasyRankly: mai nel frontend, solo admin/REST/WP-CLI.
 - Stato attuale: chiamate solo nella richiesta di invio (Turnstile, MailerLite, Slack, DNS) e in admin
@@ -52,7 +61,8 @@ solo in questo file. Quando una decisione viene presa: si scrive la data e il mo
 - Proposta: "mai durante il rendering di una pagina; solo nella richiesta di invio (REST o `admin-post.php`) e in
   admin", con timeout espliciti (≤ 15 s), gestione di `WP_Error` e dei codici HTTP, servizi elencati in
   "External services" di `readme.txt`. I controlli DNS restano opzionali e con cache in transient.
-- Decisione: _aperta_
+- Decisione (13 ottobre 2026): proposta approvata. Da fare: Fase 4.3 (timeout verificati, "External services" in
+  `readme.txt`).
 
 **D4 — Dipendenze PHP a runtime.** EasyContact distribuisce libphonenumber (centinaia di file di metadati) e il
 polyfill di mbstring.
@@ -62,7 +72,8 @@ polyfill di mbstring.
   semplificata senza libreria (meno precisa).
 - Nota dall'analisi: `Phone::boot()` carica il polyfill solo se `mb_strtoupper`/`mb_strtolower` mancano; dichiarare
   `ext-mbstring` come requisito permetterebbe di toglierlo.
-- Decisione: _aperta_
+- Decisione (13 ottobre 2026): proposta approvata. libphonenumber resta come unica eccezione dichiarata; il polyfill
+  mbstring si toglie se `ext-mbstring` diventa requisito dopo la verifica dell'uso effettivo (Fase 3).
 
 **D5 — Disinstallazione.** EasyRankly rimuove sempre tutto; EasyContact conserva moduli e invii salvo opt-in.
 - Stato attuale: già come la proposta. `uninstall.php` rimuove sempre i dati tecnici e, solo con
@@ -70,24 +81,26 @@ polyfill di mbstring.
   `tests/UninstallTest.php` copre entrambi i casi e il multisite.
 - Proposta: tenere l'opt-in per moduli e invii (sono dati dell'utente, perderli per errore è grave), ma rimuovere
   **sempre** i dati tecnici.
-- Decisione: _aperta_
+- Decisione (13 ottobre 2026): proposta approvata. Il comportamento attuale la rispetta già ed è coperto da
+  `tests/UninstallTest.php`.
 
 **D6 — Lock atomici in `wp_options`.** `State::claim()` usa `INSERT IGNORE` per evitare consegne doppie in
 richieste concorrenti.
 - Proposta: tenerlo come unico file in allowlist `$wpdb` (con il commento già presente), ma solo per i lock; i
   contatori di rate limit passano a transient/`wp_cache_add()` dove l'atomicità non è critica. Valutare se
   `wp_cache_add()` basta quando c'è una cache persistente.
-- Decisione: _aperta_
+- Decisione (13 ottobre 2026): proposta approvata. `class-state.php` resta in `WPDB_ALLOWLIST` solo per i lock; i
+  contatori di rate limit passano a transient/`wp_cache_add()` (Fase 2.2).
 
 **D7 — Requisiti minimi.** Oggi PHP 8.1 / WordPress 6.4; EasyRankly PHP 8.0 / WordPress 7.0.
 - Dati: la suite PHPUnit passa su WordPress 6.4.9 e 7.1.0 (13 ottobre 2026); la CI la esegue su entrambe.
 - Proposta: tenere PHP 8.1 e WordPress 6.4, ora che il minimo è davvero testato in CI.
-- Decisione: _aperta_
+- Decisione (13 ottobre 2026): PHP 8.1 e WordPress 6.4, testati in CI.
 
 **D8 — Nomi dei dati.** Post type, option e meta sono già prefissati `easycontact_`. Rinominarli richiede una
 migrazione.
 - Proposta: **nessuna rinomina**; si documentano così come sono (`docs/data-model.md`).
-- Decisione: _aperta_
+- Decisione (13 ottobre 2026): nessuna rinomina.
 
 **D9 — Lingua delle stringhe sorgente.** EasyRankly vuole codice, commenti e stringhe sorgente in inglese, tradotte
 con il text domain. In EasyContact codice e commenti sono in inglese, ma le stringhe dell'interfaccia sono scritte in
@@ -97,8 +110,9 @@ italiano dentro `__()`.
 - Proposta: portare le stringhe sorgente in inglese e aggiungere `languages/easycontact-it_IT.po`/`.mo` con il testo
   italiano di oggi, così i siti italiani non vedono cambiamenti. Va fatto in un PR a parte (Fase 5.3), con test che
   confrontano le stringhe principali.
-- Decisione: _aperta_
+- Decisione (13 ottobre 2026): proposta approvata. Stringhe sorgente in inglese più traduzione `it_IT` con il testo di
+  oggi, in un PR a parte (Fase 5.3). Fino ad allora le nuove stringhe seguono quelle vicine.
 
-## Prese
+## Aperte
 
 Nessuna per ora.

@@ -76,8 +76,8 @@ Ripresi da `CLAUDE.md` di EasyRankly; quelli segnati con (D) dipendono da una de
 
 ## 3. Decisioni aperte (da chiedere prima della Fase 2)
 
-Spostate in `docs/decisioni.md` (punto 1.3), con lo stato attuale di ciascuna e una nuova decisione D9 sulla lingua
-delle stringhe sorgente. Si aggiornano solo lì.
+Spostate in `docs/decisioni.md` (punto 1.3), con una nuova decisione D9 sulla lingua delle stringhe sorgente. Tutte
+prese il 13 ottobre 2026 (proposte approvate; D1 con l'eccezione di `easycontact_retry_delivery`).
 
 ## 4. Fasi
 
@@ -109,9 +109,8 @@ Fasi 0 e 1.
 
 ### Fase 1 — Regole e documentazione
 
-- [ ] 1.1 `CLAUDE.md` (e `AGENTS.md` che lo richiama) sul modello di EasyRankly, con le invarianti decise in D1–D8
-      _Scritto con le invarianti già vere e le regole in attesa di D1–D9 segnate come tali; si chiude quando le
-      decisioni sono prese._
+- [x] 1.1 `CLAUDE.md` (e `AGENTS.md` che lo richiama) sul modello di EasyRankly, con le invarianti decise in D1–D8
+      _Fatto: invarianti aggiornate con le decisioni D1–D9 del 13 ottobre 2026._
 - [x] 1.2 `docs/data-model.md`: ogni option, meta, post type, tassonomia, transient, cron e chiave dinamica,
       con chi li scrive, autoload e rimozione
 - [x] 1.3 `docs/decisioni.md`: decisioni D1–D8 con data e motivo (spostate da questo documento)

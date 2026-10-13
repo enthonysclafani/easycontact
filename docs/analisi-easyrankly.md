@@ -18,18 +18,18 @@ Con il lavoro della Fase 0 e della Fase 1 del piano EasyContact ha gli stessi st
 e 28 test PHPUnit verdi su WordPress 6.4 e 7.1, singolo sito e multisito. I test nuovi hanno trovato due problemi
 reali, corretti con un test di regressione (vedi "Trovato e corretto").
 
-Le decisioni D1–D9 non bloccano un rilascio: riguardano le fasi successive (struttura, cron, HTTP), e dove il
-comportamento di oggi coincide già con la proposta è indicato. Cosa serve prima della produzione è nella sezione
-"Lista per la produzione".
+Le decisioni D1–D9 sono state prese il 13 ottobre 2026 (proposte del piano approvate). Non bloccano un rilascio:
+guidano le fasi successive (struttura, cron, HTTP), e `docs/decisioni.md` indica dove il comportamento di oggi le
+rispetta già. Cosa serve prima della produzione è nella sezione "Lista per la produzione".
 
 ## Confronto per area
 
-Legenda: ✅ allineato, 🟡 parziale o in attesa di una decisione, ❌ assente.
+Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, ❌ assente.
 
 | Area | EasyRankly | EasyContact 1.0.0 | Ora (`Refactory`) | Cosa resta |
 |---|---|---|---|---|
-| Regole di progetto | `CLAUDE.md` completo | ❌ | 🟡 `CLAUDE.md` con invarianti e regole in attesa di D1–D9 | chiudere 1.1 dopo le decisioni |
-| Decisioni | `docs/decisioni.md` | ❌ (nel piano) | ✅ `docs/decisioni.md` | prendere D1–D9 |
+| Regole di progetto | `CLAUDE.md` completo | ❌ | ✅ `CLAUDE.md` con le invarianti decise | |
+| Decisioni | `docs/decisioni.md` | ❌ (nel piano) | ✅ `docs/decisioni.md`, D1–D9 prese | |
 | Modello dati | `docs/data-model.md` | ❌ | ✅ | tenerlo aggiornato |
 | `composer check` | architettura + PHPCS + PHPStan + PHPUnit | ❌ | ✅ stessi script | |
 | PHPCS (WPCS Extra + Docs, PHPCompatibilityWP) | zero errori | ❌ (264 errori, 210 avvisi) | ✅ zero | |
@@ -97,4 +97,4 @@ Prima del merge di `Refactory` in `main` e del rilascio (Fase 6.4 del piano, da 
 - [ ] Prova di aggiornamento da 1.0.0 a una copia del sito reale: impostazioni, moduli e invii intatti
 - [ ] Versione alzata (`EASYCONTACT_VERSION`, intestazione del plugin, `Stable tag`) e changelog in `readme.txt`
 - [ ] Controllo di sicurezza della Fase 6.2 sul codice che va in produzione
-- [ ] Decisioni D1–D9: non bloccano il rilascio, ma vanno prese prima delle Fasi 2–5
+- [x] Decisioni D1–D9 prese (13 ottobre 2026)

@@ -10,8 +10,8 @@ di `enthonysclafani/easyrankly`): dove EasyContact ha bisogno di un'eccezione, l
 Documenti di riferimento (tutti in questo branch):
 - `docs/piano-standard.md`: fasi con le caselle per portare qui gli standard di EasyRankly. È la fonte di verità su
   cosa fare dopo.
-- `docs/decisioni.md`: decisioni aperte (D1–D9) e prese, con data e perché. Davanti a una decisione aperta fermati e
-  chiedi: non si sceglie da soli.
+- `docs/decisioni.md`: decisioni prese (D1–D9, 13 ottobre 2026) e aperte, con data e perché. Davanti a una decisione
+  aperta fermati e chiedi: non si sceglie da soli.
 - `docs/data-model.md`: ogni dato salvato dal plugin. Se non è lì, il plugin non lo crea.
 - `docs/analisi-easyrankly.md`: confronto con EasyRankly e lista per la produzione.
 - `ANTI-SPAM.md`: come funziona l'anti-spam (anche per gli utenti).
@@ -51,18 +51,23 @@ blocca la CI. Ogni file ammesso in un'allowlist ha un commento con il motivo o c
 
 1. **Zero tabelle custom** (A). Mai `CREATE TABLE`, `ALTER TABLE`, `DROP TABLE`, `dbDelta()`. I dati vanno in Options
    API, post meta, post type non pubblici, tassonomie nascoste, transient.
-2. **`$wpdb` solo in allowlist** (A), sempre con `$wpdb->prepare()`. Oggi: `class-state.php` (lock atomici, D6),
+2. **`$wpdb` solo in allowlist** (A), sempre con `$wpdb->prepare()`. Oggi: `class-state.php` (solo i lock atomici, D6;
+   i contatori passano a transient nella Fase 2.2),
    `class-submission.php` (query da sostituire con `WP_Query`, Fase 2.1), `uninstall.php` (ricerca per prefisso,
    Fase 2.3). Nessun file nuovo nell'allowlist senza approvazione.
-3. **Cron solo nei file in allowlist** (A), in attesa di D1. Nessun evento nuovo.
-4. **Asset nel frontend solo al rendering di un modulo** (A per i file, test per il comportamento), in attesa di D2.
+3. **Niente cron, con una sola eccezione** (D1). Retention e pulizie si fanno a lotti, pigre, su `admin_init` e dopo
+   un invio, con il cursore in un'option. L'unico evento ammesso è `easycontact_retry_delivery` (singolo) per i nuovi
+   tentativi di consegna. Finché la Fase 4.1 non è fatta, gli eventi attuali restano nei file in allowlist (A);
+   nessun evento nuovo.
+4. **Asset nel frontend solo al rendering di un modulo** (A per i file, test per il comportamento) (D2).
    `wp_enqueue_*` solo in `class-frontend.php` (al rendering) e `class-admin.php` (schermate del plugin). Nessun JS o
    CSS inline (A per `style="…"`). Una pagina senza modulo non carica niente del plugin: `tests/QueriesTest.php`.
 5. **HTTP solo nei file in allowlist** (A), con le API di WordPress (A: niente cURL, `fopen`/`file_get_contents` su
-   URL, socket), in attesa di D3. Mai durante il rendering di una pagina; timeout ≤ 15 s; `WP_Error` e codici HTTP
+   URL, socket) (D3). Mai durante il rendering di una pagina, solo nella richiesta di invio e in admin; timeout ≤ 15 s; `WP_Error` e codici HTTP
    sempre gestiti; ogni servizio elencato in "External services" di `readme.txt`.
 6. **Dipendenze PHP a runtime**: solo quelle già incluse in `includes/vendor/` (libphonenumber e polyfill mbstring),
-   aggiornate con `tools/bundle-phone.php`, in attesa di D4. `vendor/` di Composer contiene solo strumenti di sviluppo
+   aggiornate con `tools/bundle-phone.php` (D4). libphonenumber è l'unica eccezione dichiarata; il polyfill si toglie
+   se `ext-mbstring` diventa requisito. `vendor/` di Composer contiene solo strumenti di sviluppo
    e non si distribuisce (A).
 7. **Nessuna scrittura su disco** (A) e nessuna funzione vietata (A): `eval`, `create_function`, `extract`, `assert`,
    `unserialize()`.
@@ -135,8 +140,9 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
 - Prefissi: option e transient `easycontact_`, meta `_easycontact_`, post type e tassonomie `easycontact_`, hook
   `easycontact_`. Nessuna rinomina dei nomi esistenti (D8).
 - Ogni hook pubblico (`apply_filters`/`do_action`) è una promessa di compatibilità: aggiungerne uno si chiede.
-- Codice e commenti in inglese. Le stringhe dell'interfaccia oggi sono scritte in italiano dentro `__()`: finché D9 è
-  aperta, le nuove stringhe seguono quelle vicine.
+- Codice, commenti e stringhe sorgente in inglese (D9). Le stringhe dell'interfaccia oggi sono ancora in italiano
+  dentro `__()`: passano all'inglese con una traduzione `it_IT` nella Fase 5.3; fino ad allora le nuove stringhe
+  seguono quelle vicine.
 
 ## Dati e ciclo di vita
 
