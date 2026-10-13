@@ -7,7 +7,7 @@
 
 namespace EasyContact\Tests;
 
-use EasyContact\DisposableDomains;
+use EasyContact\AntiSpam\DisposableDomains;
 use EasyContact\Plugin;
 use EasyContact\Review;
 use EasyContact\State;

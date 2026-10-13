@@ -2,14 +2,14 @@
 /**
  * DNS fixture for AntiSpam::mail_domain().
  *
- * The plugin calls dns_get_record() unqualified from the EasyContact namespace, so
+ * The plugin calls dns_get_record() unqualified from the EasyContact\AntiSpam namespace, so
  * this function shadows the global one in every test. Records come from
  * $GLOBALS['easycontact_test_dns']; an unknown domain behaves like a resolver failure.
  *
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\AntiSpam;
 
 /**
  * Return the fixture records for a domain, or false like a failed lookup.

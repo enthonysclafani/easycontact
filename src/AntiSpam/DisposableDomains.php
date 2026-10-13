@@ -5,7 +5,7 @@
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\AntiSpam;
 
 use WP_Error;
 
@@ -50,8 +50,8 @@ final class DisposableDomains {
 		if ( is_array( $saved ) && 1 === ( $saved['version'] ?? null ) && is_string( $saved['domains'] ?? null ) && '' !== $saved['domains'] && strlen( $saved['domains'] ) < self::MAX_BYTES && ( $saved['count'] ?? 0 ) > 0 && ( $saved['count'] ?? 0 ) <= self::MAX_DOMAINS && ! empty( $saved['updated_at'] ) ) {
 			return $saved;
 		}
-		$metadata            = (array) wp_json_file_decode( dirname( __DIR__ ) . '/includes/data/disposable-domains.json', array( 'associative' => true ) );
-		$metadata['domains'] = trim( (string) file_get_contents( dirname( __DIR__ ) . '/includes/data/disposable-domains.txt' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Bundled local file, never a URL.
+		$metadata            = (array) wp_json_file_decode( dirname( __DIR__, 2 ) . '/includes/data/disposable-domains.json', array( 'associative' => true ) );
+		$metadata['domains'] = trim( (string) file_get_contents( dirname( __DIR__, 2 ) . '/includes/data/disposable-domains.txt' ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Bundled local file, never a URL.
 		$metadata['synced']  = false;
 		return $metadata;
 	}

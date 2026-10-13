@@ -7,6 +7,7 @@
 
 namespace EasyContact;
 
+use EasyContact\AntiSpam\AntiSpam;
 use WP_Error;
 use WP_Post;
 use WP_Query;
