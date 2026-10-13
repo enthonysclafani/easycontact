@@ -1,0 +1,20 @@
+{
+	"name": "easycontact/phpstan-tooling",
+	"description": "PHPStan for EasyContact, kept apart from the main dev dependencies. PHPStan is distributed only as a GitHub zipball, which Claude Code cloud sessions cannot download: isolating it lets every other check install from git in the cloud, while PHPStan runs locally and in CI.",
+	"type": "project",
+	"license": "GPL-3.0-or-later",
+	"require": {
+		"phpstan/extension-installer": "^1.4",
+		"phpstan/phpstan": "^2.1",
+		"szepeviktor/phpstan-wordpress": "^2.0"
+	},
+	"config": {
+		"allow-plugins": {
+			"phpstan/extension-installer": true
+		},
+		"platform": {
+			"php": "8.1.0"
+		},
+		"sort-packages": true
+	}
+}
