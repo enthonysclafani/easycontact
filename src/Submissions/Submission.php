@@ -5,12 +5,13 @@
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\Submissions;
 
 use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\Delivery\Delivery;
 use EasyContact\Forms\Forms;
 use EasyContact\Forms\Schema;
+use EasyContact\Plugin;
 use EasyContact\Review\Review;
 use EasyContact\Settings\Settings;
 use WP_Error;
@@ -79,7 +80,7 @@ final class Submission {
 				}
 				$assessment = AntiSpam::assess( $form_id, $definition, $values, $context );
 				if ( 'accepted' !== $assessment['status'] ) {
-					if ( ! Plugin::stores_quarantine( $definition['config'] ) ) {
+					if ( ! Entries::stores_quarantine( $definition['config'] ) ) {
 						return new WP_Error( 'spam', __( 'Non è stato possibile accettare l’invio. Controlla i dati e il messaggio oppure usa un altro contatto del sito.', 'easycontact' ), array( 'status' => 422 ) );
 					}
 					$limit = max( 1, (int) Settings::get()['quarantine_limit'] );
@@ -115,13 +116,13 @@ final class Submission {
 				'observe'  => false,
 			);
 			$held       = 'accepted' !== $assessment['status'];
-			$store      = $held ? Plugin::stores_quarantine( $definition['config'] ) : Plugin::stores_entries( $definition['config'] );
+			$store      = $held ? Entries::stores_quarantine( $definition['config'] ) : Entries::stores_entries( $definition['config'] );
 			if ( $store && ! isset( $state['outcomes']['archive'] ) ) {
 				$state['outcomes']['archive'] = 'archive_uncertain';
 				if ( ! $persist() ) {
 					return self::uncertain_error();
 				}
-				$entry                        = Plugin::store( $form_id, $definition, $values, $assessment );
+				$entry                        = Entries::store( $form_id, $definition, $values, $assessment );
 				$state['entry']               = is_wp_error( $entry ) ? 0 : $entry;
 				$state['outcomes']['archive'] = is_wp_error( $entry ) ? 'archive_failed' : 'saved';
 				if ( ! $persist() ) {
@@ -235,7 +236,7 @@ final class Submission {
 			$definition = Forms::definition( $form_id );
 			$job        = get_post_meta( $entry_id, '_easycontact_retry', true );
 			$status     = get_post_meta( $entry_id, '_easycontact_delivery', true );
-			if ( ! is_array( $status ) || ! $definition || 'publish' !== get_post_status( $form_id ) || ( ! $manual && ! Plugin::stores_quarantine( $definition['config'] ) ) ) {
+			if ( ! is_array( $status ) || ! $definition || 'publish' !== get_post_status( $form_id ) || ( ! $manual && ! Entries::stores_quarantine( $definition['config'] ) ) ) {
 				self::cancel( $entry_id );
 				return new WP_Error( 'form', __( 'Il modulo originale non è disponibile per l’inoltro.', 'easycontact' ) );
 			}

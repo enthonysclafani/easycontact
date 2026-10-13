@@ -51,7 +51,7 @@ Sotto ogni decisione la riga "Decisione" dice cosa è stato scelto e cosa resta 
   funziona senza JS (invio via `admin-post.php`).
 - Proposta: regola riformulata come "asset solo sulle pagine che stampano un modulo (enqueue al rendering),
   nessun JS inline, il modulo funziona anche senza JS". Turnstile solo sui moduli che lo attivano.
-  `composer architecture` verifica che l'enqueue stia solo in `src/Forms/Renderer.php` e `src/Admin.php`.
+  `composer architecture` verifica che l'enqueue stia solo in `src/Forms/Renderer.php` e `src/Admin/Admin.php`.
 - Decisione (13 ottobre 2026): proposta approvata. Il comportamento attuale la rispetta già.
 
 **D3 — Chiamate HTTP.** EasyRankly: mai nel frontend, solo admin/REST/WP-CLI.
@@ -89,7 +89,7 @@ richieste concorrenti.
 - Proposta: tenerlo come unico file in allowlist `$wpdb` (con il commento già presente), ma solo per i lock; i
   contatori di rate limit passano a transient/`wp_cache_add()` dove l'atomicità non è critica. Valutare se
   `wp_cache_add()` basta quando c'è una cache persistente.
-- Decisione (13 ottobre 2026): proposta approvata. `src/State.php` resta in `WPDB_ALLOWLIST` solo per i lock; i
+- Decisione (13 ottobre 2026): proposta approvata. `src/Submissions/State.php` resta in `WPDB_ALLOWLIST` solo per i lock; i
   contatori di rate limit passano a transient/`wp_cache_add()` (Fase 2.2).
 
 **D7 — Requisiti minimi.** Oggi PHP 8.1 / WordPress 6.4; EasyRankly PHP 8.0 / WordPress 7.0.

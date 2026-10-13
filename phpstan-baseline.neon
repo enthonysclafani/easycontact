@@ -4,25 +4,13 @@ parameters:
 			message: '#^Constant EASYCONTACT_URL not found\.$#'
 			identifier: constant.notFound
 			count: 2
-			path: src/Admin.php
+			path: src/Admin/Admin.php
 
 		-
 			message: '#^Method EasyContact\\Forms\\Admin\\Editor\:\:checkbox\(\) has parameter \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
 			path: src/Forms/Admin/Editor.php
-
-		-
-			message: '#^Method EasyContact\\Admin\:\:columns\(\) has parameter \$columns with no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Admin.php
-
-		-
-			message: '#^Method EasyContact\\Admin\:\:columns\(\) return type has no value type specified in iterable type array\.$#'
-			identifier: missingType.iterableValue
-			count: 1
-			path: src/Admin.php
 
 		-
 			message: '#^Method EasyContact\\Forms\\Admin\\Editor\:\:config\(\) has parameter \$fields with no value type specified in iterable type array\.$#'
@@ -73,16 +61,16 @@ parameters:
 			path: src/Forms/Admin/Editor.php
 
 		-
-			message: '#^Method EasyContact\\Admin\:\:row_actions\(\) has parameter \$actions with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Admin\\Admin\:\:row_actions\(\) has parameter \$actions with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Admin.php
+			path: src/Admin/Admin.php
 
 		-
-			message: '#^Method EasyContact\\Admin\:\:row_actions\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Admin\\Admin\:\:row_actions\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Admin.php
+			path: src/Admin/Admin.php
 
 		-
 			message: '#^Method EasyContact\\Forms\\Admin\\Editor\:\:rule_row\(\) has parameter \$fields with no value type specified in iterable type array\.$#'
@@ -350,10 +338,10 @@ parameters:
 			path: src/Forms/Renderer.php
 
 		-
-			message: '#^Method EasyContact\\Frontend\:\:issue\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Endpoint\:\:issue\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Frontend.php
+			path: src/Submissions/Endpoint.php
 
 		-
 			message: '#^Method EasyContact\\Forms\\Renderer\:\:render\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
@@ -362,10 +350,10 @@ parameters:
 			path: src/Forms/Renderer.php
 
 		-
-			message: '#^Method EasyContact\\Frontend\:\:rest_submit\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Endpoint\:\:rest_submit\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Frontend.php
+			path: src/Submissions/Endpoint.php
 
 		-
 			message: '#^Method EasyContact\\Forms\\Renderer\:\:shortcode\(\) has parameter \$attributes with no value type specified in iterable type array\.$#'
@@ -374,22 +362,22 @@ parameters:
 			path: src/Forms/Renderer.php
 
 		-
-			message: '#^Method EasyContact\\Frontend\:\:submit\(\) has parameter \$input with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Endpoint\:\:submit\(\) has parameter \$input with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Frontend.php
+			path: src/Submissions/Endpoint.php
 
 		-
-			message: '#^Method EasyContact\\Frontend\:\:submit\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Endpoint\:\:submit\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Frontend.php
+			path: src/Submissions/Endpoint.php
 
 		-
 			message: '#^Parameter \#1 \$definition of static method EasyContact\\Forms\\Schema\:\:validate\(\) expects array, array\|null given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Frontend.php
+			path: src/Submissions/Endpoint.php
 
 		-
 			message: '#^Parameter \#2 \$atts of function shortcode_atts expects array, array\|string given\.$#'
@@ -404,10 +392,10 @@ parameters:
 			path: src/Forms/Renderer.php
 
 		-
-			message: '#^Parameter \#2 \$definition of static method EasyContact\\Submission\:\:process\(\) expects array, array\|null given\.$#'
+			message: '#^Parameter \#2 \$definition of static method EasyContact\\Submissions\\Submission\:\:process\(\) expects array, array\|null given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Frontend.php
+			path: src/Submissions/Endpoint.php
 
 		-
 			message: '#^Access to constant E164 on an unknown class EasyContact\\Vendor\\Phone\\PhoneNumberFormat\.$#'
@@ -470,34 +458,34 @@ parameters:
 			path: src/Forms/Forms.php
 
 		-
-			message: '#^Method EasyContact\\Plugin\:\:store\(\) has parameter \$assessment with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Entries\:\:store\(\) has parameter \$assessment with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Plugin.php
+			path: src/Submissions/Entries.php
 
 		-
-			message: '#^Method EasyContact\\Plugin\:\:store\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Entries\:\:store\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Plugin.php
+			path: src/Submissions/Entries.php
 
 		-
-			message: '#^Method EasyContact\\Plugin\:\:store\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Entries\:\:store\(\) has parameter \$values with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Plugin.php
+			path: src/Submissions/Entries.php
 
 		-
-			message: '#^Method EasyContact\\Plugin\:\:stores_entries\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Entries\:\:stores_entries\(\) has parameter \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Plugin.php
+			path: src/Submissions/Entries.php
 
 		-
-			message: '#^Method EasyContact\\Plugin\:\:stores_quarantine\(\) has parameter \$config with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Entries\:\:stores_quarantine\(\) has parameter \$config with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Plugin.php
+			path: src/Submissions/Entries.php
 
 		-
 			message: '#^Method EasyContact\\Privacy\\Privacy\:\:entries\(\) return type has no value type specified in iterable type array\.$#'
@@ -692,154 +680,154 @@ parameters:
 			path: src/Forms/Schema.php
 
 		-
-			message: '#^Method EasyContact\\State\:\:read\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\State\:\:read\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/State.php
+			path: src/Submissions/State.php
 
 		-
-			message: '#^Method EasyContact\\State\:\:write\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\State\:\:write\(\) has parameter \$data with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/State.php
+			path: src/Submissions/State.php
 
 		-
 			message: '#^Parameter \#3 \$expiration of function set_transient expects int, float\|int\<1, max\> given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/State.php
+			path: src/Submissions/State.php
 
 		-
 			message: '#^Action callback returns bool\|WP_Error\|null but should not return anything\.$#'
 			identifier: return.void
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
 			message: '#^Argument of an invalid type array\<int\|WP_Post\>\|null supplied for foreach, only iterables are supported\.$#'
 			identifier: foreach.nonIterable
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
 			message: '#^Cannot cast int\|WP_Post to int\.$#'
 			identifier: cast.int
 			count: 2
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:definition_hash\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:definition_hash\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:process\(\) has parameter \$context with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:process\(\) has parameter \$context with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:process\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:process\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:process\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:process\(\) has parameter \$values with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:process\(\) return type has no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:process\(\) return type has no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:retry\(\) never returns null so it can be removed from the return type\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:retry\(\) never returns null so it can be removed from the return type\.$#'
 			identifier: return.unusedType
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:retry\(\) should return bool\|WP_Error\|null but empty return statement found\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:retry\(\) should return bool\|WP_Error\|null but empty return statement found\.$#'
 			identifier: return.empty
 			count: 3
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:schedule\(\) has parameter \$job with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:schedule\(\) has parameter \$job with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:schedule\(\) has parameter \$outcomes with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:schedule\(\) has parameter \$outcomes with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:send\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:send\(\) has parameter \$definition with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:send\(\) has parameter \$values with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:send\(\) has parameter \$values with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:send\(\) should return string but returns int\|string\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:send\(\) should return string but returns int\|string\.$#'
 			identifier: return.type
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
-			message: '#^Method EasyContact\\Submission\:\:status\(\) has parameter \$outcomes with no value type specified in iterable type array\.$#'
+			message: '#^Method EasyContact\\Submissions\\Submission\:\:status\(\) has parameter \$outcomes with no value type specified in iterable type array\.$#'
 			identifier: missingType.iterableValue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
 			message: '#^Parameter \#1 \$array of function end expects array\|object, array\<int\|WP_Post\>\|null given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
 			message: '#^Parameter \#1 \$post_id of function get_post_meta expects int, int\|WP_Post given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
 			message: '#^Parameter \#1 \$value of function count expects array\|Countable, array\<int\|WP_Post\>\|null given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
 			message: '#^Parameter \#2 \$data of function hash_hmac expects string, string\|false given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
 			message: '#^Result of \|\| is always true\.$#'
 			identifier: booleanOr.alwaysTrue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
 			message: '#^Strict comparison using \=\=\= between null and null will always evaluate to true\.$#'
 			identifier: identical.alwaysTrue
 			count: 1
-			path: src/Submission.php
+			path: src/Submissions/Submission.php
 
 		-
 			message: '#^Call to static method getInstance\(\) on an unknown class libphonenumber\\PhoneNumberUtil\.$#'

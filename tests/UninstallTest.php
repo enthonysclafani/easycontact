@@ -11,7 +11,8 @@ use EasyContact\AntiSpam\DisposableDomains;
 use EasyContact\Plugin;
 use EasyContact\Review\Review;
 use EasyContact\Settings\Settings;
-use EasyContact\State;
+use EasyContact\Submissions\Entries;
+use EasyContact\Submissions\State;
 
 /**
  * Every datum listed in docs/data-model.md is covered here, on every site of a network too.
@@ -74,7 +75,7 @@ class UninstallTest extends TestCase {
 		update_option( Settings::OPTION, array_merge( Settings::get(), array( 'delete_on_uninstall' => $delete ) ), false );
 		$definition = $this->definition();
 		$form       = $this->form( $definition );
-		$entry      = Plugin::store( $form, $definition, $this->values(), $this->assessment( 'accepted' ) );
+		$entry      = Entries::store( $form, $definition, $this->values(), $this->assessment( 'accepted' ) );
 		update_option( DisposableDomains::OPTION, array( 'version' => 1 ), false );
 		State::write( 'uninstall-fixture', array( 'entry' => $entry ), time() + HOUR_IN_SECONDS );
 		State::claim( 'uninstall-fixture' );

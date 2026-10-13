@@ -16,7 +16,6 @@ use EasyContact\Forms\Admin\Editor;
 use EasyContact\Forms\Forms;
 use EasyContact\Forms\Renderer;
 use EasyContact\Forms\Schema;
-use EasyContact\Frontend;
 use EasyContact\Phone\Phone;
 use EasyContact\Plugin;
 use EasyContact\Privacy\Privacy;
@@ -24,8 +23,10 @@ use EasyContact\Review\Admin\Screen;
 use EasyContact\Review\Review;
 use EasyContact\Settings\Admin\Page;
 use EasyContact\Settings\Settings;
-use EasyContact\State;
-use EasyContact\Submission;
+use EasyContact\Submissions\Endpoint;
+use EasyContact\Submissions\Entries;
+use EasyContact\Submissions\State;
+use EasyContact\Submissions\Submission;
 
 /**
  * Behaviour visible to visitors, administrators and the external services.
@@ -268,7 +269,7 @@ class SubmissionTest extends TestCase {
 		$missing_trap = $this->input( $id, $this->values() );
 		unset( $missing_trap['honeypot'] );
 		$this->assertSame( 'invalid', $this->submit( $id, $missing_trap )->get_error_code(), 'Missing rotating honeypot is rejected' );
-		$token = Frontend::issue( $id, $input['clock'] );
+		$token = Endpoint::issue( $id, $input['clock'] );
 		$this->assertSame( $input['clock'], $token['clock'], 'Refresh preserves interaction time' );
 		$this->assertArrayNotHasKey( $token['honeypot'], $input['honeypot'], 'Refresh rotates the trap' );
 
@@ -338,7 +339,7 @@ class SubmissionTest extends TestCase {
 		$this->assertTrue( Submission::retry( $entry, true, false, true ), 'Reapproval is possible' );
 		$this->assertSame( 3, array_sum( $this->calls ), 'Reapproval skips previously sent destinations' );
 
-		$interrupted = Plugin::store( $id, $definition, $this->values( array( 'newsletter' => '1' ) ), $this->assessment( 'accepted' ) );
+		$interrupted = Entries::store( $id, $definition, $this->values( array( 'newsletter' => '1' ) ), $this->assessment( 'accepted' ) );
 		update_post_meta(
 			$interrupted,
 			'_easycontact_delivery',
@@ -435,8 +436,8 @@ class SubmissionTest extends TestCase {
 	public function test_privacy_tools_bulk_review_and_retention(): void {
 		$definition = $this->definition();
 		$id         = $this->form( $definition );
-		$accepted   = Plugin::store( $id, $definition, $this->values(), $this->assessment( 'accepted' ) );
-		$suspect    = Plugin::store( $id, $definition, $this->values(), $this->assessment( 'suspect' ) );
+		$accepted   = Entries::store( $id, $definition, $this->values(), $this->assessment( 'accepted' ) );
+		$suspect    = Entries::store( $id, $definition, $this->values(), $this->assessment( 'suspect' ) );
 
 		$export = wp_json_encode( Privacy::export( 'Maria+preventivo@example.org' ) );
 		$this->assertStringContainsString( 'Classificazione anti-spam', $export, 'Privacy export includes category' );
@@ -465,7 +466,7 @@ class SubmissionTest extends TestCase {
 		);
 		$retention = array();
 		foreach ( array( array( 'spam', 15, false ), array( 'suspect', 15, false ), array( 'accepted', 15, true ), array( 'accepted', 31, false ), array( 'spam', 5, true ) ) as [ $category, $age, $keep ] ) {
-			$entry = Plugin::store( $id, $definition, $this->values(), $this->assessment( $category ) );
+			$entry = Entries::store( $id, $definition, $this->values(), $this->assessment( $category ) );
 			$date  = gmdate( 'Y-m-d H:i:s', time() - $age * DAY_IN_SECONDS );
 			wp_update_post(
 				array(
@@ -481,7 +482,7 @@ class SubmissionTest extends TestCase {
 			$this->assertSame( $keep, (bool) get_post( $entry ), 'Retention honors category-specific duration for entry ' . $entry );
 		}
 
-		$erase = Plugin::store( $id, $definition, $this->values( array( 'email' => 'erase-fixture@example.org' ) ) );
+		$erase = Entries::store( $id, $definition, $this->values( array( 'email' => 'erase-fixture@example.org' ) ) );
 		wp_schedule_single_event( time() + 60, 'easycontact_retry_delivery', array( $erase ) );
 		$this->assertNotEmpty( Privacy::erase( 'erase-fixture@example.org' )['items_removed'], 'Privacy erasure removes the entry' );
 		$this->assertNull( get_post( $erase ), 'Erased entry is gone' );

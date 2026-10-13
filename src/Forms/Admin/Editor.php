@@ -17,6 +17,7 @@ use EasyContact\Phone\Admin\CountrySelect;
 use EasyContact\Phone\Phone;
 use EasyContact\Plugin;
 use EasyContact\Settings\Settings;
+use EasyContact\Submissions\Entries;
 use WP_Error;
 use WP_Post;
 
@@ -463,7 +464,7 @@ final class Editor {
 		if ( $config['captcha'] && ( ! $settings['turnstile_site_key'] || ! $settings['turnstile_secret'] ) ) {
 			return new WP_Error( 'config', __( 'Configura entrambe le chiavi Turnstile prima di attivare il CAPTCHA.', 'easycontact' ) );
 		}
-		if ( ! $config['mail_enabled'] && ! $config['mailerlite_enabled'] && ! $config['slack_enabled'] && ! Plugin::stores_entries( $config ) ) {
+		if ( ! $config['mail_enabled'] && ! $config['mailerlite_enabled'] && ! $config['slack_enabled'] && ! Entries::stores_entries( $config ) ) {
 			return new WP_Error( 'config', __( 'Attiva almeno una destinazione o l’archivio degli invii.', 'easycontact' ) );
 		}
 		return $config;

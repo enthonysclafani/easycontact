@@ -1,14 +1,15 @@
 <?php
 /**
- * Public rendering and submission endpoint.
+ * Public REST and form-post submission endpoints with signed tickets.
  *
  * @package EasyContact
  */
 
-namespace EasyContact;
+namespace EasyContact\Submissions;
 
 use EasyContact\Forms\Forms;
 use EasyContact\Forms\Schema;
+use EasyContact\Plugin;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -16,9 +17,9 @@ use WP_REST_Response;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Render accessible controls and validate anonymous submissions.
+ * Issue signed tickets and accept anonymous submissions.
  */
-final class Frontend {
+final class Endpoint {
 	/**
 	 * Register WordPress hooks.
 	 *

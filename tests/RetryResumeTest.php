@@ -8,7 +8,7 @@
 namespace EasyContact\Tests;
 
 use EasyContact\Plugin;
-use EasyContact\Submission;
+use EasyContact\Submissions\Submission;
 
 /**
  * Submission::resume() walks pending retry jobs in batches and schedules each one once.

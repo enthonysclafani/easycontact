@@ -10,10 +10,10 @@ namespace EasyContact\Tests;
 use EasyContact\AntiSpam\DisposableDomains;
 use EasyContact\Forms\Forms;
 use EasyContact\Forms\Schema;
-use EasyContact\Frontend;
 use EasyContact\Plugin;
 use EasyContact\Settings\Settings;
-use EasyContact\State;
+use EasyContact\Submissions\Endpoint;
+use EasyContact\Submissions\State;
 use WP_Error;
 use WP_UnitTestCase;
 
@@ -197,7 +197,7 @@ abstract class TestCase extends WP_UnitTestCase {
 	 * @return array
 	 */
 	protected function input( int $id, array $values, string $trap = '' ): array {
-		$token = Frontend::issue( $id );
+		$token = Endpoint::issue( $id );
 		// A signed start time from a human-length interaction, without sleeping.
 		$uuid   = wp_generate_uuid4();
 		$issued = time() - 10;
@@ -222,7 +222,7 @@ abstract class TestCase extends WP_UnitTestCase {
 	protected function submit( int $id, array $input ) {
 		$this->last_ticket      = $input['ticket'];
 		$_SERVER['REMOTE_ADDR'] = '2001:db8::' . dechex( ++$this->visitor );
-		return Frontend::submit( $id, $input );
+		return Endpoint::submit( $id, $input );
 	}
 
 	/**

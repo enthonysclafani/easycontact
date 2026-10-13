@@ -47,7 +47,7 @@ final class ArchitectureChecker {
 	private const WPDB_ALLOWLIST = array(
 		// Atomic leases (INSERT IGNORE on the unique option_name), cache-bypassing reads and the bounded cleanup of
 		// expired leases and states: D6. Rate counters use no lease with a persistent object cache.
-		'src/State.php',
+		'src/Submissions/State.php',
 		// Runs once: finds this plugin's dynamic option names (leases, states, transients) by prefix and deletes them
 		// through the Options API. An index option would cost a write on every submission instead (plan point 2.3).
 		'uninstall.php',
@@ -61,8 +61,8 @@ final class ArchitectureChecker {
 	private const CRON_ALLOWLIST = array(
 		// TODO D1: retention, receipts and bounded delivery retries.
 		'src/Plugin.php',
-		'src/State.php',
-		'src/Submission.php',
+		'src/Submissions/State.php',
+		'src/Submissions/Submission.php',
 		// Removes the events above.
 		'uninstall.php',
 	);
@@ -72,7 +72,7 @@ final class ArchitectureChecker {
 	 *
 	 * @var list<string>
 	 */
-	private const ASSET_ALLOWLIST = array( 'src/Forms/Renderer.php', 'src/Admin.php' );
+	private const ASSET_ALLOWLIST = array( 'src/Forms/Renderer.php', 'src/Admin/Admin.php' );
 
 	/**
 	 * Files allowed to make HTTP requests (D3): delivery on submission and the manual list synchronization.

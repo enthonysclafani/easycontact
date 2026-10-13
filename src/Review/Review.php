@@ -8,8 +8,8 @@
 namespace EasyContact\Review;
 
 use EasyContact\Plugin;
-use EasyContact\State;
-use EasyContact\Submission;
+use EasyContact\Submissions\State;
+use EasyContact\Submissions\Submission;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
