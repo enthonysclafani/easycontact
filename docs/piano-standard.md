@@ -104,8 +104,9 @@ Fasi 0 e 1.
 - [x] 0.8 `.editorconfig`, `.gitattributes` (strumenti di sviluppo esclusi dal pacchetto), `tools/build-dist.sh`
 - [ ] 0.9 Primo run della CI: si registra quanti errori PHPCS/PHPStan ci sono (baseline), senza correggerli qui
       _PHPCS: 264 errori e 210 avvisi all'inizio, portati a zero con sole modifiche di stile e docblock (13 ottobre
-      2026). PHPStan: manca la baseline, da generare fuori dal cloud con `composer analyse -- --generate-baseline`;
-      fino ad allora il passo PHPStan della CI non blocca._
+      2026). PHPStan livello 8: 159 errori al primo run della CI, quasi tutti tipi mancanti negli array
+      (`missingType.iterableValue`) più qualche `string|false` non controllato. La baseline va generata fuori dal
+      cloud con `composer analyse -- --generate-baseline`; fino ad allora il passo PHPStan della CI non blocca._
 
 ### Fase 1 — Regole e documentazione
 
