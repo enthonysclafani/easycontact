@@ -43,7 +43,11 @@ final class Phone {
 		);
 	}
 
-	/** ISO region identifiers, human names and calling codes; no remote lookups. */
+	/**
+	 * ISO region identifiers, human names and calling codes; no remote lookups.
+	 *
+	 * @return array<string, array{name: string, dial: int}>
+	 */
 	public static function countries(): array {
 		static $countries;
 		if ( null === $countries ) {
@@ -65,8 +69,8 @@ final class Phone {
 	/**
 	 * A locale's territory is a suggestion, and can be overridden at either scope.
 	 *
-	 * @param array $config Form configuration.
-	 * @param array $field  Field definition.
+	 * @param array<string, mixed> $config Form configuration.
+	 * @param array<string, mixed> $field  Field definition.
 	 */
 	public static function default_country( array $config = array(), array $field = array() ): string {
 		foreach ( array( $field['phone_country'] ?? '', $config['phone_country'] ?? '', Settings::get()['phone_country'] ) as $country ) {

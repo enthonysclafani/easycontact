@@ -15,9 +15,12 @@ parameters:
 		- includes
 		- tools
 	excludePaths:
-		- includes/vendor
-		- includes/data
-		- tests/fixtures
-		- tools/phpstan
-		- tools/phone-build
+		# Bundled libraries are not analysed, but their classes stay known to the code that uses them.
+		analyse:
+			- includes/vendor
+		analyseAndScan:
+			- includes/data
+			- tests/fixtures
+			- tools/phpstan
+			- tools/phone-build
 	treatPhpDocTypesAsCertain: false

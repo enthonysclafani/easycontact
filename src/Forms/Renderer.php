@@ -52,8 +52,8 @@ final class Renderer {
 	public static function render( int $id, array $definition, bool $preview = false ): string {
 		$config   = $definition['config'];
 		$settings = Settings::get();
-		wp_enqueue_style( 'easycontact-frontend', EASYCONTACT_URL . 'assets/frontend.css', array(), EASYCONTACT_VERSION );
-		wp_enqueue_script( 'easycontact-frontend', EASYCONTACT_URL . 'assets/frontend.js', array(), EASYCONTACT_VERSION, true );
+		wp_enqueue_style( 'easycontact-frontend', plugins_url( 'assets/frontend.css', EASYCONTACT_FILE ), array(), EASYCONTACT_VERSION );
+		wp_enqueue_script( 'easycontact-frontend', plugins_url( 'assets/frontend.js', EASYCONTACT_FILE ), array(), EASYCONTACT_VERSION, true );
 		if ( $config['captcha'] && ! $preview ) {
 			// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent,WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Turnstile requires its documented vendor-hosted, unversioned widget, explicitly enabled per form.
 			wp_enqueue_script(

@@ -28,6 +28,8 @@ final class DisposableDomains {
 
 	/**
 	 * The two public sources a synchronization must download in full.
+	 *
+	 * @return array<string, array{name: string, url: string, project: string}>
 	 */
 	public static function sources(): array {
 		return array(
@@ -44,7 +46,11 @@ final class DisposableDomains {
 		);
 	}
 
-	/** Read the last complete synchronization, or the bundled snapshot without HTTP. */
+	/**
+	 * Read the last complete synchronization, or the bundled snapshot without HTTP.
+	 *
+	 * @return array<string, mixed> Metadata and the newline-delimited domains.
+	 */
 	private static function snapshot(): array {
 		$saved = get_option( self::OPTION, array() );
 		if ( is_array( $saved ) && 1 === ( $saved['version'] ?? null ) && is_string( $saved['domains'] ?? null ) && '' !== $saved['domains'] && strlen( $saved['domains'] ) < self::MAX_BYTES && ( $saved['count'] ?? 0 ) > 0 && ( $saved['count'] ?? 0 ) <= self::MAX_DOMAINS && ! empty( $saved['updated_at'] ) ) {
@@ -58,6 +64,8 @@ final class DisposableDomains {
 
 	/**
 	 * Metadata of the active list, without the domains.
+	 *
+	 * @return array<string, mixed>
 	 */
 	public static function status(): array {
 		$snapshot = self::snapshot();
@@ -100,9 +108,9 @@ final class DisposableDomains {
 		if ( '' === $body || strlen( $body ) >= self::MAX_BYTES ) {
 			return new WP_Error( 'disposable_size' );
 		}
-		$body  = preg_replace( '/^\xEF\xBB\xBF/', '', $body );
+		$body  = preg_replace( '/^\xEF\xBB\xBF/', '', $body ) ?? '';
 		$lines = preg_split( '/\r\n|\r|\n/', $body );
-		if ( count( $lines ) > self::MAX_DOMAINS + 100 ) {
+		if ( false === $lines || count( $lines ) > self::MAX_DOMAINS + 100 ) {
 			return new WP_Error( 'disposable_size' );
 		}
 		$domains = array();
@@ -120,7 +128,11 @@ final class DisposableDomains {
 		return count( $domains ) >= 1000 && count( $domains ) <= self::MAX_DOMAINS ? $domains : new WP_Error( 'disposable_incomplete' );
 	}
 
-	/** Called only by the authorized manual admin action; no cron or visitor downloads. */
+	/**
+	 * Called only by the authorized manual admin action; no cron or visitor downloads.
+	 *
+	 * @return array<string, mixed>|WP_Error Status of the new list, or why the previous one was kept.
+	 */
 	public static function sync() {
 		$domains = array();
 		$counts  = array();

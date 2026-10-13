@@ -24,7 +24,11 @@ foreach ( $iterator as $file ) {
 	}
 	$relative = substr( $file->getPathname(), strlen( $source . '/src/' ) );
 	$output   = '';
-	foreach ( token_get_all( file_get_contents( $file->getPathname() ) ) as $token ) {
+	$code     = file_get_contents( $file->getPathname() );
+	if ( false === $code ) {
+		exit( "Cannot read the upstream sources.\n" );
+	}
+	foreach ( token_get_all( $code ) as $token ) {
 		if ( ! is_array( $token ) ) {
 			$output .= $token;
 			continue;
@@ -55,7 +59,11 @@ foreach ( $iterator as $file ) {
 	}
 	$relative = substr( $file->getPathname(), strlen( $polyfill . '/' ) );
 	$output   = '';
-	foreach ( token_get_all( file_get_contents( $file->getPathname() ) ) as $token ) {
+	$code     = file_get_contents( $file->getPathname() );
+	if ( false === $code ) {
+		exit( "Cannot read the upstream sources.\n" );
+	}
+	foreach ( token_get_all( $code ) as $token ) {
 		if ( ! is_array( $token ) ) {
 			$output .= $token;
 			continue;
@@ -72,8 +80,16 @@ foreach ( $iterator as $file ) {
 	}
 	file_put_contents( $destination, $output );
 }
-require $source . '/../../autoload.php';
-$phone     = \libphonenumber\PhoneNumberUtil::getInstance();
+// Read the regions from the copy just written, so the bundled library is also loaded once.
+spl_autoload_register(
+	static function ( string $class_name ) use ( $target ): void {
+		$prefix = 'EasyContact\\Vendor\\Phone\\';
+		if ( str_starts_with( $class_name, $prefix ) ) {
+			require_once $target . '/' . str_replace( '\\', '/', substr( $class_name, strlen( $prefix ) ) ) . '.php';
+		}
+	}
+);
+$phone     = \EasyContact\Vendor\Phone\PhoneNumberUtil::getInstance();
 $countries = array();
 foreach ( $phone->getSupportedRegions() as $region ) {
 	$countries[ $region ] = array(
