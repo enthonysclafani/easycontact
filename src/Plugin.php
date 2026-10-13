@@ -9,6 +9,7 @@ namespace EasyContact;
 
 use EasyContact\Admin\Admin;
 use EasyContact\Forms\Admin\Editor;
+use EasyContact\Forms\Forms;
 use EasyContact\Forms\Renderer;
 use EasyContact\Phone\Phone;
 use EasyContact\Privacy\Privacy;
@@ -173,6 +174,7 @@ final class Plugin {
 				)
 			)
 		);
+		Forms::register_meta();
 		Review::register();
 		// Reads the autoloaded cron option: no query.
 		self::schedule();

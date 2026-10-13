@@ -7,12 +7,41 @@
 
 namespace EasyContact\Forms;
 
+use EasyContact\Plugin;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Read a form definition with the defaults of its configuration.
  */
 final class Forms {
+	/**
+	 * Register the form meta: private to the plugin, out of REST and of the generic custom-field screens.
+	 *
+	 * Runs on `init` after the post types. Without `default`, a missing meta still reads as an empty string.
+	 *
+	 * @return void
+	 */
+	public static function register_meta(): void {
+		foreach ( array(
+			'_easycontact_definition'    => 'Template, parsed schema, conditional rules and configuration of the form.',
+			'_easycontact_last_delivery' => 'Outcome of the latest delivery, shown in the form list.',
+		) as $key => $description ) {
+			register_post_meta(
+				Plugin::FORM,
+				$key,
+				array(
+					'type'          => 'object',
+					'description'   => $description,
+					'single'        => true,
+					'show_in_rest'  => false,
+					// Written only by the form editor and by deliveries, never through the generic meta APIs.
+					'auth_callback' => '__return_false',
+				)
+			);
+		}
+	}
+
 	/**
 	 * Return the initial minimal form template.
 	 *
