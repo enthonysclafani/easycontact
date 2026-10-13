@@ -106,14 +106,13 @@ privacy di WordPress.
 
 ## Verifiche di sviluppo
 
-Su un sito locale WordPress Studio, con il plugin attivo:
+I comportamenti descritti qui sono coperti dai test PHPUnit in `tests/` (in particolare `SubmissionTest.php` e
+`DisposableDomainsTest.php`), che girano sulla suite di test di WordPress con email e richieste esterne
+intercettate:
 
 ```sh
-studio wp eval-file wp-content/plugins/easycontact/tests/integration.php
-studio wp eval-file wp-content/plugins/easycontact/tests/disposable-domains.php
+composer test
 ```
 
-Le verifiche creano moduli e invii temporanei, intercettano email e richieste
-esterne, poi ripristinano le impostazioni e rimuovono le proprie copie di prova.
-Eseguile su un sito di sviluppo. Le fonti e la ricostruzione delle dipendenze
-incluse sono documentate in `THIRD-PARTY.md`.
+Preparazione dell'ambiente: `README.md`. Le fonti e la ricostruzione delle dipendenze incluse sono documentate in
+`THIRD-PARTY.md`.

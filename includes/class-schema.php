@@ -270,6 +270,8 @@ final class Schema {
 	 *
 	 * @param array $definition Validated form definition.
 	 * @param array $input Untrusted input to validate.
+	 * @param array $countries Country selected for each telephone field.
+	 * @param bool  $archived Whether the values are re-validated from an archived entry.
 	 * @return array Result of this operation.
 	 */
 	public static function validate( array $definition, array $input, array $countries = array(), bool $archived = false ): array {
@@ -313,7 +315,7 @@ final class Schema {
 			}
 			if ( 'tel' === $field['type'] ) {
 				$country = $countries[ $name ] ?? Phone::default_country( $definition['config'], $field );
-				$phone = is_string( $country ) ? Phone::normalize( $comparison[ $name ], $country, ! empty( $field['phone_mobile_only'] ) ) : new \WP_Error( 'phone' );
+				$phone   = is_string( $country ) ? Phone::normalize( $comparison[ $name ], $country, ! empty( $field['phone_mobile_only'] ) ) : new \WP_Error( 'phone' );
 				if ( is_wp_error( $phone ) ) {
 					$errors[ $name ] = __( 'Controlla il numero e il paese selezionato.', 'easycontact' );
 				} elseif ( ! $archived && AntiSpam::level( $definition['config'] ) >= 2 && ! AntiSpam::enabled( $definition['config'], 'antispam_observe' ) && empty( $field['phone_allow_repeated'] ) && Phone::repetitive( $phone ) ) {

@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<ruleset name="EasyContact">
+	<description>Coding standard for EasyContact.</description>
+
+	<file>.</file>
+	<exclude-pattern>/vendor/*</exclude-pattern>
+	<exclude-pattern>/tools/phpstan/vendor/*</exclude-pattern>
+	<exclude-pattern>/tools/phone-build/vendor/*</exclude-pattern>
+	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/tests/fixtures/*</exclude-pattern>
+	<!-- Bundled upstream libraries (THIRD-PARTY.md): never edited by hand, rebuilt by tools/bundle-phone.php. -->
+	<exclude-pattern>/includes/vendor/*</exclude-pattern>
+	<exclude-pattern>/includes/data/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="8"/>
+	<arg name="colors"/>
+	<arg value="sp"/>
+
+	<config name="testVersion" value="8.1-"/>
+	<config name="minimum_wp_version" value="6.4"/>
+
+	<rule ref="WordPress-Extra"/>
+	<rule ref="WordPress-Docs"/>
+	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="easycontact"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="EasyContact"/>
+				<element value="easycontact"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Tests and tools are classes and scripts that never ship (see .gitattributes), not class-*.php. -->
+	<rule ref="WordPress.Files.FileName">
+		<exclude-pattern>/tests/*</exclude-pattern>
+		<exclude-pattern>/tools/*</exclude-pattern>
+	</rule>
+
+	<!-- DisposableDomains keeps its readable file name (class-disposable-domains.php); renaming it is left to Phase 3 of the plan. -->
+	<rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>/includes/class-disposable-domains\.php$</exclude-pattern>
+	</rule>
+
+	<!-- Tests define WordPress constants (WP_UNINSTALL_PLUGIN, WP_TESTS_*) and never ship. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WP.GlobalVariablesOverride">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+
+	<!-- Test method names describe the behaviour they check; set_up/tear_down are the suite's own. -->
+	<rule ref="Squiz.Commenting.FunctionComment.Missing">
+		<exclude-pattern>/tests/*</exclude-pattern>
+	</rule>
+
+	<!-- CLI tools run outside WordPress: their variables are never globals of a site. -->
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound">
+		<exclude-pattern>/tools/*</exclude-pattern>
+	</rule>
+
+	<!-- CLI tools and the test bootstrap run before WordPress loads: no WP_Filesystem, no escaping context. -->
+	<rule ref="WordPress.WP.AlternativeFunctions">
+		<exclude-pattern>/tools/*</exclude-pattern>
+		<exclude-pattern>/tests/bootstrap.php</exclude-pattern>
+	</rule>
+</ruleset>

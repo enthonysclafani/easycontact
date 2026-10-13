@@ -1,0 +1,45 @@
+{
+	"name": "easycontact/easycontact",
+	"description": "Development tooling for the EasyContact WordPress plugin. Nothing here ships at runtime.",
+	"type": "wordpress-plugin",
+	"license": "GPL-3.0-or-later",
+	"require": {
+		"php": ">=8.1"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"phpunit/phpunit": "^9.6",
+		"wp-coding-standards/wpcs": "^3.1",
+		"yoast/phpunit-polyfills": "^1.1"
+	},
+	"scripts": {
+		"architecture": "@php tools/check-architecture.php",
+		"lint": "phpcs",
+		"lint:fix": "phpcbf",
+		"analyse": "bash tools/analyse.sh",
+		"test": "phpunit",
+		"check": [
+			"@architecture",
+			"@lint",
+			"@analyse",
+			"@test"
+		]
+	},
+	"scripts-descriptions": {
+		"architecture": "Fails on custom tables, direct DB access outside the allowlist, cron and assets outside their declared files, and the other invariants from CLAUDE.md.",
+		"lint": "WordPress Coding Standards and PHP compatibility.",
+		"analyse": "PHPStan with WordPress stubs, from tools/phpstan (installed on first use; skipped with a notice in cloud sessions, where CI runs it).",
+		"test": "PHPUnit against the WordPress test suite (needs WP_TESTS_DIR, see README.md).",
+		"check": "Everything above. Must pass before a task is done."
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"platform": {
+			"php": "8.1.0"
+		},
+		"sort-packages": true
+	}
+}

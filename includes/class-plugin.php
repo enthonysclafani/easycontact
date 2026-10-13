@@ -54,7 +54,7 @@ final class Plugin {
 			'quarantine_limit'    => 500,
 			'email_dns_check'     => false,
 			'phone_country'       => '',
-			'spam_phrases'          => '',
+			'spam_phrases'        => '',
 			'allow_erasure'       => true,
 			'delete_on_uninstall' => false,
 			'mailerlite_token'    => '',
@@ -192,13 +192,27 @@ final class Plugin {
 			)
 		);
 		Review::register();
-		// Lazy setup also covers sites reached after network activation.
-		add_option( self::OPTION, self::defaults(), '', false );
+		// Reads the autoloaded cron option: no query.
 		self::schedule();
+		// The version is autoloaded, so the check costs no query; setup runs only after an update.
 		if ( EASYCONTACT_VERSION !== get_option( 'easycontact_version' ) ) {
-			update_option( 'easycontact_version', EASYCONTACT_VERSION, false );
-			wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_resume_retries' );
+			self::setup();
 		}
+	}
+
+	/**
+	 * Create missing data and resume archive jobs after activation or an update.
+	 *
+	 * Lazy setup also covers sites reached after network activation.
+	 */
+	private static function setup(): void {
+		add_option( self::OPTION, self::defaults(), '', false );
+		if ( ! Review::create_terms() ) {
+			// Retried on the next request.
+			return;
+		}
+		update_option( 'easycontact_version', EASYCONTACT_VERSION, true );
+		wp_schedule_single_event( time() + MINUTE_IN_SECONDS, 'easycontact_resume_retries' );
 	}
 
 	/**
@@ -230,7 +244,7 @@ final class Plugin {
 			'quarantine_entries' => 'inherit',
 			'email_dns_check'    => 'inherit',
 			'phone_country'      => '',
-			'spam_phrases'          => '',
+			'spam_phrases'       => '',
 			'mailerlite_enabled' => false,
 			'mailerlite_email'   => 'email',
 			'mailerlite_name'    => 'nome',
@@ -290,7 +304,11 @@ final class Plugin {
 		return 'inherit' === $config['store_entries'] ? (bool) self::settings()['store_entries'] : 'yes' === $config['store_entries'];
 	}
 
-	/** Suspicious entries are saved only when an archive preference explicitly permits it. */
+	/**
+	 * Suspicious entries are saved only when an archive preference explicitly permits it.
+	 *
+	 * @param array $config Validated delivery and privacy configuration.
+	 */
 	public static function stores_quarantine( array $config ): bool {
 		return self::stores_entries( $config ) || AntiSpam::enabled( $config, 'quarantine_entries' );
 	}
@@ -301,6 +319,7 @@ final class Plugin {
 	 * @param int   $form_id Published form ID.
 	 * @param array $definition Validated form definition.
 	 * @param array $values Sanitized visible field values.
+	 * @param array $assessment Result of AntiSpam::assess(); empty for entries saved without one.
 	 * @return int|WP_Error Result of this operation.
 	 */
 	public static function store( int $form_id, array $definition, array $values, array $assessment = array() ) {
@@ -358,9 +377,12 @@ final class Plugin {
 	 */
 	public static function cleanup(): void {
 		$settings = self::settings();
-		$started = microtime( true );
-		$pending = false;
-		foreach ( array( 'IN' => 'spam_retention_days', 'NOT IN' => 'retention_days' ) as $operator => $setting ) {
+		$started  = microtime( true );
+		$pending  = false;
+		foreach ( array(
+			'IN'     => 'spam_retention_days',
+			'NOT IN' => 'retention_days',
+		) as $operator => $setting ) {
 			$days = (int) $settings[ $setting ];
 			if ( $days < 1 ) {
 				continue;
@@ -370,13 +392,31 @@ final class Plugin {
 					$pending = true;
 					break;
 				}
-				$ids = get_posts( array(
-					'post_type' => self::ENTRY,
-					'post_status' => array( 'private', 'trash', 'publish', 'draft', 'pending', 'future', 'auto-draft' ),
-					'posts_per_page' => 100, 'fields' => 'ids', 'orderby' => 'ID', 'order' => 'ASC',
-					'date_query' => array( array( 'column' => 'post_date_gmt', 'before' => gmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS ), 'inclusive' => false ) ),
-					'tax_query' => array( array( 'taxonomy' => Review::TAXONOMY, 'field' => 'slug', 'terms' => array( 'suspect', 'spam' ), 'operator' => $operator ) ),
-				) ); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Separate bounded retention for quarantine and ordinary entries.
+				$ids     = get_posts(
+					array(
+						'post_type'      => self::ENTRY,
+						'post_status'    => array( 'private', 'trash', 'publish', 'draft', 'pending', 'future', 'auto-draft' ),
+						'posts_per_page' => 100,
+						'fields'         => 'ids',
+						'orderby'        => 'ID',
+						'order'          => 'ASC',
+						'date_query'     => array(
+							array(
+								'column'    => 'post_date_gmt',
+								'before'    => gmdate( 'Y-m-d H:i:s', time() - $days * DAY_IN_SECONDS ),
+								'inclusive' => false,
+							),
+						),
+						'tax_query'      => array(
+							array(
+								'taxonomy' => Review::TAXONOMY,
+								'field'    => 'slug',
+								'terms'    => array( 'suspect', 'spam' ),
+								'operator' => $operator,
+							),
+						),
+					)
+				); // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- Separate bounded retention for quarantine and ordinary entries.
 				$removed = 0;
 				foreach ( $ids as $id ) {
 					$lease = 'retry_' . $id;

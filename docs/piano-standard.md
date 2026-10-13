@@ -76,56 +76,8 @@ Ripresi da `CLAUDE.md` di EasyRankly; quelli segnati con (D) dipendono da una de
 
 ## 3. Decisioni aperte (da chiedere prima della Fase 2)
 
-Per ognuna c'è una proposta; la decisione presa va scritta qui con data e motivo.
-
-**D1 — Cron.** EasyRankly vieta ogni cron. EasyContact lo usa per pulizie e per ritentare le consegne fallite.
-- Proposta: le pulizie (retention, stati scaduti) diventano pigre e a lotti su `admin_init` e dopo un invio, con
-  il cursore in un'option. Per i nuovi tentativi verso MailerLite/Slack/email: tenere **un solo** evento singolo
-  `easycontact_retry_delivery` come eccezione dichiarata, oppure toglierlo e lasciare solo il pulsante "Riprova"
-  in admin (più semplice, ma un invio fallito resta fermo finché qualcuno non entra).
-- Decisione: _aperta_
-
-**D2 — Asset nel frontend.** Un plugin di moduli non può avere zero CSS/JS.
-- Proposta: regola riformulata come "asset solo sulle pagine che stampano un modulo (enqueue al rendering),
-  nessun JS inline, il modulo funziona anche senza JS (invio via `admin-post.php`)". Turnstile solo sui moduli
-  che lo attivano. `composer architecture` verifica che l'enqueue stia solo nel file di rendering del modulo.
-- Decisione: _aperta_
-
-**D3 — Chiamate HTTP.** EasyRankly: mai nel frontend, solo admin/REST/WP-CLI.
-- Proposta: "mai durante il rendering di una pagina; solo nella richiesta di invio (REST o `admin-post.php`) e in
-  admin", con timeout espliciti (≤ 15 s), gestione di `WP_Error` e dei codici HTTP, servizi elencati in
-  "External services" di `readme.txt`. I controlli DNS restano opzionali e con cache in transient.
-- Decisione: _aperta_
-
-**D4 — Dipendenze PHP a runtime.** EasyContact distribuisce libphonenumber (centinaia di file di metadati) e il
-polyfill di mbstring.
-- Proposta: polyfill mbstring rimosso se i requisiti lo permettono (verificare l'uso effettivo); libphonenumber
-  tenuto come **unica eccezione dichiarata**, isolato in `includes/vendor/phone/` (o `lib/`), escluso da PHPCS e
-  PHPStan, aggiornato solo con `tools/bundle-phone.php`, licenza in `THIRD-PARTY.md`. Alternativa: validazione
-  telefonica semplificata senza libreria (meno precisa).
-- Decisione: _aperta_
-
-**D5 — Disinstallazione.** EasyRankly rimuove sempre tutto; EasyContact conserva moduli e invii salvo opt-in.
-- Proposta: tenere l'opt-in per moduli e invii (sono dati dell'utente, perderli per errore è grave), ma rimuovere
-  **sempre** dati tecnici (lock, stati, transient, versione, cache dei domini usa e getta, cron). Il test di
-  disinstallazione copre entrambi i casi, anche in multisite.
-- Decisione: _aperta_
-
-**D6 — Lock atomici in `wp_options`.** `State::claim()` usa `INSERT IGNORE` per evitare consegne doppie in
-richieste concorrenti.
-- Proposta: tenerlo come unico file in allowlist `$wpdb` (con il commento già presente), ma solo per i lock; i
-  contatori di rate limit passano a transient/`wp_cache_add()` dove l'atomicità non è critica. Valutare se
-  `wp_cache_add()` basta quando c'è una cache persistente.
-- Decisione: _aperta_
-
-**D7 — Requisiti minimi.** Oggi PHP 8.1 / WordPress 6.4; EasyRankly PHP 8.0 / WordPress 7.0.
-- Proposta: tenere PHP 8.1, allineare WordPress al minimo realmente testato in CI.
-- Decisione: _aperta_
-
-**D8 — Nomi dei dati.** Post type, option e meta sono già prefissati `easycontact_`. Rinominarli richiede una
-migrazione.
-- Proposta: **nessuna rinomina**; si documentano così come sono.
-- Decisione: _aperta_
+Spostate in `docs/decisioni.md` (punto 1.3), con una nuova decisione D9 sulla lingua delle stringhe sorgente. Tutte
+prese il 13 ottobre 2026 (proposte approvate; D1 con l'eccezione di `easycontact_retry_delivery`).
 
 ## 4. Fasi
 
@@ -134,31 +86,36 @@ Fasi 0 e 1.
 
 ### Fase 0 — Strumenti (nessun cambio al codice del plugin)
 
-- [ ] 0.1 `composer.json` con soli strumenti di sviluppo (`require-dev`), `composer.lock` committato,
+- [x] 0.1 `composer.json` con soli strumenti di sviluppo (`require-dev`), `composer.lock` committato,
       script `architecture`, `lint`, `lint:fix`, `analyse`, `test`, `check`
-- [ ] 0.2 `phpcs.xml.dist` (WPCS Extra + Docs, PHPCompatibilityWP, text domain `easycontact`, esclusi
+- [x] 0.2 `phpcs.xml.dist` (WPCS Extra + Docs, PHPCompatibilityWP, text domain `easycontact`, esclusi
       `includes/vendor/`, `includes/data/`, `tools/phone-build/`)
-- [ ] 0.3 PHPStan livello 8 in `tools/phpstan/` (dipendenze separate, come in EasyRankly), `tools/analyse.sh`
-- [ ] 0.4 PHPUnit sulla suite di WordPress: `phpunit.xml.dist`, `tests/bootstrap.php`,
+- [x] 0.3 PHPStan livello 8 in `tools/phpstan/` (dipendenze separate, come in EasyRankly), `tools/analyse.sh`
+- [x] 0.4 PHPUnit sulla suite di WordPress: `phpunit.xml.dist`, `tests/bootstrap.php`,
       `tools/install-wp-tests.sh`; i casi di `tests/integration.php` e `tests/disposable-domains.php`
       convertiti in test PHPUnit
-- [ ] 0.5 `tools/check-architecture.php` adattato (con test sui casi vietati e consentiti in
+- [x] 0.5 `tools/check-architecture.php` adattato (con test sui casi vietati e consentiti in
       `tests/fixtures/architecture/`), inizialmente con l'allowlist dello stato attuale e un `TODO` per ogni
       eccezione da eliminare nelle fasi successive
-- [ ] 0.6 CI GitHub (`.github/workflows/ci.yml`): statici su PHP minimo e 8.4, PHPUnit su WordPress minimo e
+- [x] 0.6 CI GitHub (`.github/workflows/ci.yml`): statici su PHP minimo e 8.4, PHPUnit su WordPress minimo e
       ultimo, anche multisite, Plugin Check; azioni fissate per SHA; `.github/dependabot.yml`
-- [ ] 0.7 Sessioni cloud: `tools/cloud-setup.sh` e hook `SessionStart` in `.claude/settings.json`
+- [x] 0.7 Sessioni cloud: `tools/cloud-setup.sh` e hook `SessionStart` in `.claude/settings.json`
       (Composer, MariaDB, suite di test di WordPress, sorgenti del core in `/tmp/wordpress-develop`)
-- [ ] 0.8 `.editorconfig`, `.gitattributes` (strumenti di sviluppo esclusi dal pacchetto), `tools/build-dist.sh`
+- [x] 0.8 `.editorconfig`, `.gitattributes` (strumenti di sviluppo esclusi dal pacchetto), `tools/build-dist.sh`
 - [ ] 0.9 Primo run della CI: si registra quanti errori PHPCS/PHPStan ci sono (baseline), senza correggerli qui
+      _PHPCS: 264 errori e 210 avvisi all'inizio, portati a zero con sole modifiche di stile e docblock (13 ottobre
+      2026). PHPStan livello 8: 159 errori al primo run della CI, quasi tutti tipi mancanti negli array
+      (`missingType.iterableValue`) più qualche `string|false` non controllato. La baseline va generata fuori dal
+      cloud con `composer analyse -- --generate-baseline`; fino ad allora il passo PHPStan della CI non blocca._
 
 ### Fase 1 — Regole e documentazione
 
-- [ ] 1.1 `CLAUDE.md` (e `AGENTS.md` che lo richiama) sul modello di EasyRankly, con le invarianti decise in D1–D8
-- [ ] 1.2 `docs/data-model.md`: ogni option, meta, post type, tassonomia, transient, cron e chiave dinamica,
+- [x] 1.1 `CLAUDE.md` (e `AGENTS.md` che lo richiama) sul modello di EasyRankly, con le invarianti decise in D1–D8
+      _Fatto: invarianti aggiornate con le decisioni D1–D9 del 13 ottobre 2026._
+- [x] 1.2 `docs/data-model.md`: ogni option, meta, post type, tassonomia, transient, cron e chiave dinamica,
       con chi li scrive, autoload e rimozione
-- [ ] 1.3 `docs/decisioni.md`: decisioni D1–D8 con data e motivo (spostate da questo documento)
-- [ ] 1.4 Subagenti in `.claude/agents/` (ricercatore, esecutore, verificatore) adattati
+- [x] 1.3 `docs/decisioni.md`: decisioni D1–D8 con data e motivo (spostate da questo documento)
+- [x] 1.4 Subagenti in `.claude/agents/` (ricercatore, esecutore, verificatore) adattati
 
 ### Fase 2 — Database: zero SQL non motivato
 
@@ -167,7 +124,8 @@ Fasi 0 e 1.
 - [ ] 2.2 Lock e rate limit secondo D6; allowlist `$wpdb` ridotta al minimo deciso
 - [ ] 2.3 `uninstall.php` secondo D5; ricerca delle chiavi dinamiche ridotta (se possibile, chiavi tracciate in
       un'option indice invece del `LIKE`); `tests/UninstallTest.php` singolo sito e multisite
-- [ ] 2.4 `composer architecture` blocca `CREATE TABLE`, `dbDelta`, `ALTER TABLE` e `$wpdb` fuori allowlist
+      _Il test esiste già (Fase 0) e copre il comportamento attuale, che coincide con la proposta di D5._
+- [x] 2.4 `composer architecture` blocca `CREATE TABLE`, `dbDelta`, `ALTER TABLE` e `$wpdb` fuori allowlist
 
 ### Fase 3 — Struttura
 
@@ -186,6 +144,8 @@ Fasi 0 e 1.
 - [ ] 4.1 Pulizie senza cron (o con l'eccezione decisa), idempotenti e a lotti; test
 - [ ] 4.2 Asset del frontend caricati solo con un modulo nella pagina; test che una pagina senza modulo non
       carichi né CSS né JS del plugin e non faccia query in più (`tests/QueriesTest.php`)
+      _`tests/QueriesTest.php` esiste già: niente asset senza modulo e nessuna query in `init`. Le tre letture in più
+      a ogni richiesta che ha trovato sono state tolte nella Fase 0._
 - [ ] 4.3 Chiamate remote solo nella richiesta di invio e in admin, timeout ≤ 15 s, "External services" in
       `readme.txt`; test con risposte HTTP simulate (`pre_http_request`)
 

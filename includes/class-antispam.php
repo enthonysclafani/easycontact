@@ -1,23 +1,49 @@
 <?php
-/** Explainable, local anti-spam rules. No AI, telemetry or remote reputation service. */
+/**
+ * Explainable, local anti-spam rules. No AI, telemetry or remote reputation service.
+ *
+ * @package EasyContact
+ */
+
 namespace EasyContact;
 
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
 
+/**
+ * Score a submission from independent local signals.
+ */
 final class AntiSpam {
+	/**
+	 * Resolve the protection level of a form, 1 to 3.
+	 *
+	 * @param array $config Validated form configuration.
+	 * @return int Protection level.
+	 */
 	public static function level( array $config ): int {
 		$value = $config['antispam_level'] ?? 'inherit';
 		return max( 1, min( 3, (int) ( 'inherit' === $value ? Plugin::settings()['antispam_level'] : $value ) ) );
 	}
 
+	/**
+	 * Resolve an inherited yes/no preference of a form.
+	 *
+	 * @param array  $config Validated form configuration.
+	 * @param string $key    Preference name.
+	 * @return bool Whether the preference is on.
+	 */
 	public static function enabled( array $config, string $key ): bool {
 		$value = $config[ $key ] ?? 'inherit';
 		return 'inherit' === $value ? (bool) Plugin::settings()[ $key ] : 'yes' === $value;
 	}
 
-	/** Preserve the local part, plus aliases and dots; canonicalize only the domain. */
+	/**
+	 * Preserve the local part, plus aliases and dots; canonicalize only the domain.
+	 *
+	 * @param string $value Submitted address.
+	 * @return string|false Canonical address, or false when malformed.
+	 */
 	public static function email( string $value ) {
 		$value = trim( $value );
 		$parts = explode( '@', $value );
@@ -25,14 +51,21 @@ final class AntiSpam {
 			return false;
 		}
 		$domain = self::domain( $parts[1] );
-		$email = $parts[0] . '@' . $domain;
+		$email  = $parts[0] . '@' . $domain;
 		return $domain && strlen( $email ) <= 254 && is_email( $email ) ? $email : false;
 	}
 
+	/**
+	 * Lowercase ASCII form of a domain name, or an empty string when it is not one.
+	 *
+	 * @param string $value Domain, possibly internationalized.
+	 * @return string Canonical domain or ''.
+	 */
 	public static function domain( string $value ): string {
 		$value = strtolower( trim( $value ) );
 		if ( function_exists( 'idn_to_ascii' ) && preg_match( '/[^\x00-\x7f]/', $value ) ) {
-			$value = idn_to_ascii( $value, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46 ) ?: '';
+			$value = idn_to_ascii( $value, IDNA_DEFAULT, INTL_IDNA_VARIANT_UTS46 );
+			$value = is_string( $value ) ? $value : '';
 		}
 		if ( strlen( $value ) > 253 || ! preg_match( '/^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/D', $value ) ) {
 			return '';
@@ -40,9 +73,14 @@ final class AntiSpam {
 		return $value;
 	}
 
-	/** Optional DNS checks are cached; inconclusive resolver failures are allowed. */
+	/**
+	 * Optional DNS checks are cached; inconclusive resolver failures are allowed.
+	 *
+	 * @param string $domain Canonical domain.
+	 * @return string 'valid', 'invalid' or 'unknown'.
+	 */
 	public static function mail_domain( string $domain ): string {
-		$key = 'easycontact_dns_' . substr( hash_hmac( 'sha256', $domain, wp_salt( 'auth' ) ), 0, 32 );
+		$key    = 'easycontact_dns_' . substr( hash_hmac( 'sha256', $domain, wp_salt( 'auth' ) ), 0, 32 );
 		$cached = get_transient( $key );
 		if ( in_array( $cached, array( 'valid', 'invalid', 'unknown' ), true ) ) {
 			return $cached;
@@ -50,17 +88,23 @@ final class AntiSpam {
 		$result = 'unknown';
 		if ( function_exists( 'dns_get_record' ) ) {
 			// Resolver errors must not block legitimate visitors.
-			$records = @dns_get_record( $domain, DNS_MX | DNS_A | DNS_AAAA ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			$records = @dns_get_record( $domain, DNS_MX | DNS_A | DNS_AAAA ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- Resolver warnings become an 'unknown' result.
 			if ( is_array( $records ) ) {
-				$mx = array_values( array_filter( $records, static fn( $record ) => 'MX' === ( $record['type'] ?? '' ) ) );
+				$mx      = array_values( array_filter( $records, static fn( $record ) => 'MX' === ( $record['type'] ?? '' ) ) );
 				$null_mx = 1 === count( $mx ) && in_array( $mx[0]['target'] ?? '', array( '', '.' ), true );
-				$result = $null_mx || ! $records ? 'invalid' : 'valid';
+				$result  = $null_mx || ! $records ? 'invalid' : 'valid';
 			}
 		}
 		set_transient( $key, $result, 'unknown' === $result ? MINUTE_IN_SECONDS : 15 * MINUTE_IN_SECONDS );
 		return $result;
 	}
 
+	/**
+	 * Validate and canonicalize suspect phrases, one per line.
+	 *
+	 * @param string $value Phrases as typed by the administrator.
+	 * @return string|WP_Error Lowercase unique phrases, or the validation error.
+	 */
 	public static function phrase_list( string $value ) {
 		$lines = preg_split( '/[\r\n]+/', sanitize_textarea_field( $value ) );
 		if ( strlen( $value ) > 5000 || count( $lines ) > 30 ) {
@@ -80,20 +124,35 @@ final class AntiSpam {
 		return implode( "\n", array_unique( $phrases ) );
 	}
 
+	/**
+	 * Site-wide and form lines of a list preference, combined.
+	 *
+	 * @param array  $config Validated form configuration.
+	 * @param string $key    Preference name.
+	 * @return array Non-empty lines.
+	 */
 	private static function listing( array $config, string $key ): array {
 		return array_filter( preg_split( '/[\r\n]+/', Plugin::settings()[ $key ] . "\n" . ( $config[ $key ] ?? '' ) ) );
 	}
 
-	/** Assess once per new ticket; receipt retries reuse this assessment and its counters. */
+	/**
+	 * Assess once per new ticket; receipt retries reuse this assessment and its counters.
+	 *
+	 * @param int   $form_id    Published form ID.
+	 * @param array $definition Validated form definition.
+	 * @param array $values     Sanitized visible field values.
+	 * @param array $context    Request signals: honeypot, elapsed seconds.
+	 * @return array Status, detected category, score, reasons, level and observation flag.
+	 */
 	public static function assess( int $form_id, array $definition, array $values, array $context = array() ): array {
-		$config = $definition['config'];
-		$level = self::level( $config );
+		$config   = $definition['config'];
+		$level    = self::level( $config );
 		$families = array();
-		$reasons = array();
-		$forced = false;
-		$add = static function ( string $family, int $points, string $reason ) use ( &$families, &$reasons ): void {
+		$reasons  = array();
+		$forced   = false;
+		$add      = static function ( string $family, int $points, string $reason ) use ( &$families, &$reasons ): void {
 			$families[ $family ] = max( $families[ $family ] ?? 0, $points );
-			$reasons[] = $reason;
+			$reasons[]           = $reason;
 		};
 		if ( ! empty( $context['honeypot'] ) ) {
 			$add( 'trap', 100, 'honeypot' );
@@ -142,13 +201,13 @@ final class AntiSpam {
 			$message = mb_strtolower( implode( "\n", $text ), 'UTF-8' );
 			if ( '' !== $message ) {
 				preg_match_all( '~(?:https?://|www\.)[^\s<>]+~iu', $message, $matches );
-				$links = count( $matches[0] );
+				$links   = count( $matches[0] );
 				$density = strlen( implode( '', $matches[0] ) ) / max( 1, strlen( $message ) );
 				if ( $links >= ( 3 === $level ? 3 : 4 ) || ( $links >= 2 && $density > 0.6 ) ) {
 					$add( 'content', 30, 'links' );
 				}
 				$promotions = array( 'buy now', 'guaranteed rankings', 'increase your website traffic', 'backlink packages', 'guest post service', 'casino bonus', 'crypto investment', 'guadagno garantito', 'acquista subito', 'pacchetti backlink', 'traffico garantito', 'investimento garantito' );
-				$hits = 0;
+				$hits       = 0;
 				foreach ( $promotions as $phrase ) {
 					$hits += str_contains( $message, $phrase ) ? 1 : 0;
 				}
@@ -170,7 +229,7 @@ final class AntiSpam {
 				}
 			}
 		}
-		$score = min( 100, array_sum( $families ) );
+		$score  = min( 100, array_sum( $families ) );
 		$status = 'accepted';
 		if ( $forced || ( $score >= ( 3 === $level ? 40 : 60 ) && count( $families ) >= 2 ) ) {
 			$status = 'spam';
@@ -178,24 +237,36 @@ final class AntiSpam {
 			$status = 'suspect';
 		}
 		$observe = self::enabled( $config, 'antispam_observe' ) && ! $forced;
-		return array( 'status' => $observe ? 'accepted' : $status, 'detected' => $status, 'score' => $score, 'reasons' => array_values( array_unique( $reasons ) ), 'level' => $level, 'observe' => $observe );
+		return array(
+			'status'   => $observe ? 'accepted' : $status,
+			'detected' => $status,
+			'score'    => $score,
+			'reasons'  => array_values( array_unique( $reasons ) ),
+			'level'    => $level,
+			'observe'  => $observe,
+		);
 	}
 
+	/**
+	 * Localized labels of the assessment reasons.
+	 *
+	 * @return array Labels keyed by reason.
+	 */
 	public static function reason_labels(): array {
 		return array(
-			'honeypot' => __( 'Campo anti-bot compilato', 'easycontact' ),
-			'fast' => __( 'Compilazione estremamente rapida', 'easycontact' ),
-			'disposable' => __( 'Dominio email temporaneo', 'easycontact' ),
-			'blocked_domain' => __( 'Dominio email bloccato nelle impostazioni', 'easycontact' ),
-			'alias_pattern' => __( 'Email con sequenza ripetitiva', 'easycontact' ),
-			'email_frequency' => __( 'Molti invii dalla stessa email', 'easycontact' ),
-			'phone_frequency' => __( 'Molti invii dallo stesso telefono', 'easycontact' ),
+			'honeypot'         => __( 'Campo anti-bot compilato', 'easycontact' ),
+			'fast'             => __( 'Compilazione estremamente rapida', 'easycontact' ),
+			'disposable'       => __( 'Dominio email temporaneo', 'easycontact' ),
+			'blocked_domain'   => __( 'Dominio email bloccato nelle impostazioni', 'easycontact' ),
+			'alias_pattern'    => __( 'Email con sequenza ripetitiva', 'easycontact' ),
+			'email_frequency'  => __( 'Molti invii dalla stessa email', 'easycontact' ),
+			'phone_frequency'  => __( 'Molti invii dallo stesso telefono', 'easycontact' ),
 			'repetitive_phone' => __( 'Numero telefonico interamente ripetitivo', 'easycontact' ),
-			'repetitive_text' => __( 'Testo composto da ripetizioni', 'easycontact' ),
-			'links' => __( 'Elevata presenza di collegamenti', 'easycontact' ),
-			'promotion' => __( 'Schema promozionale ricorrente', 'easycontact' ),
-			'custom_phrase' => __( 'Frase segnalata nelle regole del modulo', 'easycontact' ),
-			'duplicate' => __( 'Contenuto ripetuto in più invii', 'easycontact' ),
+			'repetitive_text'  => __( 'Testo composto da ripetizioni', 'easycontact' ),
+			'links'            => __( 'Elevata presenza di collegamenti', 'easycontact' ),
+			'promotion'        => __( 'Schema promozionale ricorrente', 'easycontact' ),
+			'custom_phrase'    => __( 'Frase segnalata nelle regole del modulo', 'easycontact' ),
+			'duplicate'        => __( 'Contenuto ripetuto in più invii', 'easycontact' ),
 		);
 	}
 }

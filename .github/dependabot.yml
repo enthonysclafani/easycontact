@@ -1,0 +1,13 @@
+# Updates the commit SHAs the CI actions are pinned to, as pull requests towards Refactory.
+# Options: https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: Refactory
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns:
+          - '*'

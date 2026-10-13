@@ -35,12 +35,13 @@ final class Submission {
 	 * @param string $ticket Signed submission ticket.
 	 * @param string $captcha Turnstile response token.
 	 * @param string $input_fingerprint Keyed fingerprint of the original submitted fields.
+	 * @param array  $context Request signals for the anti-spam assessment.
 	 * @return array|WP_Error Result of this operation.
 	 */
 	public static function process( int $form_id, array $definition, array $values, string $ticket, string $captcha, string $input_fingerprint, array $context = array() ) {
-		$key   = substr( hash( 'sha256', $ticket ), 0, 40 );
-		$lease = 'submit_' . $key;
-		$owner = State::claim( $lease );
+		$key         = substr( hash( 'sha256', $ticket ), 0, 40 );
+		$lease       = 'submit_' . $key;
+		$owner       = State::claim( $lease );
 		$entry_lease = '';
 		$entry_owner = null;
 		if ( null === $owner ) {
@@ -60,7 +61,7 @@ final class Submission {
 			if ( $state && $state['hash'] !== $hash ) {
 				return new WP_Error( 'changed', __( 'Il modulo è stato aggiornato. Ricarica la pagina prima di un nuovo invio.', 'easycontact' ), array( 'status' => 409 ) );
 			}
-			if ( ! $state && ! State::rate_allowed( $form_id, 3 === AntiSpam::level( $definition['config'] ) ? 6 : 10 ) ) {
+			if ( ! $state && ! State::rate_allowed( $form_id, AntiSpam::level( $definition['config'] ) === 3 ? 6 : 10 ) ) {
 				return new WP_Error( 'rate', __( 'Troppi invii ravvicinati. Attendi qualche minuto.', 'easycontact' ), array( 'status' => 429 ) );
 			}
 			if ( ! $state ) {
@@ -99,9 +100,16 @@ final class Submission {
 				return self::uncertain_error();
 			}
 			++$state['attempts'];
-			$assessment = $state['assessment'] ?? array( 'status' => 'accepted', 'detected' => 'accepted', 'level' => 1, 'score' => 0, 'reasons' => array(), 'observe' => false );
-			$held = 'accepted' !== $assessment['status'];
-			$store = $held ? Plugin::stores_quarantine( $definition['config'] ) : Plugin::stores_entries( $definition['config'] );
+			$assessment = $state['assessment'] ?? array(
+				'status'   => 'accepted',
+				'detected' => 'accepted',
+				'level'    => 1,
+				'score'    => 0,
+				'reasons'  => array(),
+				'observe'  => false,
+			);
+			$held       = 'accepted' !== $assessment['status'];
+			$store      = $held ? Plugin::stores_quarantine( $definition['config'] ) : Plugin::stores_entries( $definition['config'] );
 			if ( $store && ! isset( $state['outcomes']['archive'] ) ) {
 				$state['outcomes']['archive'] = 'archive_uncertain';
 				if ( ! $persist() ) {
@@ -137,7 +145,11 @@ final class Submission {
 					}
 				}
 				self::status( $form_id, $state['entry'], $state['outcomes'], $key, true );
-				$state['response'] = array( 'success' => true, 'held' => true, 'message' => __( 'Il messaggio è stato ricevuto ed è in attesa di verifica.', 'easycontact' ) );
+				$state['response'] = array(
+					'success' => true,
+					'held'    => true,
+					'message' => __( 'Il messaggio è stato ricevuto ed è in attesa di verifica.', 'easycontact' ),
+				);
 				return $persist() ? $state['response'] : self::uncertain_error();
 			}
 			foreach ( array( 'mail', 'mailerlite', 'slack' ) as $adapter ) {
@@ -247,7 +259,7 @@ final class Submission {
 			}
 			$outcomes = $status['outcomes'];
 			foreach ( array( 'mail', 'mailerlite', 'slack' ) as $adapter ) {
-				$outcome   = $outcomes[ $adapter ] ?? '';
+				$outcome = $outcomes[ $adapter ] ?? '';
 				if ( $approve && 'held' === $outcome && ! $definition['config'][ $adapter . '_enabled' ] ) {
 					$outcomes[ $adapter ] = 'disabled';
 				}

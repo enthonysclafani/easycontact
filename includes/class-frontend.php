@@ -69,31 +69,44 @@ final class Frontend {
 	/**
 	 * Issue a fresh signed ticket, nonce and UTC expiry.
 	 *
-	 * @param int $id Native WordPress post ID.
+	 * @param int    $id Native WordPress post ID.
+	 * @param string $clock Signed start time to keep; a new one is issued when it is invalid.
 	 * @return array Result of this operation.
 	 */
 	public static function issue( int $id, string $clock = '' ): array {
 		$issued    = time();
 		$uuid      = wp_generate_uuid4();
 		$signature = hash_hmac( 'sha256', get_current_blog_id() . '|' . $id . '|' . $issued . '|' . $uuid . '|2', wp_salt( 'auth' ) );
-		$ticket = $issued . '.' . $uuid . '.2.' . $signature;
+		$ticket    = $issued . '.' . $uuid . '.2.' . $signature;
 		if ( false === self::elapsed( $id, $clock ) ) {
 			$clock = $issued . '.' . $uuid . '.' . hash_hmac( 'sha256', get_current_blog_id() . '|' . $id . '|' . $issued . '|' . $uuid . '|clock', wp_salt( 'auth' ) );
 		}
 		return array(
-			'nonce'   => wp_create_nonce( 'easycontact_submit_' . get_current_blog_id() . '_' . $id ),
-			'ticket'  => $ticket,
-			'expires' => $issued + HOUR_IN_SECONDS,
+			'nonce'    => wp_create_nonce( 'easycontact_submit_' . get_current_blog_id() . '_' . $id ),
+			'ticket'   => $ticket,
+			'expires'  => $issued + HOUR_IN_SECONDS,
 			'honeypot' => self::honeypot_name( $id, $ticket ),
-			'clock' => $clock,
+			'clock'    => $clock,
 		);
 	}
 
+	/**
+	 * Field name of the honeypot, unpredictable per ticket.
+	 *
+	 * @param int    $id     Form ID.
+	 * @param string $ticket Signed ticket.
+	 */
 	private static function honeypot_name( int $id, string $ticket ): string {
 		return 'contact_' . substr( hash_hmac( 'sha256', get_current_blog_id() . '|' . $id . '|' . ( explode( '.', $ticket )[1] ?? '' ), wp_salt( 'auth' ) ), 0, 12 );
 	}
 
-	/** A separate signed start time survives ticket refreshes and validation corrections. */
+	/**
+	 * A separate signed start time survives ticket refreshes and validation corrections.
+	 *
+	 * @param int    $id    Form ID.
+	 * @param string $clock Signed start time.
+	 * @return int|false Seconds since the form was first shown, or false when the clock is invalid.
+	 */
 	private static function elapsed( int $id, string $clock ) {
 		if ( ! preg_match( '/^(\d{1,11})\.([a-f0-9-]{36})\.([a-f0-9]{64})$/D', $clock, $parts ) || (int) $parts[1] > time() + 60 || time() - (int) $parts[1] > DAY_IN_SECONDS ) {
 			return false;
@@ -131,7 +144,7 @@ final class Frontend {
 		if ( ! State::rate_allowed( $id, 120, 'token' ) ) {
 			return new WP_Error( 'rate', __( 'Troppe richieste ravvicinate. Attendi qualche minuto.', 'easycontact' ), array( 'status' => 429 ) );
 		}
-		$clock = $request->get_param( 'clock' );
+		$clock    = $request->get_param( 'clock' );
 		$response = new WP_REST_Response( self::issue( $id, is_string( $clock ) ? $clock : '' ) );
 		$response->header( 'Cache-Control', 'no-store, private, max-age=0' );
 		return $response;
@@ -164,8 +177,8 @@ final class Frontend {
 		if ( ! State::rate_allowed( $id, 40, 'attempt' ) ) {
 			return new WP_Error( 'rate', __( 'Troppi tentativi ravvicinati. Attendi qualche minuto.', 'easycontact' ), array( 'status' => 429 ) );
 		}
-		$nonce       = is_string( $input['nonce'] ?? null ) ? $input['nonce'] : '';
-		$ticket      = is_string( $input['ticket'] ?? null ) ? $input['ticket'] : '';
+		$nonce  = is_string( $input['nonce'] ?? null ) ? $input['nonce'] : '';
+		$ticket = is_string( $input['ticket'] ?? null ) ? $input['ticket'] : '';
 		if ( ! wp_verify_nonce( $nonce, 'easycontact_submit_' . get_current_blog_id() . '_' . $id ) || ! self::valid_ticket( $id, $ticket ) ) {
 			return new WP_Error( 'expired', __( 'La sessione del modulo è scaduta. Ricarica la pagina.', 'easycontact' ), array( 'status' => 403 ) );
 		}
@@ -188,10 +201,15 @@ final class Frontend {
 			'honeypot' => '' !== $traps[ $name ],
 			'elapsed'  => $elapsed,
 		);
-		$fields = $input['fields'];
+		$fields  = $input['fields'];
 		ksort( $fields, SORT_STRING );
 		ksort( $countries, SORT_STRING );
-		$encoded = wp_json_encode( $countries ? array( 'fields' => $fields, 'countries' => $countries ) : $fields );
+		$encoded = wp_json_encode(
+			$countries ? array(
+				'fields'    => $fields,
+				'countries' => $countries,
+			) : $fields
+		);
 		if ( false === $encoded ) {
 			return new WP_Error( 'invalid', __( 'Il modulo non è valido.', 'easycontact' ), array( 'status' => 422 ) );
 		}
@@ -286,7 +304,7 @@ final class Frontend {
 		}
 		$instance = wp_unique_id( 'easycontact-' . $id . '-' );
 		$public   = array(
-			'locale' => str_replace( '_', '-', get_locale() ),
+			'locale'     => str_replace( '_', '-', get_locale() ),
 			'conditions' => $definition['conditions'],
 			'mode'       => $config['conditions_match'],
 			'preview'    => $preview,
@@ -308,14 +326,14 @@ final class Frontend {
 		$html   = (string) ob_get_clean();
 		$html  .= '<form ' . self::attributes(
 			array(
-				'class'           => 'easycontact-form',
-				'id'              => $instance,
-				'method'          => 'post',
-				'novalidate'      => true,
-				'action'          => admin_url( 'admin-post.php' ),
-				'data-easycontact'        => wp_json_encode( $public, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ),
-				'data-token-url'  => rest_url( 'easycontact/v1/forms/' . $id . '/token' ),
-				'data-submit-url' => rest_url( 'easycontact/v1/forms/' . $id . '/submit' ),
+				'class'            => 'easycontact-form',
+				'id'               => $instance,
+				'method'           => 'post',
+				'novalidate'       => true,
+				'action'           => admin_url( 'admin-post.php' ),
+				'data-easycontact' => wp_json_encode( $public, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ),
+				'data-token-url'   => rest_url( 'easycontact/v1/forms/' . $id . '/token' ),
+				'data-submit-url'  => rest_url( 'easycontact/v1/forms/' . $id . '/submit' ),
 			)
 		) . '>';
 		$hidden = array(
@@ -351,8 +369,8 @@ final class Frontend {
 			$html .= '<div ' . self::attributes(
 				array(
 					'data-easycontact-captcha' => true,
-					'data-sitekey'     => $settings['turnstile_site_key'],
-					'data-action'      => 'easycontact_form_' . $id,
+					'data-sitekey'             => $settings['turnstile_site_key'],
+					'data-action'              => 'easycontact_form_' . $id,
 				)
 			) . '></div><input type="hidden" name="captcha" value=""><noscript><p>' . esc_html__( 'Attiva JavaScript per completare il CAPTCHA e inviare il modulo.', 'easycontact' ) . '</p></noscript>';
 		}
@@ -378,16 +396,17 @@ final class Frontend {
 	 *
 	 * @param array  $field Validated field definition.
 	 * @param string $instance Unique rendered form instance.
+	 * @param array  $config Form configuration.
 	 * @return string Result of this operation.
 	 */
 	private static function field( array $field, string $instance, array $config ): string {
 		$id         = $instance . '-' . $field['name'];
 		$check      = in_array( $field['type'], array( 'checkbox', 'acceptance' ), true );
 		$attributes = array(
-			'id'               => $id,
-			'name'             => 'fields[' . $field['name'] . ']',
-			'aria-describedby' => $id . '-error',
-			'required'         => $field['required'],
+			'id'                       => $id,
+			'name'                     => 'fields[' . $field['name'] . ']',
+			'aria-describedby'         => $id . '-error',
+			'required'                 => $field['required'],
 			'data-easycontact-control' => true,
 		);
 		$label      = '<label for="' . esc_attr( $id ) . '">' . esc_html( $field['label'] ) . ( $field['required'] ? ' <span aria-hidden="true">*</span>' : '' ) . '</label>';
@@ -415,13 +434,23 @@ final class Frontend {
 			$country = Phone::default_country( $config, $field );
 			/* translators: %s: telephone field label. */
 			$country_label = sprintf( __( 'Paese per %s', 'easycontact' ), $field['label'] );
-			$html .= '<div class="easycontact-phone"><div class="easycontact-phone-country"><input type="search" class="easycontact-country-search" data-easycontact-country-search placeholder="' . esc_attr__( 'Cerca paese…', 'easycontact' ) . '" aria-label="' . esc_attr__( 'Cerca un paese', 'easycontact' ) . '" autocomplete="off" hidden><select id="' . esc_attr( $id . '-country' ) . '" name="countries[' . esc_attr( $field['name'] ) . ']" data-easycontact-country aria-label="' . esc_attr( $country_label ) . '" aria-describedby="' . esc_attr( $id . '-error' ) . '"><option value="">' . esc_html__( 'Seleziona paese', 'easycontact' ) . '</option>';
-			$countries = Phone::countries();
+			$html         .= '<div class="easycontact-phone"><div class="easycontact-phone-country"><input type="search" class="easycontact-country-search" data-easycontact-country-search placeholder="' . esc_attr__( 'Cerca paese…', 'easycontact' ) . '" aria-label="' . esc_attr__( 'Cerca un paese', 'easycontact' ) . '" autocomplete="off" hidden><select id="' . esc_attr( $id . '-country' ) . '" name="countries[' . esc_attr( $field['name'] ) . ']" data-easycontact-country aria-label="' . esc_attr( $country_label ) . '" aria-describedby="' . esc_attr( $id . '-error' ) . '"><option value="">' . esc_html__( 'Seleziona paese', 'easycontact' ) . '</option>';
+			$countries     = Phone::countries();
 			uasort( $countries, static fn( $first, $second ) => strcasecmp( $first['name'], $second['name'] ) );
 			foreach ( $countries as $region => $data ) {
 				$html .= '<option value="' . esc_attr( $region ) . '" data-dial="' . (int) $data['dial'] . '" ' . selected( $country, $region, false ) . '>' . esc_html( Phone::country_label( $region ) ) . '</option>';
 			}
-			$html .= '</select></div><input ' . self::attributes( array_merge( $attributes, array( 'type' => 'tel', 'inputmode' => 'tel', 'autocomplete' => 'tel', 'maxlength' => 80 ) ) ) . '></div>';
+			$html .= '</select></div><input ' . self::attributes(
+				array_merge(
+					$attributes,
+					array(
+						'type'         => 'tel',
+						'inputmode'    => 'tel',
+						'autocomplete' => 'tel',
+						'maxlength'    => 80,
+					)
+				)
+			) . '></div>';
 		} else {
 			$attributes['type'] = $check ? 'checkbox' : $field['type'];
 			if ( $check ) {

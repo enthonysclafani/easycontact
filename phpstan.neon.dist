@@ -1,0 +1,17 @@
+# PHPStan level 8 with WordPress stubs (szepeviktor/phpstan-wordpress, loaded by the extension installer).
+# The baseline of the existing code (point 0.9 of docs/piano-standard.md) is generated on the first run
+# outside the cloud, with `composer analyse -- --generate-baseline`, and then included here.
+parameters:
+	level: 8
+	paths:
+		- easycontact.php
+		- uninstall.php
+		- includes
+		- tools
+	excludePaths:
+		- includes/vendor
+		- includes/data
+		- tests/fixtures
+		- tools/phpstan
+		- tools/phone-build
+	treatPhpDocTypesAsCertain: false
