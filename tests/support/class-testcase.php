@@ -75,10 +75,21 @@ abstract class TestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Clear request globals that tests change.
+	 * Clear request globals and queued assets that tests change.
 	 */
 	public function tear_down(): void {
 		unset( $_SERVER['REMOTE_ADDR'], $_REQUEST['_wpnonce'] );
+		// A rendered form enqueues its assets: the next test starts without them. The registries
+		// stay, because rebuilding them needs built core files that the 6.4 test checkout lacks.
+		$queued = array(
+			'wp_scripts' => array( 'easycontact-frontend', 'easycontact-turnstile', 'easycontact-admin' ),
+			'wp_styles'  => array( 'easycontact-frontend', 'easycontact-admin' ),
+		);
+		foreach ( $queued as $registry => $handles ) {
+			if ( $GLOBALS[ $registry ] ?? null ) {
+				$GLOBALS[ $registry ]->dequeue( $handles );
+			}
+		}
 		parent::tear_down();
 	}
 

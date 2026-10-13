@@ -173,12 +173,20 @@ Fasi 0 e 1.
       `easycontact_retry_delivery`; il setup toglie gli eventi della 1.0.0 quando cambia `EASYCONTACT_VERSION`, quindi
       il rilascio deve aumentare la versione. `State.php` esce dall'allowlist del cron. Test:
       `tests/MaintenanceTest.php`._
-- [ ] 4.2 Asset del frontend caricati solo con un modulo nella pagina; test che una pagina senza modulo non
+- [x] 4.2 Asset del frontend caricati solo con un modulo nella pagina; test che una pagina senza modulo non
       carichi né CSS né JS del plugin e non faccia query in più (`tests/QueriesTest.php`)
-      _`tests/QueriesTest.php` esiste già: niente asset senza modulo e nessuna query in `init`. Le tre letture in più
-      a ogni richiesta che ha trovato sono state tolte nella Fase 0._
-- [ ] 4.3 Chiamate remote solo nella richiesta di invio e in admin, timeout ≤ 15 s, "External services" in
+      _Fatto: `tests/QueriesTest.php` verifica che una pagina senza modulo non carichi asset e che `init` non faccia
+      query; nel frontend il plugin aggancia solo lo shortcode, le route REST e `admin-post.php`. Le tre letture in
+      più a ogni richiesta sono state tolte nella Fase 0. Il controllo con Query Monitor sul sito Studio resta da
+      fare in locale._
+- [x] 4.3 Chiamate remote solo nella richiesta di invio e in admin, timeout ≤ 15 s, "External services" in
       `readme.txt`; test con risposte HTTP simulate (`pre_http_request`)
+      _Fatto: `tests/HttpTest.php` verifica che ogni chiamata (Turnstile, MailerLite, Slack, liste dei domini) abbia
+      timeout tra 1 e 15 s, nessun redirect, risposta limitata e solo host pubblici; che stampare un modulo, anche
+      con CAPTCHA, non faccia richieste; che ogni risposta (successo, errore HTTP, corpo non valido, rete
+      irraggiungibile) dia un risultato definito. Le uniche chiamate fuori da invio e admin sono i nuovi tentativi
+      di `easycontact_retry_delivery` (D1). "External services" in `readme.txt` è verificato sulle fonti
+      ufficiali._
 
 ### Fase 5 — Admin
 
