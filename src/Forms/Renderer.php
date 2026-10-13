@@ -29,24 +29,25 @@ final class Renderer {
 	/**
 	 * Manage plugin-specific native WordPress data.
 	 *
-	 * @param array|string $attributes Supported attributes.
+	 * @param array<string, string>|string $attributes Supported attributes; an empty string when there are none.
 	 * @return string Result of this operation.
 	 */
 	public static function shortcode( $attributes ): string {
-		$attributes = shortcode_atts( array( 'id' => 0 ), $attributes, 'easycontact' );
+		$attributes = shortcode_atts( array( 'id' => 0 ), is_array( $attributes ) ? $attributes : array(), 'easycontact' );
 		$id         = absint( $attributes['id'] );
-		if ( ! Endpoint::available( $id ) ) {
+		$definition = Endpoint::available( $id ) ? Forms::definition( $id ) : null;
+		if ( null === $definition ) {
 			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'Publish a valid form before using the shortcode.', 'easycontact' ) . '</p>' : '';
 		}
-		return self::render( $id, Forms::definition( $id ) );
+		return self::render( $id, $definition );
 	}
 
 	/**
 	 * Render escaped native HTML and enqueue assets only for pages containing a form.
 	 *
-	 * @param int   $id Native WordPress post ID.
-	 * @param array $definition Validated form definition.
-	 * @param bool  $preview Whether to disable submission and integrations.
+	 * @param int                  $id Native WordPress post ID.
+	 * @param array<string, mixed> $definition Validated form definition.
+	 * @param bool                 $preview Whether to disable submission and integrations.
 	 * @return string Result of this operation.
 	 */
 	public static function render( int $id, array $definition, bool $preview = false ): string {
@@ -161,9 +162,9 @@ final class Renderer {
 	/**
 	 * Render one field with a visible label and a dedicated accessible error description.
 	 *
-	 * @param array  $field Validated field definition.
-	 * @param string $instance Unique rendered form instance.
-	 * @param array  $config Form configuration.
+	 * @param array<string, mixed> $field Validated field definition.
+	 * @param string               $instance Unique rendered form instance.
+	 * @param array<string, mixed> $config Form configuration.
 	 * @return string Result of this operation.
 	 */
 	private static function field( array $field, string $instance, array $config ): string {
@@ -244,7 +245,7 @@ final class Renderer {
 	/**
 	 * Escape attributes assembled only from supported, hardcoded attribute names.
 	 *
-	 * @param array $attributes Supported attributes.
+	 * @param array<string, mixed> $attributes Supported attributes.
 	 * @return string Result of this operation.
 	 */
 	private static function attributes( array $attributes ): string {
@@ -265,7 +266,7 @@ final class Renderer {
 	 * @return void
 	 */
 	public static function preview( int $id ): void {
-		$html = self::render( $id, Forms::definition( $id, true ), true );
+		$html = self::render( $id, Forms::editor_definition( $id ), true );
 		echo '<!doctype html><html ';
 		language_attributes();
 		echo '><head><meta charset="' . esc_attr( get_option( 'blog_charset' ) ) . '"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . esc_html__( 'Form preview', 'easycontact' ) . '</title>';

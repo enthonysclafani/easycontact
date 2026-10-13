@@ -93,7 +93,7 @@ final class Editor {
 	 * @return void
 	 */
 	public static function module_box( WP_Post $post ): void {
-		$definition = Forms::definition( $post->ID, true );
+		$definition = Forms::editor_definition( $post->ID );
 		wp_nonce_field( 'easycontact_editor_' . $post->ID, 'easycontact_editor_nonce' );
 		?>
 		<p class="easycontact-toolbar">
@@ -122,11 +122,11 @@ final class Editor {
 	/**
 	 * Render a mapping selector using the saved schema.
 	 *
-	 * @param string $key Internal identifier.
-	 * @param string $label Localized visible label.
-	 * @param array  $definition Validated form definition.
-	 * @param array  $types Allowed field types; empty accepts all types.
-	 * @param bool   $allow_empty Whether the empty mapping is available.
+	 * @param string               $key Internal identifier.
+	 * @param string               $label Localized visible label.
+	 * @param array<string, mixed> $definition Validated form definition.
+	 * @param array<int, string>   $types Allowed field types; empty accepts all types.
+	 * @param bool                 $allow_empty Whether the empty mapping is available.
 	 * @return void
 	 */
 	private static function field_select( string $key, string $label, array $definition, array $types = array(), bool $allow_empty = true ): void {
@@ -146,11 +146,11 @@ final class Editor {
 	/**
 	 * Render a configuration field while keeping secrets out of the response.
 	 *
-	 * @param string $key Internal identifier.
-	 * @param string $label Localized visible label.
-	 * @param array  $config Validated delivery and privacy configuration.
-	 * @param string $type Supported input type.
-	 * @param string $help Localized explanatory text.
+	 * @param string               $key Internal identifier.
+	 * @param string               $label Localized visible label.
+	 * @param array<string, mixed> $config Validated delivery and privacy configuration.
+	 * @param string               $type Supported input type.
+	 * @param string               $help Localized explanatory text.
 	 * @return void
 	 */
 	private static function input( string $key, string $label, array $config, string $type = 'text', string $help = '' ): void {
@@ -164,9 +164,9 @@ final class Editor {
 	/**
 	 * Render a boolean form preference.
 	 *
-	 * @param string $key Internal identifier.
-	 * @param string $label Localized visible label.
-	 * @param array  $config Validated delivery and privacy configuration.
+	 * @param string               $key Internal identifier.
+	 * @param string               $label Localized visible label.
+	 * @param array<string, mixed> $config Validated delivery and privacy configuration.
 	 * @return void
 	 */
 	private static function checkbox( string $key, string $label, array $config ): void {
@@ -180,7 +180,7 @@ final class Editor {
 	 * @return void
 	 */
 	public static function email_box( WP_Post $post ): void {
-		$definition = Forms::definition( $post->ID, true );
+		$definition = Forms::editor_definition( $post->ID );
 		$config     = $definition['config'];
 		self::checkbox( 'mail_enabled', __( 'Send an email notification', 'easycontact' ), $config );
 		self::input( 'mail_to', __( 'Recipients', 'easycontact' ), $config, 'text', __( 'Comma-separated email addresses.', 'easycontact' ) );
@@ -196,7 +196,7 @@ final class Editor {
 	 * @return void
 	 */
 	public static function integrations_box( WP_Post $post ): void {
-		$definition = Forms::definition( $post->ID, true );
+		$definition = Forms::editor_definition( $post->ID );
 		$config     = $definition['config'];
 		echo '<h3>MailerLite</h3>';
 		self::checkbox( 'mailerlite_enabled', __( 'Enable MailerLite for this form', 'easycontact' ), $config );
@@ -219,7 +219,7 @@ final class Editor {
 	 * @return void
 	 */
 	public static function options_box( WP_Post $post ): void {
-		$config = Forms::definition( $post->ID, true )['config'];
+		$config = Forms::editor_definition( $post->ID )['config'];
 		self::checkbox( 'captcha', __( 'Verify with Cloudflare Turnstile', 'easycontact' ), $config );
 		echo '<p><label for="easycontact-archive">' . esc_html__( 'Submission archive', 'easycontact' ) . '</label><br><select id="easycontact-archive" name="easycontact_config[store_entries]">';
 		foreach ( array(
@@ -241,10 +241,10 @@ final class Editor {
 	/**
 	 * A form setting that can inherit the general settings.
 	 *
-	 * @param string $key    Configuration key.
-	 * @param string $label  Visible label.
-	 * @param array  $config Form configuration.
-	 * @param string $help   Description below the field.
+	 * @param string               $key    Configuration key.
+	 * @param string               $label  Visible label.
+	 * @param array<string, mixed> $config Form configuration.
+	 * @param string               $help   Description below the field.
 	 */
 	private static function inherited_select( string $key, string $label, array $config, string $help ): void {
 		echo '<p><label for="easycontact-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label><br><select id="easycontact-' . esc_attr( $key ) . '" name="easycontact_config[' . esc_attr( $key ) . ']">';
@@ -264,7 +264,7 @@ final class Editor {
 	 * @param WP_Post $post Form.
 	 */
 	public static function antispam_box( WP_Post $post ): void {
-		$config = Forms::definition( $post->ID, true )['config'];
+		$config = Forms::editor_definition( $post->ID )['config'];
 		echo '<p><label for="easycontact-antispam-level">' . esc_html__( 'Anti-spam level', 'easycontact' ) . '</label><br><select id="easycontact-antispam-level" name="easycontact_config[antispam_level]">';
 		foreach ( array(
 			'inherit' => __( 'Use the general settings', 'easycontact' ),
@@ -272,7 +272,7 @@ final class Editor {
 			'2'       => __( '2 — Balanced', 'easycontact' ),
 			'3'       => __( '3 — Strict', 'easycontact' ),
 		) as $value => $label ) {
-			echo '<option value="' . esc_attr( $value ) . '" ' . selected( $config['antispam_level'], $value, false ) . '>' . esc_html( $label ) . '</option>';
+			echo '<option value="' . esc_attr( (string) $value ) . '" ' . selected( $config['antispam_level'], (string) $value, false ) . '>' . esc_html( $label ) . '</option>';
 		}
 		echo '</select></p><p class="description">' . esc_html__( 'Validity checks and the honeypot are always on. Levels 2 and 3 add checks on content, disposable domains, repetitions and frequency. Level 3 is more sensitive and may need more reviews.', 'easycontact' ) . '</p>';
 		self::inherited_select( 'quarantine_entries', __( 'Quarantine with the archive off', 'easycontact' ), $config, __( 'Keep spam and suspicious submissions even when the normal archive is off. With the archive on, suspicious submissions are always saved with delivery held. Without storage, they are rejected.', 'easycontact' ) );
@@ -289,7 +289,7 @@ final class Editor {
 	/**
 	 * Return localized supported comparison labels.
 	 *
-	 * @return array Result of this operation.
+	 * @return array<string, string> Result of this operation.
 	 */
 	private static function operators(): array {
 		return array(
@@ -306,9 +306,9 @@ final class Editor {
 	/**
 	 * Render a conditional editor row.
 	 *
-	 * @param mixed $index Unique editor row index.
-	 * @param array $rule Validated conditional rule.
-	 * @param array $fields Field definitions keyed by name.
+	 * @param mixed                               $index Unique editor row index.
+	 * @param array<string, string>               $rule Validated conditional rule.
+	 * @param array<string, array<string, mixed>> $fields Field definitions keyed by name.
 	 * @return void
 	 */
 	private static function rule_row( $index, array $rule, array $fields ): void {
@@ -337,7 +337,7 @@ final class Editor {
 	 * @return void
 	 */
 	public static function conditions_box( WP_Post $post ): void {
-		$definition = Forms::definition( $post->ID, true );
+		$definition = Forms::editor_definition( $post->ID );
 		echo '<p>' . esc_html__( 'Show a field when the comparison is met. Hidden fields are neither validated nor sent. For a checkbox use the value 1 when checked.', 'easycontact' ) . '</p><p><label>' . esc_html__( 'For rules on the same field require', 'easycontact' ) . ' <select name="easycontact_config[conditions_match]"><option value="all" ' . selected( $definition['config']['conditions_match'], 'all', false ) . '>' . esc_html__( 'all conditions (AND)', 'easycontact' ) . '</option><option value="any" ' . selected( $definition['config']['conditions_match'], 'any', false ) . '>' . esc_html__( 'at least one condition (OR)', 'easycontact' ) . '</option></select></label></p>';
 		echo '<div class="easycontact-rule-scroll"><table class="widefat easycontact-rules"><thead><tr><th>' . esc_html__( 'Show', 'easycontact' ) . '</th><th>' . esc_html__( 'When', 'easycontact' ) . '</th><th>' . esc_html__( 'Comparison', 'easycontact' ) . '</th><th>' . esc_html__( 'Value', 'easycontact' ) . '</th><th></th></tr></thead><tbody id="easycontact-rules">';
 		foreach ( $definition['conditions']['rules'] as $index => $rule ) {
@@ -376,7 +376,7 @@ final class Editor {
 		}
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- self::config sanitizes and validates each supported setting; unknown keys are discarded.
 		$config_input = isset( $_POST['easycontact_config'] ) && is_array( $_POST['easycontact_config'] ) ? wp_unslash( $_POST['easycontact_config'] ) : array();
-		$config       = self::config( $config_input, Forms::definition( $id, true )['config'], $schema['fields'] );
+		$config       = self::config( $config_input, Forms::editor_definition( $id )['config'], $schema['fields'] );
 		if ( is_wp_error( $config ) ) {
 			self::error( $id, $config );
 			return;
@@ -391,10 +391,10 @@ final class Editor {
 	/**
 	 * Validate and normalize only supported per-form configuration.
 	 *
-	 * @param array $input Untrusted input to validate.
-	 * @param array $previous Previously validated configuration.
-	 * @param array $fields Field definitions keyed by name.
-	 * @return mixed Result of this operation.
+	 * @param array<mixed>                        $input Untrusted input to validate.
+	 * @param array<string, mixed>                $previous Previously validated configuration.
+	 * @param array<string, array<string, mixed>> $fields Field definitions keyed by name.
+	 * @return array<string, mixed>|WP_Error Result of this operation.
 	 */
 	public static function config( array $input, array $previous, array $fields ) {
 		$config = Forms::config_defaults();
@@ -444,7 +444,7 @@ final class Editor {
 		}
 		if ( $config['mail_enabled'] ) {
 			$addresses = array_map( 'trim', explode( ',', $config['mail_to'] ) );
-			if ( ! $addresses || count( $addresses ) > 10 || count( array_filter( $addresses, 'is_email' ) ) !== count( $addresses ) || '' === $config['mail_subject'] || '' === $config['mail_body'] || ( '' !== $config['mail_reply_to'] && 'email' !== ( $fields[ $config['mail_reply_to'] ]['type'] ?? '' ) ) ) {
+			if ( ! $addresses || count( $addresses ) > 10 || count( array_filter( $addresses, static fn( $address ) => false !== is_email( $address ) ) ) !== count( $addresses ) || '' === $config['mail_subject'] || '' === $config['mail_body'] || ( '' !== $config['mail_reply_to'] && 'email' !== ( $fields[ $config['mail_reply_to'] ]['type'] ?? '' ) ) ) {
 				return new WP_Error( 'config', __( 'Check the recipients, subject, message and Reply-To field of the email notification.', 'easycontact' ) );
 			}
 			$config['mail_to'] = implode( ',', $addresses );
