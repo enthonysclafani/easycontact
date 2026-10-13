@@ -10,16 +10,18 @@
 
 namespace EasyContact\Tests;
 
-use EasyContact\Admin;
 use EasyContact\AntiSpam\AntiSpam;
 use EasyContact\AntiSpam\DisposableDomains;
+use EasyContact\Forms\Admin\Editor;
+use EasyContact\Forms\Forms;
+use EasyContact\Forms\Renderer;
+use EasyContact\Forms\Schema;
 use EasyContact\Frontend;
 use EasyContact\Phone\Phone;
 use EasyContact\Plugin;
 use EasyContact\Privacy\Privacy;
 use EasyContact\Review\Admin\Screen;
 use EasyContact\Review\Review;
-use EasyContact\Schema;
 use EasyContact\Settings\Admin\Page;
 use EasyContact\Settings\Settings;
 use EasyContact\State;
@@ -83,8 +85,8 @@ class SubmissionTest extends TestCase {
 		$implicit   = $definition;
 		unset( $implicit['config']['antispam_level'] );
 		$implicit_id = $this->form( $implicit );
-		$this->assertSame( 2, AntiSpam::level( Plugin::definition( $implicit_id )['config'] ), 'Forms without an explicit level inherit the site level' );
-		$this->assertSame( 2, AntiSpam::level( Plugin::config_defaults() ), 'New forms inherit balanced protection' );
+		$this->assertSame( 2, AntiSpam::level( Forms::definition( $implicit_id )['config'] ), 'Forms without an explicit level inherit the site level' );
+		$this->assertSame( 2, AntiSpam::level( Forms::config_defaults() ), 'New forms inherit balanced protection' );
 
 		$validation = Schema::validate( $definition, $this->values( array( 'telefono' => '3333333333' ) ), array( 'telefono' => 'IT' ) );
 		$this->assertArrayHasKey( 'telefono', $validation['errors'], 'Repetitive phone has an actionable field error at level 2' );
@@ -488,7 +490,7 @@ class SubmissionTest extends TestCase {
 
 	public function test_admin_validation_keeps_safe_values_and_markup_has_protections(): void {
 		$definition = $this->definition();
-		$this->assertWPError( Admin::config( array( 'antispam_level' => '99' ), $definition['config'], $definition['schema']['fields'] ), 'Reject invalid per-form protection level' );
+		$this->assertWPError( Editor::config( array( 'antispam_level' => '99' ), $definition['config'], $definition['schema']['fields'] ), 'Reject invalid per-form protection level' );
 
 		$settings = Page::sanitize_settings(
 			array(
@@ -505,7 +507,7 @@ class SubmissionTest extends TestCase {
 		$this->assertArrayNotHasKey( 'blocked_email_domains', $settings, 'Retired manual lists are discarded' );
 		$this->assertArrayNotHasKey( 'allowed_email_domains', $settings, 'Retired manual lists are discarded' );
 
-		$html = Frontend::render( $this->form( $definition ), $definition );
+		$html = Renderer::render( $this->form( $definition ), $definition );
 		$this->assertStringContainsString( 'data-easycontact-country', $html, 'Markup includes the country selector' );
 		$this->assertStringContainsString( 'name="countries[telefono]"', $html, 'Markup includes the country field' );
 		$this->assertStringContainsString( 'data-easycontact-trap', $html, 'Markup includes the honeypot' );

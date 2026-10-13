@@ -59,7 +59,7 @@ blocca la CI. Ogni file ammesso in un'allowlist ha un commento con il motivo o c
    tentativi di consegna. Finché la Fase 4.1 non è fatta, gli eventi attuali restano nei file in allowlist (A);
    nessun evento nuovo.
 4. **Asset nel frontend solo al rendering di un modulo** (A per i file, test per il comportamento) (D2).
-   `wp_enqueue_*` solo in `src/Frontend.php` (al rendering) e `src/Admin.php` (schermate del plugin). Nessun JS o
+   `wp_enqueue_*` solo in `src/Forms/Renderer.php` (al rendering) e `src/Admin.php` (schermate del plugin). Nessun JS o
    CSS inline (A per `style="…"`). Una pagina senza modulo non carica niente del plugin: `tests/QueriesTest.php`.
 5. **HTTP solo nei file in allowlist** (A), con le API di WordPress (A: niente cURL, `fopen`/`file_get_contents` su
    URL, socket) (D3). Mai durante il rendering di una pagina, solo nella richiesta di invio e in admin; timeout ≤ 15 s; `WP_Error` e codici HTTP
