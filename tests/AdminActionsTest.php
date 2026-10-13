@@ -8,6 +8,7 @@
 namespace EasyContact\Tests;
 
 use EasyContact\Forms\Admin\Editor;
+use EasyContact\Plugin;
 use EasyContact\Review\Admin\Screen;
 use EasyContact\Review\Review;
 use EasyContact\Settings\Admin\Page;
@@ -46,6 +47,7 @@ class AdminActionsTest extends TestCase {
 		$_POST    = array();
 		$_REQUEST = array();
 		unset( $_SERVER['REQUEST_METHOD'] );
+		$GLOBALS['current_screen'] = null;
 		parent::tear_down();
 	}
 
@@ -55,11 +57,9 @@ class AdminActionsTest extends TestCase {
 	public function test_every_admin_action_is_covered(): void {
 		global $wp_filter;
 
-		// Admin screens register their hooks only in wp-admin.
-		Editor::boot();
-		Screen::boot();
-		EntryScreen::boot();
-		Page::boot();
+		// Register the plugin as wp-admin does, so an action added to any part of it shows up here.
+		set_current_screen( 'dashboard' );
+		Plugin::register();
 		$actions = array();
 		foreach ( array_keys( $wp_filter ) as $hook ) {
 			if ( str_starts_with( $hook, 'admin_post_' ) && str_contains( $hook, 'easycontact' ) && has_action( $hook ) ) {
@@ -130,14 +130,26 @@ class AdminActionsTest extends TestCase {
 	 * A manual retry needs an administrator and the nonce of that entry.
 	 */
 	public function test_retry_needs_capability_and_nonce(): void {
-		$entry = $this->entry_for_review();
-		$post  = array( 'easycontact_retry_entry' => (string) $entry );
+		$this->slack_code = 429;
+		$entry            = $this->entry_for_review(
+			'',
+			array(
+				'slack_enabled' => true,
+				'slack_webhook' => 'https://hooks.slack.com/services/TEST/TEST/TEST',
+			)
+		);
+		$this->slack_code = 200;
+		$before           = $this->calls['slack'];
+		$post             = array( 'easycontact_retry_entry' => (string) $entry );
 
 		$this->assert_denied( array( EntryScreen::class, 'retry' ), $post, 'easycontact_retry_' . $entry, 'easycontact_retry_nonce', 'editor' );
 		$this->assert_denied( array( EntryScreen::class, 'retry' ), $post, '', 'easycontact_retry_nonce' );
 		$this->assert_denied( array( EntryScreen::class, 'retry' ), $post, 'easycontact_review_' . $entry, 'easycontact_retry_nonce' );
+		$this->assertSame( $before, $this->calls['slack'], 'Refused retries deliver nothing' );
+		$this->assertNotFalse( wp_next_scheduled( 'easycontact_retry_delivery', array( $entry ) ), 'Refused retries keep the scheduled attempt' );
 
 		$this->assert_redirect( array( EntryScreen::class, 'retry' ), $post, 'easycontact_retry_' . $entry, 'easycontact_retry_nonce', 'post.php?post=' . $entry . '&action=edit' );
+		$this->assertSame( $before + 1, $this->calls['slack'], 'The retry delivers the failed destination' );
 	}
 
 	/**
@@ -152,6 +164,15 @@ class AdminActionsTest extends TestCase {
 		$this->assert_denied( array( Editor::class, 'preview' ), $get, '', '_wpnonce', 'administrator', 'GET' );
 		$this->assert_denied( array( Editor::class, 'preview' ), $get, 'easycontact_preview_' . $other, '_wpnonce', 'administrator', 'GET' );
 		$this->assert_denied( array( Editor::class, 'preview' ), array( 'id' => (string) $this->entry_for_review() ), 'easycontact_preview_' . $form, '_wpnonce', 'administrator', 'GET' );
+
+		// The preview ends with exit: stop it when it reads the charset for its headers, after every check.
+		add_filter(
+			'pre_option_blog_charset',
+			static function () {
+				throw new RuntimeException( 'allowed' );
+			}
+		);
+		$this->assertSame( 'allowed', $this->run_handler( array( Editor::class, 'preview' ), $get, 'easycontact_preview_' . $form, '_wpnonce', 'administrator', 'GET' ), 'An administrator with the nonce of the form opens the preview' );
 	}
 
 	/**
@@ -164,11 +185,12 @@ class AdminActionsTest extends TestCase {
 	/**
 	 * An archived entry from a real submission: accepted, or held as spam when the honeypot is filled.
 	 *
-	 * @param string $trap Honeypot value.
+	 * @param string $trap   Honeypot value.
+	 * @param array  $config Form configuration overrides.
 	 * @return int Entry ID.
 	 */
-	private function entry_for_review( string $trap = '' ): int {
-		$id     = $this->form( $this->definition() );
+	private function entry_for_review( string $trap = '', array $config = array() ): int {
+		$id     = $this->form( $this->definition( $config ) );
 		$result = $this->submit( $id, $this->input( $id, $this->values(), $trap ) );
 		$this->assertNotWPError( $result, 'Fixture submission is accepted' );
 		return $this->entry();
