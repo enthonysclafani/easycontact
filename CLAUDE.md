@@ -135,8 +135,9 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
 - Standard: WordPress Coding Standards (`WordPress-Extra`, `WordPress-Docs`), PHPCompatibilityWP, PHPStan livello 8
   con `szepeviktor/phpstan-wordpress`. Zero errori PHPCS. PHPStan: zero errori nuovi; quelli del codice
   precedente sono in `phpstan-baseline.neon` e si tolgono da lì quando si correggono, mai se ne aggiungono.
-- Gli hook si agganciano dentro `boot()` o `init()` delle classi, mai a livello di file (tranne attivazione e
-  disattivazione in `easycontact.php`).
+- Gli hook si agganciano dentro `boot()` o `register()` delle classi, o in un callback agganciato da lì; mai a
+  livello di file (A), tranne attivazione e disattivazione in `easycontact.php`. Niente stato statico condiviso
+  tra classi: l'unica proprietà statica è la copia in memoria della lista dei domini usa e getta, per richiesta.
 - **Callback degli hook**: WordPress passa spesso stringhe dove ti aspetti interi. Nei callback converti
   esplicitamente; i tipi rigidi vanno nei metodi interni.
 - Prefissi: option e transient `easycontact_`, meta `_easycontact_`, post type e tassonomie `easycontact_`, hook

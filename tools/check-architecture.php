@@ -107,6 +107,14 @@ final class ArchitectureChecker {
 	);
 
 	/**
+	 * Functions that hook into WordPress: under `src/` they are called from `boot()`/`register()` or from a callback
+	 * they register, never at file level.
+	 *
+	 * @var list<string>
+	 */
+	private const HOOK_FUNCTIONS = array( 'add_action', 'add_filter', 'add_shortcode' );
+
+	/**
 	 * Functions allowed only in the files of an allowlist, by rule.
 	 *
 	 * @var array<string, list<string>>
@@ -262,9 +270,25 @@ final class ArchitectureChecker {
 		$this->check_direct_access_guard( $relative, $code );
 
 		$count = count( $tokens );
+		// One entry per open brace: whether it opens the body of a named function or method.
+		$braces = array();
+		$named  = false;
 
 		for ( $i = 0; $i < $count; $i++ ) {
 			$token = $tokens[ $i ];
+
+			if ( '{' === $token || ( is_array( $token ) && in_array( $token[0], array( T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES ), true ) ) ) {
+				$braces[] = '{' === $token && $named;
+				$named    = false;
+			} elseif ( '}' === $token ) {
+				array_pop( $braces );
+			} elseif ( ';' === $token ) {
+				// An abstract or interface method has no body.
+				$named = false;
+			} elseif ( is_array( $token ) && T_FUNCTION === $token[0] ) {
+				$next  = $this->next_significant( $tokens, $i );
+				$named = null !== $next && is_array( $tokens[ $next ] ) && T_STRING === $tokens[ $next ][0];
+			}
 
 			if ( ! is_array( $token ) ) {
 				continue;
@@ -301,7 +325,13 @@ final class ArchitectureChecker {
 				continue;
 			}
 
-			$this->check_function_call( $relative, $line, strtolower( ltrim( $text, '\\' ) ) );
+			$function_name = strtolower( ltrim( $text, '\\' ) );
+			if ( in_array( $function_name, self::HOOK_FUNCTIONS, true ) && str_starts_with( $relative, 'src/' ) && ! in_array( true, $braces, true ) ) {
+				$this->add( $relative, $line, 'hooks-in-register', "`{$function_name}()` at file level: hook from `boot()`/`register()` or from a callback they register." );
+				continue;
+			}
+
+			$this->check_function_call( $relative, $line, $function_name );
 		}
 	}
 
