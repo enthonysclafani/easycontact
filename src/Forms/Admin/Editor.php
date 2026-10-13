@@ -57,8 +57,8 @@ final class Editor {
 	/**
 	 * Add the shortcode and last delivery columns to the form list.
 	 *
-	 * @param array $columns Native list-table columns.
-	 * @return array Result of this operation.
+	 * @param array<string, string> $columns Native list-table columns.
+	 * @return array<string, string> Result of this operation.
 	 */
 	public static function columns( array $columns ): array {
 		$columns['easycontact-shortcode'] = 'Shortcode';
