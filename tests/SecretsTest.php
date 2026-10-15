@@ -2,17 +2,17 @@
 /**
  * Integration secrets stay on the server.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Forms\Admin\Editor;
-use EasyContact\Forms\Renderer;
-use EasyContact\Privacy\Privacy;
-use EasyContact\Settings\Admin\Page;
-use EasyContact\Settings\Settings;
-use EasyContact\Submissions\Endpoint;
+use EasyFormly\Forms\Admin\Editor;
+use EasyFormly\Forms\Renderer;
+use EasyFormly\Privacy\Privacy;
+use EasyFormly\Settings\Admin\Page;
+use EasyFormly\Settings\Settings;
+use EasyFormly\Submissions\Endpoint;
 
 /**
  * The MailerLite token, the Turnstile secret and the Slack webhook never reach the page, REST, email,

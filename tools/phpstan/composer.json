@@ -1,6 +1,6 @@
 {
-	"name": "easycontact/phpstan-tooling",
-	"description": "PHPStan for EasyContact, kept apart from the main dev dependencies. PHPStan is distributed only as a GitHub zipball, which Claude Code cloud sessions cannot download: isolating it lets every other check install from git in the cloud, while PHPStan runs locally and in CI.",
+	"name": "easyformly/phpstan-tooling",
+	"description": "PHPStan for EasyFormly, kept apart from the main dev dependencies. PHPStan is distributed only as a GitHub zipball, which Claude Code cloud sessions cannot download: isolating it lets every other check install from git in the cloud, while PHPStan runs locally and in CI.",
 	"type": "project",
 	"license": "GPL-3.0-or-later",
 	"require": {

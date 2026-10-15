@@ -2,12 +2,12 @@
 /**
  * Country select of the telephone field, shared by the settings page and the form editor.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Phone\Admin;
+namespace EasyFormly\Phone\Admin;
 
-use EasyContact\Phone\Phone;
+use EasyFormly\Phone\Phone;
 
 defined( 'ABSPATH' ) || exit;
 

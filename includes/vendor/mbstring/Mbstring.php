@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace EasyContact\Vendor\Mbstring;
+namespace EasyFormly\Vendor\Mbstring;
 
 /**
  * Partial mbstring implementation in PHP, iconv based, UTF-8 centric.

@@ -2,12 +2,12 @@
 /**
  * Form definitions: tag template, parsed schema, conditional rules and per-form configuration.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Forms;
+namespace EasyFormly\Forms;
 
-use EasyContact\Plugin;
+use EasyFormly\Plugin;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -50,14 +50,14 @@ final class Forms {
 	public static function default_template(): string {
 		// Field names stay fixed; only the labels follow the site language. Quotes would end a label early.
 		$label = static fn( string $text ): string => '"' . str_replace( array( '"', '[', ']' ), '', $text ) . '"';
-		return '[text* nome ' . $label( __( 'Name', 'easycontact' ) ) . ']' . "\n"
-			. '[email* email ' . $label( __( 'Email', 'easycontact' ) ) . ']' . "\n"
-			. '[select* motivo ' . $label( __( 'Reason', 'easycontact' ) ) . ' ' . $label( __( 'Information', 'easycontact' ) ) . ' ' . $label( __( 'Quote', 'easycontact' ) ) . ']' . "\n"
-			. '[number budget ' . $label( __( 'Estimated budget', 'easycontact' ) ) . ' min:0 step:1]' . "\n"
-			. '[textarea* messaggio ' . $label( __( 'Message', 'easycontact' ) ) . ']' . "\n"
-			. '[checkbox newsletter ' . $label( __( 'I would like to receive the newsletter', 'easycontact' ) ) . ']' . "\n"
-			. '[acceptance* privacy ' . $label( __( 'I have read the privacy policy', 'easycontact' ) ) . ']' . "\n"
-			. '[submit ' . $label( __( 'Send message', 'easycontact' ) ) . ']';
+		return '[text* nome ' . $label( __( 'Name', 'easyformly' ) ) . ']' . "\n"
+			. '[email* email ' . $label( __( 'Email', 'easyformly' ) ) . ']' . "\n"
+			. '[select* motivo ' . $label( __( 'Reason', 'easyformly' ) ) . ' ' . $label( __( 'Information', 'easyformly' ) ) . ' ' . $label( __( 'Quote', 'easyformly' ) ) . ']' . "\n"
+			. '[number budget ' . $label( __( 'Estimated budget', 'easyformly' ) ) . ' min:0 step:1]' . "\n"
+			. '[textarea* messaggio ' . $label( __( 'Message', 'easyformly' ) ) . ']' . "\n"
+			. '[checkbox newsletter ' . $label( __( 'I would like to receive the newsletter', 'easyformly' ) ) . ']' . "\n"
+			. '[acceptance* privacy ' . $label( __( 'I have read the privacy policy', 'easyformly' ) ) . ']' . "\n"
+			. '[submit ' . $label( __( 'Send message', 'easyformly' ) ) . ']';
 	}
 
 	/**
@@ -69,7 +69,7 @@ final class Forms {
 		return array(
 			'mail_enabled'       => true,
 			'mail_to'            => get_option( 'admin_email' ),
-			'mail_subject'       => __( 'New message: [form]', 'easycontact' ),
+			'mail_subject'       => __( 'New message: [form]', 'easyformly' ),
 			'mail_reply_to'      => 'email',
 			'mail_body'          => '[fields]',
 			'store_entries'      => 'inherit',
@@ -89,7 +89,7 @@ final class Forms {
 			'slack_enabled'      => false,
 			'slack_webhook'      => '',
 			'slack_fields'       => 'nome,email,messaggio',
-			'success_message'    => __( 'Thank you, your message has been received.', 'easycontact' ),
+			'success_message'    => __( 'Thank you, your message has been received.', 'easyformly' ),
 		);
 	}
 

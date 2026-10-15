@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="EasyContact">
-	<description>Coding standard for EasyContact.</description>
+<ruleset name="EasyFormly">
+	<description>Coding standard for EasyFormly.</description>
 
 	<file>.</file>
 	<exclude-pattern>/vendor/*</exclude-pattern>
@@ -27,15 +27,17 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="easycontact"/>
+				<element value="easyformly"/>
 			</property>
 		</properties>
 	</rule>
 
+	<!-- easycontact: names of 1.0.0 that are stored or sent outside PHP and are not renamed (D8, D10). -->
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="EasyContact"/>
+				<element value="EasyFormly"/>
+				<element value="easyformly"/>
 				<element value="easycontact"/>
 			</property>
 		</properties>

@@ -1,6 +1,6 @@
 # Anti-spam: configurazione e uso
 
-Apri **EasyContact → Impostazioni → Anti-spam e telefono internazionale**.
+Apri **EasyFormly → Impostazioni → Anti-spam e telefono internazionale**.
 Il livello predefinito del sito è **2 — Equilibrato** e ogni modulo lo eredita.
 Puoi scegliere un livello diverso nella sezione Anti-spam del singolo modulo.
 
@@ -75,7 +75,7 @@ e dalla lista ordinaria di
 lista separata dei servizi con registrazione anonima del secondo progetto.
 Sono riconosciuti anche i sottodomini, senza confondere domini con nomi simili.
 
-In **EasyContact → Impostazioni → Lista domini temporanei** sono visibili
+In **EasyFormly → Impostazioni → Lista domini temporanei** sono visibili
 le fonti, il numero di domini e la data della copia locale. **Sincronizza lista**
 scarica e verifica entrambe le fonti soltanto su richiesta dell’amministratore.
 La nuova lista sostituisce la precedente, recependo aggiunte e rimozioni dei

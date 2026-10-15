@@ -4,13 +4,13 @@
  *
  * Converted from the former tests/disposable-domains.php (run with `studio wp eval-file`).
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\AntiSpam\DisposableDomains;
-use EasyContact\Settings\Admin\Page;
+use EasyFormly\AntiSpam\DisposableDomains;
+use EasyFormly\Settings\Admin\Page;
 use RuntimeException;
 use WP_Error;
 

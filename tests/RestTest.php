@@ -2,12 +2,12 @@
 /**
  * Public REST routes of the form: what an anonymous visitor can and cannot do.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Plugin;
+use EasyFormly\Plugin;
 use WP_REST_Request;
 use WP_REST_Server;
 

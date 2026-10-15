@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EasyContact\Vendor\Phone;
+namespace EasyFormly\Vendor\Phone;
 
 /**
  * INTERNATIONAL and NATIONAL formats are consistent with the definition in ITU-T Recommendation

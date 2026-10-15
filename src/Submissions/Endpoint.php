@@ -2,14 +2,14 @@
 /**
  * Public REST and form-post submission endpoints with signed tickets.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Submissions;
+namespace EasyFormly\Submissions;
 
-use EasyContact\Forms\Forms;
-use EasyContact\Forms\Schema;
-use EasyContact\Plugin;
+use EasyFormly\Forms\Forms;
+use EasyFormly\Forms\Schema;
+use EasyFormly\Plugin;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -181,10 +181,10 @@ final class Endpoint {
 	public static function rest_token( WP_REST_Request $request ) {
 		$id = (int) $request['id'];
 		if ( ! self::available( $id ) ) {
-			return new WP_Error( 'unavailable', __( 'Form not available.', 'easycontact' ), array( 'status' => 404 ) );
+			return new WP_Error( 'unavailable', __( 'Form not available.', 'easyformly' ), array( 'status' => 404 ) );
 		}
 		if ( ! State::rate_allowed( $id, 120, 'token' ) ) {
-			return new WP_Error( 'rate', __( 'Too many requests in a short time. Wait a few minutes.', 'easycontact' ), array( 'status' => 429 ) );
+			return new WP_Error( 'rate', __( 'Too many requests in a short time. Wait a few minutes.', 'easyformly' ), array( 'status' => 429 ) );
 		}
 		$clock    = $request->get_param( 'clock' );
 		$response = new WP_REST_Response( self::issue( $id, is_string( $clock ) ? $clock : '' ) );
@@ -200,7 +200,7 @@ final class Endpoint {
 	 */
 	public static function rest_submit( WP_REST_Request $request ) {
 		if ( strlen( $request->get_body() ) > 50000 ) {
-			return new WP_Error( 'size', __( 'The message is too long.', 'easycontact' ), array( 'status' => 413 ) );
+			return new WP_Error( 'size', __( 'The message is too long.', 'easyformly' ), array( 'status' => 413 ) );
 		}
 		return self::submit( (int) $request['id'], (array) $request->get_json_params() );
 	}
@@ -215,30 +215,30 @@ final class Endpoint {
 	public static function submit( int $id, array $input ) {
 		$definition = self::available( $id ) ? Forms::definition( $id ) : null;
 		if ( null === $definition ) {
-			return new WP_Error( 'unavailable', __( 'Form not available.', 'easycontact' ), array( 'status' => 404 ) );
+			return new WP_Error( 'unavailable', __( 'Form not available.', 'easyformly' ), array( 'status' => 404 ) );
 		}
 		if ( ! State::rate_allowed( $id, 40, 'attempt' ) ) {
-			return new WP_Error( 'rate', __( 'Too many attempts in a short time. Wait a few minutes.', 'easycontact' ), array( 'status' => 429 ) );
+			return new WP_Error( 'rate', __( 'Too many attempts in a short time. Wait a few minutes.', 'easyformly' ), array( 'status' => 429 ) );
 		}
 		$nonce  = is_string( $input['nonce'] ?? null ) ? $input['nonce'] : '';
 		$ticket = is_string( $input['ticket'] ?? null ) ? $input['ticket'] : '';
 		if ( ! wp_verify_nonce( $nonce, 'easycontact_submit_' . get_current_blog_id() . '_' . $id ) || ! self::valid_ticket( $id, $ticket ) ) {
-			return new WP_Error( 'expired', __( 'The form session has expired. Reload the page.', 'easycontact' ), array( 'status' => 403 ) );
+			return new WP_Error( 'expired', __( 'The form session has expired. Reload the page.', 'easyformly' ), array( 'status' => 403 ) );
 		}
 		if ( ! is_array( $input['fields'] ?? null ) || count( $input['fields'] ) > 80 || strlen( (string) wp_json_encode( $input['fields'] ) ) > 40000 || ( isset( $input['countries'] ) && ( ! is_array( $input['countries'] ) || count( $input['countries'] ) > 40 || strlen( (string) wp_json_encode( $input['countries'] ) ) > 5000 ) ) ) {
-			return new WP_Error( 'invalid', __( 'The form is not valid.', 'easycontact' ), array( 'status' => 422 ) );
+			return new WP_Error( 'invalid', __( 'The form is not valid.', 'easyformly' ), array( 'status' => 422 ) );
 		}
 		$countries = $input['countries'] ?? array();
 		foreach ( $countries as $country ) {
 			if ( ! is_string( $country ) || strlen( $country ) > 2 ) {
-				return new WP_Error( 'invalid', __( 'The selected country is not valid.', 'easycontact' ), array( 'status' => 422 ) );
+				return new WP_Error( 'invalid', __( 'The selected country is not valid.', 'easyformly' ), array( 'status' => 422 ) );
 			}
 		}
 		$name    = self::honeypot_name( $id, $ticket );
 		$traps   = $input['honeypot'] ?? null;
 		$elapsed = self::elapsed( $id, is_string( $input['clock'] ?? null ) ? $input['clock'] : '' );
 		if ( ! is_array( $traps ) || 1 !== count( $traps ) || ! isset( $traps[ $name ] ) || ! is_string( $traps[ $name ] ) || strlen( $traps[ $name ] ) > 512 || false === $elapsed ) {
-			return new WP_Error( 'invalid', __( 'The form is not valid. Reload the page.', 'easycontact' ), array( 'status' => 422 ) );
+			return new WP_Error( 'invalid', __( 'The form is not valid. Reload the page.', 'easyformly' ), array( 'status' => 422 ) );
 		}
 		$context = array(
 			'honeypot' => '' !== $traps[ $name ],
@@ -254,18 +254,18 @@ final class Endpoint {
 			) : $fields
 		);
 		if ( false === $encoded ) {
-			return new WP_Error( 'invalid', __( 'The form is not valid.', 'easycontact' ), array( 'status' => 422 ) );
+			return new WP_Error( 'invalid', __( 'The form is not valid.', 'easyformly' ), array( 'status' => 422 ) );
 		}
 		$input_fingerprint = hash_hmac( 'sha256', $encoded, wp_salt( 'auth' ) );
 		$receipt           = State::read( substr( hash( 'sha256', $ticket ), 0, 40 ) );
 		if ( isset( $receipt['response'], $receipt['input_fingerprint'] ) ) {
-			return hash_equals( $receipt['input_fingerprint'], $input_fingerprint ) ? $receipt['response'] : new WP_Error( 'used', __( 'This submission has already been processed. Contact the site before sending another message.', 'easycontact' ), array( 'status' => 409 ) );
+			return hash_equals( $receipt['input_fingerprint'], $input_fingerprint ) ? $receipt['response'] : new WP_Error( 'used', __( 'This submission has already been processed. Contact the site before sending another message.', 'easyformly' ), array( 'status' => 409 ) );
 		}
 		$validated = Schema::validate( $definition, $input['fields'], $countries );
 		if ( $validated['errors'] ) {
 			return new WP_Error(
 				'validation',
-				__( 'Check the highlighted fields.', 'easycontact' ),
+				__( 'Check the highlighted fields.', 'easyformly' ),
 				array(
 					'status' => 422,
 					'fields' => $validated['errors'],
@@ -291,7 +291,7 @@ final class Endpoint {
 		if ( is_wp_error( $result ) ) {
 			wp_die(
 				esc_html( $result->get_error_message() ),
-				esc_html__( 'Form submission', 'easycontact' ),
+				esc_html__( 'Form submission', 'easyformly' ),
 				array(
 					'response'  => (int) ( $result->get_error_data()['status'] ?? 400 ),
 					'back_link' => true,

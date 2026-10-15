@@ -4,7 +4,7 @@
  *
  * Usage and sources: THIRD-PARTY.md. Development-only file, never shipped.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
 if ( 'cli' !== PHP_SAPI || empty( $argv[1] ) ) {
@@ -16,7 +16,7 @@ if ( ! $source || ! is_file( $source . '/src/PhoneNumberUtil.php' ) ) {
 }
 $root     = dirname( __DIR__ );
 $target   = $root . '/includes/vendor/phone';
-$prefix   = 'EasyContact\\Vendor\\Phone';
+$prefix   = 'EasyFormly\\Vendor\\Phone';
 $iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $source . '/src', FilesystemIterator::SKIP_DOTS ) );
 foreach ( $iterator as $file ) {
 	if ( $file->getExtension() !== 'php' ) {
@@ -70,7 +70,7 @@ foreach ( $iterator as $file ) {
 		}
 		[ $kind, $value ] = $token;
 		if ( in_array( $kind, array( T_NAME_QUALIFIED, T_NAME_FULLY_QUALIFIED ), true ) ) {
-			$value = str_replace( 'Symfony\\Polyfill\\Mbstring', 'EasyContact\\Vendor\\Mbstring', $value );
+			$value = str_replace( 'Symfony\\Polyfill\\Mbstring', 'EasyFormly\\Vendor\\Mbstring', $value );
 		}
 		$output .= $value;
 	}
@@ -83,13 +83,13 @@ foreach ( $iterator as $file ) {
 // Read the regions from the copy just written, so the bundled library is also loaded once.
 spl_autoload_register(
 	static function ( string $class_name ) use ( $target ): void {
-		$prefix = 'EasyContact\\Vendor\\Phone\\';
+		$prefix = 'EasyFormly\\Vendor\\Phone\\';
 		if ( str_starts_with( $class_name, $prefix ) ) {
 			require_once $target . '/' . str_replace( '\\', '/', substr( $class_name, strlen( $prefix ) ) ) . '.php';
 		}
 	}
 );
-$phone     = \EasyContact\Vendor\Phone\PhoneNumberUtil::getInstance();
+$phone     = \EasyFormly\Vendor\Phone\PhoneNumberUtil::getInstance();
 $countries = array();
 foreach ( $phone->getSupportedRegions() as $region ) {
 	$countries[ $region ] = array(

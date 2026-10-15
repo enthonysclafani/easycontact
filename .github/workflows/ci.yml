@@ -100,21 +100,21 @@ jobs:
         run: |
           tools/build-dist.sh
           mkdir -p dist-extracted
-          unzip -q .dist/easycontact.zip -d dist-extracted
-          test -f dist-extracted/easycontact/easycontact.php
-          test -f dist-extracted/easycontact/src/autoload.php
-          test -f dist-extracted/easycontact/includes/data/countries.json
-          test ! -e dist-extracted/easycontact/tests
-          test ! -e dist-extracted/easycontact/tools
-          test ! -e dist-extracted/easycontact/docs
-          test ! -e dist-extracted/easycontact/composer.json
+          unzip -q .dist/easyformly.zip -d dist-extracted
+          test -f dist-extracted/easyformly/easyformly.php
+          test -f dist-extracted/easyformly/src/autoload.php
+          test -f dist-extracted/easyformly/includes/data/countries.json
+          test ! -e dist-extracted/easyformly/tests
+          test ! -e dist-extracted/easyformly/tools
+          test ! -e dist-extracted/easyformly/docs
+          test ! -e dist-extracted/easyformly/composer.json
 
       - uses: wordpress/plugin-check-action@10857da14b6c2246d15402b3e69f777edcf8c12e # v1.1.9
         with:
-          build-dir: ./dist-extracted/easycontact
-          slug: easycontact
+          build-dir: ./dist-extracted/easyformly
+          slug: easyformly
           ignore-warnings: true
-          # EasyContact is distributed outside WordPress.org: `Update URI: false` in the header is deliberate (no
+          # EasyFormly is distributed outside WordPress.org: `Update URI: false` in the header is deliberate (no
           # updates from a WordPress.org plugin with the same slug), and plugin_updater reports it as an error.
           exclude-checks: plugin_updater
           # The two public disposable-domain lists are plain-text data that an administrator downloads on request,

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace EasyContact\Vendor\Phone;
+namespace EasyFormly\Vendor\Phone;
 
 /**
  * Cost categories of short numbers

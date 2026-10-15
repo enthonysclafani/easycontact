@@ -1,6 +1,6 @@
 {
-	"name": "easycontact/easycontact",
-	"description": "Development tooling for the EasyContact WordPress plugin. Nothing here ships at runtime.",
+	"name": "easyformly/easyformly",
+	"description": "Development tooling for the EasyFormly WordPress plugin. Nothing here ships at runtime.",
 	"type": "wordpress-plugin",
 	"license": "GPL-3.0-or-later",
 	"require": {

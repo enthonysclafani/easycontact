@@ -1,4 +1,4 @@
-# EasyContact
+# EasyFormly
 
 Plugin di moduli di contatto per WordPress: anti-spam locale, telefono internazionale, campi condizionali,
 MailerLite, Slack e Cloudflare Turnstile, costruito solo su dati nativi di WordPress (nessuna tabella custom).
@@ -34,7 +34,7 @@ composer check
 | `composer test` | PHPUnit sulla suite di WordPress; `WP_MULTISITE=1 composer test` per il multisito |
 | `composer check` | Tutto quanto sopra: deve passare prima di dire "fatto" |
 
-`tools/build-dist.sh` crea `.dist/easycontact.zip` con solo i file che vanno distribuiti (`.gitattributes` esclude
+`tools/build-dist.sh` crea `.dist/easyformly.zip` con solo i file che vanno distribuiti (`.gitattributes` esclude
 test, strumenti e documenti). La libreria del telefono in `includes/vendor/phone/` si aggiorna solo con
 `tools/bundle-phone.php` (vedi `THIRD-PARTY.md`).
 

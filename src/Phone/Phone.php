@@ -2,15 +2,15 @@
 /**
  * International telephone validation using locally bundled numbering metadata.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Phone;
+namespace EasyFormly\Phone;
 
-use EasyContact\Settings\Settings;
-use EasyContact\Vendor\Phone\PhoneNumberFormat;
-use EasyContact\Vendor\Phone\PhoneNumberType;
-use EasyContact\Vendor\Phone\PhoneNumberUtil;
+use EasyFormly\Settings\Settings;
+use EasyFormly\Vendor\Phone\PhoneNumberFormat;
+use EasyFormly\Vendor\Phone\PhoneNumberType;
+use EasyFormly\Vendor\Phone\PhoneNumberUtil;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -27,7 +27,7 @@ final class Phone {
 		}
 		spl_autoload_register(
 			static function ( string $class_name ): void {
-				$prefix = 'EasyContact\\Vendor\\Phone\\';
+				$prefix = 'EasyFormly\\Vendor\\Phone\\';
 				if ( ! str_starts_with( $class_name, $prefix ) ) {
 					return;
 				}
@@ -195,6 +195,6 @@ final class Phone {
 	 * The single message shown for any invalid number.
 	 */
 	private static function error(): WP_Error {
-		return new WP_Error( 'phone', __( 'Check the number and the selected country.', 'easycontact' ) );
+		return new WP_Error( 'phone', __( 'Check the number and the selected country.', 'easyformly' ) );
 	}
 }

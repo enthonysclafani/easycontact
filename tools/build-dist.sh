@@ -7,6 +7,6 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 
 mkdir -p .dist
-rm -f .dist/easycontact.zip
-git archive --format=zip --prefix=easycontact/ -o .dist/easycontact.zip HEAD
-echo "Built .dist/easycontact.zip"
+rm -f .dist/easyformly.zip
+git archive --format=zip --prefix=easyformly/ -o .dist/easyformly.zip HEAD
+echo "Built .dist/easyformly.zip"

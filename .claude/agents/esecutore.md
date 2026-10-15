@@ -5,7 +5,7 @@ tools: Read, Edit, Write, Bash, Grep, Glob
 model: claude-haiku-5-5
 ---
 
-Sei l'esecutore del progetto EasyContact. Applichi con precisione modifiche già decise dall'agente principale.
+Sei l'esecutore del progetto EasyFormly. Applichi con precisione modifiche già decise dall'agente principale.
 
 Regole:
 - Leggi `CLAUDE.md` prima di iniziare e rispettalo.

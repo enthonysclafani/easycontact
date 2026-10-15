@@ -1,4 +1,4 @@
-# EasyContact rispetto agli standard di EasyRankly
+# EasyFormly rispetto agli standard di EasyRankly
 
 Analisi del 13 ottobre 2026 di EasyContact 1.0.0 (branch `main` e `Refactory`) confrontato con EasyRankly (branch
 `Refactory`), e stato del lavoro per portare il plugin in produzione con quegli standard. Il piano operativo è
@@ -6,7 +6,7 @@ Analisi del 13 ottobre 2026 di EasyContact 1.0.0 (branch `main` e `Refactory`) c
 
 ## In breve
 
-Il codice di EasyContact era già solido sul piano del comportamento: nessuna tabella custom, invio pubblico protetto
+Il codice di EasyFormly era già solido sul piano del comportamento: nessuna tabella custom, invio pubblico protetto
 (ticket firmati, nonce, honeypot, rate limit, idempotenza), consegne senza doppioni grazie ai lock atomici,
 quarantena con revisione umana, strumenti privacy del core, disinstallazione anche in multisito.
 
@@ -14,7 +14,7 @@ Mancava tutto ciò che in EasyRankly rende queste qualità **verificabili e dife
 `composer check`, nessuna CI, nessun PHPCS o PHPStan, test lanciabili solo a mano su un sito locale, nessun documento
 di regole o di modello dati, file di sviluppo dentro lo zip distribuito.
 
-Con il lavoro della Fase 0 e della Fase 1 del piano EasyContact ha gli stessi strumenti di EasyRankly, PHPCS a zero
+Con il lavoro della Fase 0 e della Fase 1 del piano EasyFormly ha gli stessi strumenti di EasyRankly, PHPCS a zero
 e 28 test PHPUnit verdi su WordPress 6.4 e 7.1, singolo sito e multisito. I test nuovi hanno trovato due problemi
 reali, corretti con un test di regressione (vedi "Trovato e corretto").
 
@@ -61,7 +61,7 @@ Legenda: ✅ allineato, 🟡 parziale o eccezione decisa ancora da applicare, �
    option non autoload (`easycontact_settings`, `easycontact_version`, `easycontact_review_terms_version`). Ora il
    setup gira solo quando cambia la versione, salvata in autoload; `tests/QueriesTest.php` lo verifica. Sui siti già
    in 1.0.0 l'option della versione diventa autoload al primo cambio di versione: per avere subito il beneficio il
-   rilascio deve alzare `EASYCONTACT_VERSION`.
+   rilascio deve alzare `EASYFORMLY_VERSION`.
 2. **Archivio bloccato se spariscono le categorie anti-spam.** Se i termini di `easycontact_safety` vengono cancellati
    fuori dal plugin (una migrazione, una pulizia del database, uno strumento di manutenzione), l'option
    `easycontact_review_terms_version` restava a `1` e ogni nuovo invio da archiviare falliva con `archive_failed`.
@@ -95,6 +95,6 @@ Prima del merge di `Refactory` in `main` e del rilascio (Fase 6.4 del piano, da 
 - [ ] Verifica manuale sul sito Studio con Query Monitor: pagina senza modulo (zero query e zero asset del plugin),
       invio riuscito, invio sospetto in revisione, approvazione, nuovo tentativo dopo un errore di Slack/MailerLite
 - [ ] Prova di aggiornamento da 1.0.0 a una copia del sito reale: impostazioni, moduli e invii intatti
-- [ ] Versione alzata (`EASYCONTACT_VERSION`, intestazione del plugin, `Stable tag`) e changelog in `readme.txt`
+- [ ] Versione alzata (`EASYFORMLY_VERSION`, intestazione del plugin, `Stable tag`) e changelog in `readme.txt`
 - [x] Controllo di sicurezza della Fase 6.2 sul codice che va in produzione (`docs/sicurezza.md`)
 - [x] Decisioni D1–D9 prese (13 ottobre 2026)

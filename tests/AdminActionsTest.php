@@ -2,17 +2,17 @@
 /**
  * Classic admin forms posted to admin-post.php.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Forms\Admin\Editor;
-use EasyContact\Plugin;
-use EasyContact\Review\Admin\Screen;
-use EasyContact\Review\Review;
-use EasyContact\Settings\Admin\Page;
-use EasyContact\Submissions\Admin\EntryScreen;
+use EasyFormly\Forms\Admin\Editor;
+use EasyFormly\Plugin;
+use EasyFormly\Review\Admin\Screen;
+use EasyFormly\Review\Review;
+use EasyFormly\Settings\Admin\Page;
+use EasyFormly\Submissions\Admin\EntryScreen;
 use RuntimeException;
 
 /**

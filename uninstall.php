@@ -2,10 +2,10 @@
 /**
  * Explicit opt-in cleanup using core tables and APIs only.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact;
+namespace EasyFormly;
 
 defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 

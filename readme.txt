@@ -1,4 +1,4 @@
-=== EasyContact ===
+=== EasyFormly ===
 Tags: contact form, antispam, mailerlite, slack, conditional fields
 Requires at least: 6.4
 Tested up to: 7.1
@@ -11,7 +11,7 @@ Forms with local anti-spam, international phone fields, conditional fields, inte
 
 == Description ==
 
-EasyContact is a standalone WordPress plugin with a small tag editor, native metaboxes, AND/OR conditional fields, and plain-text email notifications.
+EasyFormly is a standalone WordPress plugin with a small tag editor, native metaboxes, AND/OR conditional fields, and plain-text email notifications.
 
 * Private custom post types and native metadata for form definitions and the optional submission archive.
 * No custom database tables, bundled frameworks, or dependencies on Contact Form 7 or Forminator.
@@ -60,10 +60,10 @@ WordPress erasure removes local archived copies only. Copies already sent by ema
 
 == Installation ==
 
-1. Upload the easycontact plugin folder or its ZIP from Plugins > Add Plugin, and activate it.
-2. Open EasyContact > Impostazioni to configure credentials and preferences.
-3. Create and publish a form from EasyContact > Moduli.
-4. Add the shortcode [easycontact id="123"] to a page, replacing 123 with the form ID.
+1. Upload the easyformly plugin folder or its ZIP from Plugins > Add Plugin, and activate it.
+2. Open EasyFormly > Impostazioni to configure credentials and preferences.
+3. Create and publish a form from EasyFormly > Moduli.
+4. Add the shortcode [easyformly id="123"] to a page, replacing 123 with the form ID.
 
 The interface is in English and includes an Italian translation, used automatically when the site or user language is Italian. A separate Italian setup guide is provided with this build.
 
@@ -95,7 +95,7 @@ The plugin does not use AI. It cannot establish mailbox ownership, whether a num
 
 = How do I update the disposable-email list? =
 
-Open EasyContact > Impostazioni > Lista domini temporanei and press Sincronizza lista. The screen shows the source projects, domain count and last synchronization or bundled snapshot date. The list combines disposable-email-domains, also used by PyPI, and the normal list from disposable/disposable. Updates respect provider additions and removals; if either source fails validation, the current complete copy remains active. No cron or visitor request downloads these lists.
+Open EasyFormly > Impostazioni > Lista domini temporanei and press Sincronizza lista. The screen shows the source projects, domain count and last synchronization or bundled snapshot date. The list combines disposable-email-domains, also used by PyPI, and the normal list from disposable/disposable. Updates respect provider additions and removals; if either source fails validation, the current complete copy remains active. No cron or visitor request downloads these lists.
 
 = Where are suspicious submissions organized? =
 
@@ -134,7 +134,10 @@ With the archive disabled there is no background delivery queue and no saved cop
 The browser refreshes an expired submission ticket before a first send and preserves field values. After an interrupted request it reuses the original ticket and payload to retrieve a stored confirmation. If an ambiguous attempt has already expired, it asks the visitor to contact the site before sending again.
 
 = Are translations supported? =
-All interface strings are in English and use the easycontact text domain. The package includes a POT template and the Italian translation (languages/easycontact-it_IT.po and .mo). Translations in WordPress's language directory take precedence over the bundled one.
+All interface strings are in English and use the easyformly text domain. The package includes a POT template and the Italian translation (languages/easyformly-it_IT.po and .mo). Translations in WordPress's language directory take precedence over the bundled one.
+
+= How do I move from EasyContact 1.0.0? =
+EasyFormly is the new name of EasyContact and uses the same forms, submissions and settings. Install EasyFormly and activate it: EasyContact is deactivated automatically. Pages with the [easycontact] shortcode keep working. Deleting EasyContact afterwards keeps forms, submissions and settings even when data removal on uninstall is enabled.
 
 = Can forms be imported from other plugins? =
 This version uses its own small tag syntax. It does not include automatic imports, a drag-and-drop builder, file uploads, payments, multiple steps, or separate confirmation emails to the submitter.

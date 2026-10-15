@@ -7,7 +7,7 @@
 	failOnWarning="true"
 >
 	<testsuites>
-		<testsuite name="EasyContact">
+		<testsuite name="EasyFormly">
 			<directory suffix="Test.php">tests</directory>
 		</testsuite>
 	</testsuites>

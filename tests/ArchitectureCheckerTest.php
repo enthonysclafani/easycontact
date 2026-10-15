@@ -2,12 +2,12 @@
 /**
  * Tests for tools/check-architecture.php on fixtures with allowed and forbidden code.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Tools\ArchitectureChecker;
+use EasyFormly\Tools\ArchitectureChecker;
 use PHPUnit\Framework\TestCase as Base;
 
 require_once dirname( __DIR__ ) . '/tools/check-architecture.php';
@@ -33,12 +33,12 @@ class ArchitectureCheckerTest extends Base {
 
 		$this->assertSame(
 			array(
-				'easycontact.php:1 direct-access-guard',
-				'easycontact.php:2 no-direct-db',
-				'easycontact.php:3 cron',
-				'easycontact.php:4 no-custom-tables',
-				'easycontact.php:5 no-inline-css',
-				'easycontact.php:6 assets',
+				'easyformly.php:1 direct-access-guard',
+				'easyformly.php:2 no-direct-db',
+				'easyformly.php:3 cron',
+				'easyformly.php:4 no-custom-tables',
+				'easyformly.php:5 no-inline-css',
+				'easyformly.php:6 assets',
 				'src/Extra.php:4 forbidden-php',
 				'src/Extra.php:5 no-disk-writes',
 				'src/Extra.php:6 http',

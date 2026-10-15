@@ -1,6 +1,6 @@
-# Piano: gli standard di EasyRankly in EasyContact
+# Piano: gli standard di EasyRankly in EasyFormly
 
-Obiettivo: portare in EasyContact gli standard di qualità di EasyRankly (branch `Refactory` di
+Obiettivo: portare in EasyFormly gli standard di qualità di EasyRankly (branch `Refactory` di
 `enthonysclafani/easyrankly`): stessi controlli automatici, stessa struttura, stessa disciplina sui dati,
 **zero tabelle custom e zero accessi diretti al database non motivati**.
 
@@ -135,7 +135,7 @@ Fasi 0 e 1.
 
 ### Fase 3 — Struttura
 
-- [x] 3.1 `src/autoload.php` PSR-4, `src/Plugin.php` con `register()`; bootstrap in `easycontact.php` ridotto
+- [x] 3.1 `src/autoload.php` PSR-4, `src/Plugin.php` con `register()`; bootstrap in `easyformly.php` ridotto
 - [x] 3.2 Una cartella per funzionalità (ipotesi: `Forms/`, `Submissions/`, `Delivery/`, `AntiSpam/`, `Phone/`,
       `Review/`, `Privacy/`, `Settings/`), classi admin in `*/Admin/`; un PR per funzionalità, comportamento
       invariato e coperto dai test della Fase 0
@@ -170,7 +170,7 @@ Fasi 0 e 1.
       _Fatto: `src/Submissions/Maintenance.php` esegue retention (`Entries::cleanup()`), pulizia di lock e stati e
       ripresa dei tentativi su `admin_init` e alla fine di una richiesta con un invio, sotto un lock, al massimo una
       volta al giorno a giro finito; i cursori stanno in `easycontact_maintenance` (non autoload). Resta solo
-      `easycontact_retry_delivery`; il setup toglie gli eventi della 1.0.0 quando cambia `EASYCONTACT_VERSION`, quindi
+      `easycontact_retry_delivery`; il setup toglie gli eventi della 1.0.0 quando cambia `EASYFORMLY_VERSION`, quindi
       il rilascio deve aumentare la versione. `State.php` esce dall'allowlist del cron. Test:
       `tests/MaintenanceTest.php`._
 - [x] 4.2 Asset del frontend caricati solo con un modulo nella pagina; test che una pagina senza modulo non
@@ -203,7 +203,7 @@ Fasi 0 e 1.
       classici con ricarica della pagina, come prevede la tabella delle API native in CLAUDE.md._
 - [x] 5.3 Testi delle schermate brevi e coerenti
       _Fatto con D9: le stringhe sorgente sono in inglese, brevi e con le parole del core; il testo italiano di oggi è
-      in `languages/easycontact-it_IT.po`/`.mo`, caricato da `Plugin::init()` solo quando il file per la lingua esiste,
+      in `languages/easyformly-it_IT.po`/`.mo`, caricato da `Plugin::init()` solo quando il file per la lingua esiste,
       così un sito in italiano non vede cambiamenti. Anche le etichette del modulo predefinito e gli esempi della
       pagina Supporto seguono la lingua. `tests/I18nTest.php` verifica che ogni stringa sia tradotta, che un sito in
       italiano mostri i testi di prima e che il modulo predefinito resti valido in entrambe le lingue._

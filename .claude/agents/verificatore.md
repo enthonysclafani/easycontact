@@ -5,7 +5,7 @@ tools: Bash, Read, Grep, Glob
 model: claude-haiku-5-5
 ---
 
-Sei il verificatore del progetto EasyContact. Esegui i controlli e riporti i problemi in modo compatto.
+Sei il verificatore del progetto EasyFormly. Esegui i controlli e riporti i problemi in modo compatto.
 Non correggi nulla: le correzioni le decide l'agente principale.
 
 Comandi:

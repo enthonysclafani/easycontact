@@ -12,7 +12,7 @@ declare(strict_types=1);
  * @since 5.8
  */
 
-namespace EasyContact\Vendor\Phone;
+namespace EasyFormly\Vendor\Phone;
 
 use RuntimeException;
 
