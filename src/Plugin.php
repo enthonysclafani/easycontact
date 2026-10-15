@@ -2,25 +2,25 @@
 /**
  * Private post types, site lifecycle and hook registration.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact;
+namespace EasyFormly;
 
-use EasyContact\Admin\Admin;
-use EasyContact\Forms\Admin\Editor;
-use EasyContact\Forms\Forms;
-use EasyContact\Forms\Renderer;
-use EasyContact\Phone\Phone;
-use EasyContact\Privacy\Privacy;
-use EasyContact\Review\Admin\Screen;
-use EasyContact\Review\Review;
-use EasyContact\Settings\Admin\Page;
-use EasyContact\Settings\Settings;
-use EasyContact\Submissions\Admin\EntryScreen;
-use EasyContact\Submissions\Endpoint;
-use EasyContact\Submissions\Maintenance;
-use EasyContact\Submissions\Submission;
+use EasyFormly\Admin\Admin;
+use EasyFormly\Forms\Admin\Editor;
+use EasyFormly\Forms\Forms;
+use EasyFormly\Forms\Renderer;
+use EasyFormly\Phone\Phone;
+use EasyFormly\Privacy\Privacy;
+use EasyFormly\Review\Admin\Screen;
+use EasyFormly\Review\Review;
+use EasyFormly\Settings\Admin\Page;
+use EasyFormly\Settings\Settings;
+use EasyFormly\Submissions\Admin\EntryScreen;
+use EasyFormly\Submissions\Endpoint;
+use EasyFormly\Submissions\Maintenance;
+use EasyFormly\Submissions\Submission;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -39,11 +39,22 @@ final class Plugin {
 	private const LEGACY_EVENTS = array( 'easycontact_daily_cleanup', 'easycontact_retention_cleanup', 'easycontact_state_cleanup', 'easycontact_resume_retries' );
 
 	/**
+	 * The plugin before the rename (EasyContact 1.0.0): it uses the same data, so the two never run together (D10).
+	 */
+	public const LEGACY_PLUGIN = 'easycontact/easycontact.php';
+
+	/**
 	 * Register the hooks of every part of the plugin, one line each.
 	 *
 	 * @return void
 	 */
 	public static function register(): void {
+		// EasyContact 1.0.0 loads first and already registers the same names: it serves this request alone.
+		if ( defined( 'EASYCONTACT_VERSION' ) ) {
+			add_action( 'admin_init', array( self::class, 'replace_legacy' ) );
+			return;
+		}
+		add_action( 'pre_uninstall_plugin', array( self::class, 'guard_legacy_uninstall' ) );
 		add_action( 'init', array( self::class, 'init' ) );
 		Submission::boot();
 		Maintenance::boot();
@@ -61,12 +72,74 @@ final class Plugin {
 	}
 
 	/**
-	 * Initialize non-autoloaded settings.
+	 * Initialize non-autoloaded settings and take over from EasyContact 1.0.0.
+	 *
+	 * @param bool $network_wide Whether activation applies to the whole network.
+	 * @return void
+	 */
+	public static function activate( bool $network_wide = false ): void {
+		add_option( Settings::OPTION, Settings::defaults(), '', false );
+		self::deactivate_legacy( $network_wide );
+	}
+
+	/**
+	 * Deactivate EasyContact 1.0.0 when an administrator opens the dashboard with both plugins active.
 	 *
 	 * @return void
 	 */
-	public static function activate(): void {
-		add_option( Settings::OPTION, Settings::defaults(), '', false );
+	public static function replace_legacy(): void {
+		if ( current_user_can( 'activate_plugins' ) ) {
+			self::deactivate_legacy( is_multisite() && is_plugin_active_for_network( plugin_basename( EASYFORMLY_FILE ) ) );
+		}
+	}
+
+	/**
+	 * Deactivate EasyContact 1.0.0 where EasyFormly is active: on the current site, or on the network.
+	 *
+	 * Its own deactivation clears the version and the retries, so the next request runs the setup of EasyFormly,
+	 * which resumes them. A network activation of EasyContact is left alone when EasyFormly runs on one site only.
+	 *
+	 * @param bool $network_wide Whether EasyFormly is active on the whole network.
+	 * @return void
+	 */
+	private static function deactivate_legacy( bool $network_wide ): void {
+		if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$on_network = is_multisite() && is_plugin_active_for_network( self::LEGACY_PLUGIN );
+		if ( $on_network && $network_wide ) {
+			deactivate_plugins( self::LEGACY_PLUGIN, false, true );
+		} elseif ( ! $on_network && is_plugin_active( self::LEGACY_PLUGIN ) ) {
+			deactivate_plugins( self::LEGACY_PLUGIN );
+		}
+	}
+
+	/**
+	 * Keep forms, entries and settings when EasyContact 1.0.0 is deleted: they now belong to EasyFormly.
+	 *
+	 * Its uninstall.php reads the same settings; during that request it sees data removal turned off. The technical
+	 * data it removes (version, locks, receipts, retries) is rebuilt by the setup on the next request.
+	 *
+	 * @param string $plugin Basename of the plugin being uninstalled.
+	 * @return void
+	 */
+	public static function guard_legacy_uninstall( $plugin ): void {
+		if ( self::LEGACY_PLUGIN === $plugin ) {
+			add_filter( 'option_' . Settings::OPTION, array( self::class, 'keep_data' ) );
+		}
+	}
+
+	/**
+	 * Settings as read by the uninstall of EasyContact 1.0.0: data removal off.
+	 *
+	 * @param mixed $settings Stored settings.
+	 * @return mixed Settings without data removal.
+	 */
+	public static function keep_data( $settings ) {
+		if ( is_array( $settings ) ) {
+			$settings['delete_on_uninstall'] = false;
+		}
+		return $settings;
 	}
 
 	/**
@@ -119,8 +192,8 @@ final class Plugin {
 	public static function init(): void {
 		// The Italian translation ships with the plugin (D9); files in wp-content/languages still take precedence.
 		// Registering the folder only when it has the current locale spares other sites a lookup on every string.
-		if ( is_readable( plugin_dir_path( EASYCONTACT_FILE ) . 'languages/easycontact-' . determine_locale() . '.mo' ) ) {
-			load_plugin_textdomain( 'easycontact', false, dirname( plugin_basename( EASYCONTACT_FILE ) ) . '/languages' );
+		if ( is_readable( plugin_dir_path( EASYFORMLY_FILE ) . 'languages/easyformly-' . determine_locale() . '.mo' ) ) {
+			load_plugin_textdomain( 'easyformly', false, dirname( plugin_basename( EASYFORMLY_FILE ) ) . '/languages' );
 		}
 		$capabilities = array_fill_keys( array( 'edit_post', 'read_post', 'delete_post', 'edit_posts', 'edit_others_posts', 'publish_posts', 'read_private_posts', 'delete_posts', 'delete_private_posts', 'delete_published_posts', 'delete_others_posts', 'edit_private_posts', 'edit_published_posts', 'create_posts' ), 'manage_options' );
 		$shared       = array(
@@ -141,12 +214,12 @@ final class Plugin {
 				$shared,
 				array(
 					'labels'    => array(
-						'name'          => __( 'Forms', 'easycontact' ),
-						'singular_name' => __( 'Form', 'easycontact' ),
-						'menu_name'     => 'EasyContact',
-						'add_new_item'  => __( 'Add a form', 'easycontact' ),
-						'edit_item'     => __( 'Edit form', 'easycontact' ),
-						'all_items'     => __( 'Forms', 'easycontact' ),
+						'name'          => __( 'Forms', 'easyformly' ),
+						'singular_name' => __( 'Form', 'easyformly' ),
+						'menu_name'     => 'EasyFormly',
+						'add_new_item'  => __( 'Add a form', 'easyformly' ),
+						'edit_item'     => __( 'Edit form', 'easyformly' ),
+						'all_items'     => __( 'Forms', 'easyformly' ),
 					),
 					'menu_icon' => 'dashicons-email',
 					'supports'  => array( 'title' ),
@@ -160,10 +233,10 @@ final class Plugin {
 				$shared,
 				array(
 					'labels'       => array(
-						'name'          => __( 'Submissions', 'easycontact' ),
-						'singular_name' => __( 'Submission', 'easycontact' ),
-						'edit_item'     => __( 'Submission details', 'easycontact' ),
-						'all_items'     => __( 'Submissions', 'easycontact' ),
+						'name'          => __( 'Submissions', 'easyformly' ),
+						'singular_name' => __( 'Submission', 'easyformly' ),
+						'edit_item'     => __( 'Submission details', 'easyformly' ),
+						'all_items'     => __( 'Submissions', 'easyformly' ),
 					),
 					'show_in_menu' => 'edit.php?post_type=' . self::FORM,
 					'capabilities' => $capabilities,
@@ -174,7 +247,7 @@ final class Plugin {
 		Forms::register_meta();
 		Review::register();
 		// The version is autoloaded, so the check costs no query; setup runs only after an update.
-		if ( EASYCONTACT_VERSION !== get_option( 'easycontact_version' ) ) {
+		if ( EASYFORMLY_VERSION !== get_option( 'easycontact_version' ) ) {
 			self::setup();
 		}
 	}
@@ -193,7 +266,7 @@ final class Plugin {
 		foreach ( self::LEGACY_EVENTS as $hook ) {
 			wp_unschedule_hook( $hook );
 		}
-		update_option( 'easycontact_version', EASYCONTACT_VERSION, true );
+		update_option( 'easycontact_version', EASYFORMLY_VERSION, true );
 		Maintenance::resume_retries();
 	}
 }

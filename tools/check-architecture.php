@@ -10,12 +10,12 @@
  *
  * Development-only file: excluded from the distributable (see .gitattributes).
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
 declare( strict_types=1 );
 
-namespace EasyContact\Tools;
+namespace EasyFormly\Tools;
 
 /**
  * Scans the plugin source for constructs that CLAUDE.md forbids.
@@ -37,7 +37,7 @@ final class ArchitectureChecker {
 	 *
 	 * @var list<string>
 	 */
-	private const SCANNED_PATHS = array( 'easycontact.php', 'uninstall.php', 'src', 'includes' );
+	private const SCANNED_PATHS = array( 'easyformly.php', 'uninstall.php', 'src', 'includes' );
 
 	/**
 	 * Directories never scanned: bundled upstream libraries and data (THIRD-PARTY.md).
@@ -535,14 +535,14 @@ final class ArchitectureChecker {
 
 // Run only when executed directly, so tests can load the class without side effects.
 if ( 'cli' === PHP_SAPI && realpath( get_included_files()[0] ) === __FILE__ ) {
-	$easycontact_violations = ( new ArchitectureChecker( dirname( __DIR__ ) ) )->check();
+	$easyformly_violations = ( new ArchitectureChecker( dirname( __DIR__ ) ) )->check();
 
-	foreach ( $easycontact_violations as $easycontact_violation ) {
-		fwrite( STDERR, sprintf( "%s:%d  [%s] %s\n", $easycontact_violation['file'], $easycontact_violation['line'], $easycontact_violation['rule'], $easycontact_violation['message'] ) );
+	foreach ( $easyformly_violations as $easyformly_violation ) {
+		fwrite( STDERR, sprintf( "%s:%d  [%s] %s\n", $easyformly_violation['file'], $easyformly_violation['line'], $easyformly_violation['rule'], $easyformly_violation['message'] ) );
 	}
 
-	if ( array() !== $easycontact_violations ) {
-		fwrite( STDERR, sprintf( "\n%d architecture violation(s). See CLAUDE.md, section \"Invarianti architetturali\".\n", count( $easycontact_violations ) ) );
+	if ( array() !== $easyformly_violations ) {
+		fwrite( STDERR, sprintf( "\n%d architecture violation(s). See CLAUDE.md, section \"Invarianti architetturali\".\n", count( $easyformly_violations ) ) );
 		exit( 1 );
 	}
 

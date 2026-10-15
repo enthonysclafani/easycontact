@@ -2,14 +2,14 @@
 /**
  * Private, mutually exclusive entry categories and explicit human review.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Review;
+namespace EasyFormly\Review;
 
-use EasyContact\Plugin;
-use EasyContact\Submissions\State;
-use EasyContact\Submissions\Submission;
+use EasyFormly\Plugin;
+use EasyFormly\Submissions\State;
+use EasyFormly\Submissions\Submission;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -27,9 +27,9 @@ final class Review {
 	 */
 	public static function labels(): array {
 		return array(
-			'accepted' => __( 'Accepted', 'easycontact' ),
-			'suspect'  => __( 'Likely spam', 'easycontact' ),
-			'spam'     => __( 'Spam', 'easycontact' ),
+			'accepted' => __( 'Accepted', 'easyformly' ),
+			'suspect'  => __( 'Likely spam', 'easyformly' ),
+			'spam'     => __( 'Spam', 'easyformly' ),
 		);
 	}
 
@@ -197,14 +197,14 @@ final class Review {
 		$lease = 'retry_' . $id;
 		$owner = State::claim( $lease );
 		if ( null === $owner ) {
-			return new WP_Error( 'busy', __( 'This submission is being processed. Try again in a few seconds.', 'easycontact' ) );
+			return new WP_Error( 'busy', __( 'This submission is being processed. Try again in a few seconds.', 'easyformly' ) );
 		}
 		try {
 			if ( 'private' !== get_post_status( $id ) || get_post_meta( $id, '_easycontact_initializing', true ) ) {
-				return new WP_Error( 'busy', __( 'This submission is not available for review. Try again in a few seconds.', 'easycontact' ) );
+				return new WP_Error( 'busy', __( 'This submission is not available for review. Try again in a few seconds.', 'easyformly' ) );
 			}
 			if ( ! self::write( $id, $category, 'manual', 'accepted' !== $category || self::held( $id ) ) ) {
-				return new WP_Error( 'save', __( 'The category could not be updated.', 'easycontact' ) );
+				return new WP_Error( 'save', __( 'The category could not be updated.', 'easyformly' ) );
 			}
 			return true;
 		} finally {

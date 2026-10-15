@@ -2,15 +2,15 @@
 /**
  * Archived entries: storage preferences, storage and retention.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Submissions;
+namespace EasyFormly\Submissions;
 
-use EasyContact\AntiSpam\AntiSpam;
-use EasyContact\Plugin;
-use EasyContact\Review\Review;
-use EasyContact\Settings\Settings;
+use EasyFormly\AntiSpam\AntiSpam;
+use EasyFormly\Plugin;
+use EasyFormly\Review\Review;
+use EasyFormly\Settings\Settings;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;

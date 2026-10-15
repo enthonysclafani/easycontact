@@ -1,6 +1,6 @@
 # Decisioni
 
-Tutte le decisioni sugli standard di EasyContact, aperte e prese, con data e perché. Prima di proporre qualcosa
+Tutte le decisioni sugli standard di EasyFormly, aperte e prese, con data e perché. Prima di proporre qualcosa
 controlla che non sia già stato deciso o scartato; davanti a una decisione aperta fermati e chiedi a Enthony: non si
 sceglie da soli.
 
@@ -20,7 +20,8 @@ solo in questo file. Quando una decisione viene presa: si scrive la data e il mo
 | D6 | Lock atomici in `wp_options` | presa | Fase 2.2, `WPDB_ALLOWLIST` |
 | D7 | Requisiti minimi | presa (già così) | |
 | D8 | Nomi dei dati | presa | |
-| D9 | Lingua delle stringhe sorgente | presa, fatta | Fase 5.3, `languages/easycontact-it_IT.po` |
+| D9 | Lingua delle stringhe sorgente | presa, fatta | Fase 5.3, `languages/easyformly-it_IT.po` |
+| D10 | Nuovo nome: EasyFormly | presa (default, da confermare) | Rinomina del repository GitHub, a cura di Enthony |
 
 ## Prese
 
@@ -31,7 +32,7 @@ comportamento attuale, e le altre tolgono codice o rischi senza cambiare ciò ch
 
 Sotto ogni decisione la riga "Decisione" dice cosa è stato scelto e cosa resta da fare.
 
-**D1 — Cron.** EasyRankly vieta ogni cron. EasyContact lo usa per pulizie e per ritentare le consegne fallite.
+**D1 — Cron.** EasyRankly vieta ogni cron. EasyFormly lo usa per pulizie e per ritentare le consegne fallite.
 - Stato attuale: `easycontact_daily_cleanup` (giornaliero), `easycontact_retention_cleanup`,
   `easycontact_state_cleanup`, `easycontact_retry_delivery`, `easycontact_resume_retries` (singoli). I file che li
   pianificano sono in `CRON_ALLOWLIST` con `TODO D1`.
@@ -64,7 +65,7 @@ Sotto ogni decisione la riga "Decisione" dice cosa è stato scelto e cosa resta 
 - Decisione (13 ottobre 2026): proposta approvata. Da fare: Fase 4.3 (timeout verificati, "External services" in
   `readme.txt`).
 
-**D4 — Dipendenze PHP a runtime.** EasyContact distribuisce libphonenumber (centinaia di file di metadati) e il
+**D4 — Dipendenze PHP a runtime.** EasyFormly distribuisce libphonenumber (centinaia di file di metadati) e il
 polyfill di mbstring.
 - Proposta: polyfill mbstring rimosso se i requisiti lo permettono (verificare l'uso effettivo); libphonenumber
   tenuto come **unica eccezione dichiarata**, isolato in `includes/vendor/phone/`, escluso da PHPCS e PHPStan,
@@ -75,7 +76,7 @@ polyfill di mbstring.
 - Decisione (13 ottobre 2026): proposta approvata. libphonenumber resta come unica eccezione dichiarata; il polyfill
   mbstring si toglie se `ext-mbstring` diventa requisito dopo la verifica dell'uso effettivo (Fase 3).
 
-**D5 — Disinstallazione.** EasyRankly rimuove sempre tutto; EasyContact conserva moduli e invii salvo opt-in.
+**D5 — Disinstallazione.** EasyRankly rimuove sempre tutto; EasyFormly conserva moduli e invii salvo opt-in.
 - Stato attuale: già come la proposta. `uninstall.php` rimuove sempre i dati tecnici e, solo con
   `delete_on_uninstall`, moduli, invii, categorie e impostazioni, su ogni sito della rete.
   `tests/UninstallTest.php` copre entrambi i casi e il multisite.
@@ -103,15 +104,41 @@ migrazione.
 - Decisione (13 ottobre 2026): nessuna rinomina.
 
 **D9 — Lingua delle stringhe sorgente.** EasyRankly vuole codice, commenti e stringhe sorgente in inglese, tradotte
-con il text domain. In EasyContact codice e commenti sono in inglese, ma le stringhe dell'interfaccia sono scritte in
+con il text domain. In EasyFormly codice e commenti sono in inglese, ma le stringhe dell'interfaccia sono scritte in
 italiano dentro `__()`.
 - Effetto: su un sito in inglese o in un'altra lingua l'interfaccia resta in italiano finché non esiste una
   traduzione da italiano; WordPress.org e i traduttori si aspettano sorgenti in inglese.
-- Proposta: portare le stringhe sorgente in inglese e aggiungere `languages/easycontact-it_IT.po`/`.mo` con il testo
+- Proposta: portare le stringhe sorgente in inglese e aggiungere `languages/easyformly-it_IT.po`/`.mo` con il testo
   italiano di oggi, così i siti italiani non vedono cambiamenti. Va fatto in un PR a parte (Fase 5.3), con test che
   confrontano le stringhe principali.
 - Decisione (13 ottobre 2026): proposta approvata. Stringhe sorgente in inglese più traduzione `it_IT` con il testo di
   oggi, in un PR a parte (Fase 5.3). Fino ad allora le nuove stringhe seguono quelle vicine.
+
+**D10 — Nuovo nome: EasyFormly.** Il 15 ottobre 2026 Enthony ha chiesto di rinominare il plugin "EasyFormly".
+- Problema: i siti in produzione hanno la 1.0.0 come `easycontact/easycontact.php`, con dati, shortcode nelle pagine e
+  HTML del modulo nelle cache delle pagine che usano i nomi `easycontact`.
+- Scelta: cambia tutto ciò che è nome del plugin o del codice; resta tutto ciò che WordPress salva o che esce dal
+  PHP verso pagine già pubblicate.
+  - Cambiano: nome mostrato (intestazione, menu, titoli delle schermate, guida privacy), cartella e file principale
+    (`easyformly/easyformly.php`, zip `easyformly.zip`), text domain `easyformly` e file in `languages/`, namespace
+    PHP `EasyFormly` (anche per le librerie incluse), costanti `EASYFORMLY_*`, pacchetti Composer, documenti.
+  - Restano `easycontact` (D8 e compatibilità): post type, tassonomia, option, meta, transient, gruppo di cache,
+    eventi cron, route REST `easycontact/v1`, azioni di `admin-post.php` e dei nonce, nomi dei campi, classi CSS,
+    attributi `data-`, oggetti JS, handle degli asset, slug delle schermate admin, ID di export ed erase privacy.
+    Le pagine in cache mandano ancora questi nomi, e i temi possono avere CSS sulle classi.
+  - Shortcode: `[easyformly]` è quello mostrato nell'editor; `[easycontact]` resta valido, senza scadenza.
+- Passaggio dalla 1.0.0: EasyFormly è un plugin con un'altra cartella, quindi si installa accanto e si attiva.
+  - L'attivazione disattiva EasyContact sullo stesso sito (o sulla rete, se entrambi sono attivi sulla rete); se i
+    due restano attivi insieme, EasyFormly non registra niente e lascia servire EasyContact finché un amministratore
+    apre la bacheca, che lo disattiva. La disattivazione di EasyContact toglie la versione: la richiesta dopo rifà
+    il setup e riprende i tentativi di consegna.
+  - Eliminare EasyContact da Plugin esegue il suo `uninstall.php`, che legge le stesse impostazioni: con
+    EasyFormly attivo, in quella richiesta "elimina i dati alla disinstallazione" risulta spento, quindi moduli,
+    invii e impostazioni restano. I dati tecnici che toglie (versione, lock, ricevute, cache dei domini) li ricrea
+    il setup. Test: `tests/RenameTest.php`, `tests/UninstallTest.php`.
+- Il repository GitHub si chiama ancora `enthonysclafani/easycontact`: la rinomina la fa Enthony, se la vuole.
+- Decisione (15 ottobre 2026): default scelto da Claude sulla richiesta di Enthony, da confermare nella pull
+  request della rinomina.
 
 ## Aperte
 

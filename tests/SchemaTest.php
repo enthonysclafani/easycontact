@@ -2,12 +2,12 @@
 /**
  * The tag language of the form editor.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Forms\Schema;
+use EasyFormly\Forms\Schema;
 
 /**
  * Fields joined with | share a row; notes and the button stay on their own line.

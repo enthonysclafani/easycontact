@@ -2,18 +2,18 @@
 /**
  * Submission orchestration and bounded recovery using the optional native archive.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Submissions;
+namespace EasyFormly\Submissions;
 
-use EasyContact\AntiSpam\AntiSpam;
-use EasyContact\Delivery\Delivery;
-use EasyContact\Forms\Forms;
-use EasyContact\Forms\Schema;
-use EasyContact\Plugin;
-use EasyContact\Review\Review;
-use EasyContact\Settings\Settings;
+use EasyFormly\AntiSpam\AntiSpam;
+use EasyFormly\Delivery\Delivery;
+use EasyFormly\Forms\Forms;
+use EasyFormly\Forms\Schema;
+use EasyFormly\Plugin;
+use EasyFormly\Review\Review;
+use EasyFormly\Settings\Settings;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -56,17 +56,17 @@ final class Submission {
 		 */
 		$entry_owner = null;
 		if ( null === $owner ) {
-			return new WP_Error( 'busy', __( 'The submission is in progress. Wait a few seconds.', 'easycontact' ), array( 'status' => 429 ) );
+			return new WP_Error( 'busy', __( 'The submission is in progress. Wait a few seconds.', 'easyformly' ), array( 'status' => 429 ) );
 		}
 		try {
 			$encoded = wp_json_encode( $values );
 			if ( false === $encoded ) {
-				return new WP_Error( 'invalid', __( 'The form is not valid.', 'easycontact' ), array( 'status' => 422 ) );
+				return new WP_Error( 'invalid', __( 'The form is not valid.', 'easyformly' ), array( 'status' => 422 ) );
 			}
 			$fingerprint = hash_hmac( 'sha256', $encoded, wp_salt( 'auth' ) );
 			$state       = State::read( $key );
 			if ( $state && ( ! hash_equals( $state['fingerprint'], $fingerprint ) || ! hash_equals( $state['input_fingerprint'], $input_fingerprint ) ) ) {
-				return new WP_Error( 'used', __( 'This submission has already been processed. Reload the form for a new message.', 'easycontact' ), array( 'status' => 409 ) );
+				return new WP_Error( 'used', __( 'This submission has already been processed. Reload the form for a new message.', 'easyformly' ), array( 'status' => 409 ) );
 			}
 			// Recheck the committed receipt after acquiring ownership, never before the lease.
 			if ( isset( $state['response'] ) ) {
@@ -74,10 +74,10 @@ final class Submission {
 			}
 			$hash = self::definition_hash( $definition );
 			if ( $state && $state['hash'] !== $hash ) {
-				return new WP_Error( 'changed', __( 'The form has been updated. Reload the page before sending again.', 'easycontact' ), array( 'status' => 409 ) );
+				return new WP_Error( 'changed', __( 'The form has been updated. Reload the page before sending again.', 'easyformly' ), array( 'status' => 409 ) );
 			}
 			if ( ! $state && ! State::rate_allowed( $form_id, AntiSpam::level( $definition['config'] ) === 3 ? 6 : 10 ) ) {
-				return new WP_Error( 'rate', __( 'Too many submissions in a short time. Wait a few minutes.', 'easycontact' ), array( 'status' => 429 ) );
+				return new WP_Error( 'rate', __( 'Too many submissions in a short time. Wait a few minutes.', 'easyformly' ), array( 'status' => 429 ) );
 			}
 			if ( ! $state ) {
 				if ( $definition['config']['captcha'] ) {
@@ -89,12 +89,12 @@ final class Submission {
 				$assessment = AntiSpam::assess( $form_id, $definition, $values, $context );
 				if ( 'accepted' !== $assessment['status'] ) {
 					if ( ! Entries::stores_quarantine( $definition['config'] ) ) {
-						return new WP_Error( 'spam', __( 'The submission could not be accepted. Check your data and message or use another contact for the site.', 'easycontact' ), array( 'status' => 422 ) );
+						return new WP_Error( 'spam', __( 'The submission could not be accepted. Check your data and message or use another contact for the site.', 'easyformly' ), array( 'status' => 422 ) );
 					}
 					$limit = max( 1, (int) Settings::get()['quarantine_limit'] );
 					$count = State::count( 'quarantine_budget', 'site', DAY_IN_SECONDS, $limit + 1 );
 					if ( null === $count || $count > $limit ) {
-						return new WP_Error( 'spam', __( 'The submission could not be accepted. Use another contact for the site.', 'easycontact' ), array( 'status' => 422 ) );
+						return new WP_Error( 'spam', __( 'The submission could not be accepted. Use another contact for the site.', 'easyformly' ), array( 'status' => 422 ) );
 					}
 				}
 				$state = array(
@@ -152,7 +152,7 @@ final class Submission {
 			}
 			if ( $held ) {
 				if ( ! $state['entry'] ) {
-					return new WP_Error( 'delivery', __( 'The message could not be stored for review. Try again later.', 'easycontact' ), array( 'status' => 503 ) );
+					return new WP_Error( 'delivery', __( 'The message could not be stored for review. Try again later.', 'easyformly' ), array( 'status' => 503 ) );
 				}
 				foreach ( array( 'mail', 'mailerlite', 'slack' ) as $adapter ) {
 					if ( $definition['config'][ $adapter . '_enabled' ] && ! in_array( $state['outcomes'][ $adapter ] ?? '', array( 'sent', 'skipped' ), true ) ) {
@@ -163,7 +163,7 @@ final class Submission {
 				$state['response'] = array(
 					'success' => true,
 					'held'    => true,
-					'message' => __( 'Your message has been received and is awaiting review.', 'easycontact' ),
+					'message' => __( 'Your message has been received and is awaiting review.', 'easyformly' ),
 				);
 				return $persist() ? $state['response'] : self::uncertain_error();
 			}
@@ -194,7 +194,7 @@ final class Submission {
 						return self::uncertain_error();
 					}
 				}
-				return new WP_Error( 'delivery', __( 'The message could not be received. Try again later or use another contact.', 'easycontact' ), array( 'status' => 503 ) );
+				return new WP_Error( 'delivery', __( 'The message could not be received. Try again later or use another contact.', 'easyformly' ), array( 'status' => 503 ) );
 			}
 			$state['response'] = array(
 				'success' => true,
@@ -232,23 +232,23 @@ final class Submission {
 		$lease = 'retry_' . $entry_id;
 		$owner = State::claim( $lease );
 		if ( null === $owner ) {
-			return new WP_Error( 'busy', __( 'This submission is being processed. Try again in a few seconds.', 'easycontact' ) );
+			return new WP_Error( 'busy', __( 'This submission is being processed. Try again in a few seconds.', 'easyformly' ) );
 		}
 		try {
 			wp_clear_scheduled_hook( 'easycontact_retry_delivery', array( $entry_id ) );
 			$entry = get_post( $entry_id );
 			if ( ! $entry || Plugin::ENTRY !== $entry->post_type || 'private' !== $entry->post_status ) {
-				return new WP_Error( 'entry', __( 'Submission not available.', 'easycontact' ) );
+				return new WP_Error( 'entry', __( 'Submission not available.', 'easyformly' ) );
 			}
 			if ( ! $approve && ! Review::can_deliver( $entry_id ) ) {
 				self::cancel( $entry_id );
-				return new WP_Error( 'held', __( 'The submission is held. Use Approve and send after reviewing it.', 'easycontact' ) );
+				return new WP_Error( 'held', __( 'The submission is held. Use Approve and send after reviewing it.', 'easyformly' ) );
 			}
 			if ( get_post_meta( $entry_id, '_easycontact_initializing', true ) ) {
-				return new WP_Error( 'busy', __( 'This submission is being processed. Try again in a few seconds.', 'easycontact' ) );
+				return new WP_Error( 'busy', __( 'This submission is being processed. Try again in a few seconds.', 'easyformly' ) );
 			}
 			if ( $approve && ( ! $manual || ! Review::requires_approval( $entry_id ) ) ) {
-				return new WP_Error( 'approved', __( 'This submission has already been approved or is not in quarantine.', 'easycontact' ) );
+				return new WP_Error( 'approved', __( 'This submission has already been approved or is not in quarantine.', 'easyformly' ) );
 			}
 			$form_id    = (int) get_post_meta( $entry_id, '_easycontact_form_id', true );
 			$definition = Forms::definition( $form_id );
@@ -256,7 +256,7 @@ final class Submission {
 			$status     = get_post_meta( $entry_id, '_easycontact_delivery', true );
 			if ( ! is_array( $status ) || ! $definition || 'publish' !== get_post_status( $form_id ) || ( ! $manual && ! Entries::stores_quarantine( $definition['config'] ) ) ) {
 				self::cancel( $entry_id );
-				return new WP_Error( 'form', __( 'The original form is not available for delivery.', 'easycontact' ) );
+				return new WP_Error( 'form', __( 'The original form is not available for delivery.', 'easyformly' ) );
 			}
 			$hash          = self::definition_hash( $definition );
 			$status['key'] = $status['key'] ?? hash( 'sha256', 'entry_' . $entry_id );
@@ -267,7 +267,7 @@ final class Submission {
 			$validated = Schema::validate( $definition, (array) get_post_meta( $entry_id, '_easycontact_values', true ), array(), true );
 			if ( $validated['errors'] ) {
 				self::cancel( $entry_id );
-				return new WP_Error( 'validation', __( 'The archived data does not match the form\'s current configuration.', 'easycontact' ) );
+				return new WP_Error( 'validation', __( 'The archived data does not match the form\'s current configuration.', 'easyformly' ) );
 			}
 			$job = $manual ? array(
 				'hash'     => $hash,
@@ -277,10 +277,10 @@ final class Submission {
 			++$job['attempts'];
 			update_post_meta( $entry_id, '_easycontact_retry', $job );
 			if ( get_post_meta( $entry_id, '_easycontact_retry', true ) !== $job ) {
-				return new WP_Error( 'save', __( 'Delivery could not be prepared.', 'easycontact' ) );
+				return new WP_Error( 'save', __( 'Delivery could not be prepared.', 'easyformly' ) );
 			}
 			if ( $approve && ( ! State::owns( $lease, $owner ) || ! Review::write( $entry_id, 'accepted', 'manual', false ) ) ) {
-				return new WP_Error( 'save', __( 'The submission could not be approved.', 'easycontact' ) );
+				return new WP_Error( 'save', __( 'The submission could not be approved.', 'easyformly' ) );
 			}
 			$outcomes = $status['outcomes'];
 			foreach ( array( 'mail', 'mailerlite', 'slack' ) as $adapter ) {
@@ -483,6 +483,6 @@ final class Submission {
 	 * @return WP_Error Result of this operation.
 	 */
 	private static function uncertain_error(): WP_Error {
-		return new WP_Error( 'delivery_uncertain', __( 'The submission could not be confirmed. Contact the site before sending the message again.', 'easycontact' ), array( 'status' => 503 ) );
+		return new WP_Error( 'delivery_uncertain', __( 'The submission could not be confirmed. Contact the site before sending the message again.', 'easyformly' ), array( 'status' => 503 ) );
 	}
 }

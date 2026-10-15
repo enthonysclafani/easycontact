@@ -5,28 +5,28 @@
  * Converted from the former tests/integration.php (run with `studio wp eval-file`):
  * same cases, now on the WordPress test suite in CI.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\AntiSpam\AntiSpam;
-use EasyContact\AntiSpam\DisposableDomains;
-use EasyContact\Forms\Admin\Editor;
-use EasyContact\Forms\Forms;
-use EasyContact\Forms\Renderer;
-use EasyContact\Forms\Schema;
-use EasyContact\Phone\Phone;
-use EasyContact\Plugin;
-use EasyContact\Privacy\Privacy;
-use EasyContact\Review\Admin\Screen;
-use EasyContact\Review\Review;
-use EasyContact\Settings\Admin\Page;
-use EasyContact\Settings\Settings;
-use EasyContact\Submissions\Endpoint;
-use EasyContact\Submissions\Entries;
-use EasyContact\Submissions\State;
-use EasyContact\Submissions\Submission;
+use EasyFormly\AntiSpam\AntiSpam;
+use EasyFormly\AntiSpam\DisposableDomains;
+use EasyFormly\Forms\Admin\Editor;
+use EasyFormly\Forms\Forms;
+use EasyFormly\Forms\Renderer;
+use EasyFormly\Forms\Schema;
+use EasyFormly\Phone\Phone;
+use EasyFormly\Plugin;
+use EasyFormly\Privacy\Privacy;
+use EasyFormly\Review\Admin\Screen;
+use EasyFormly\Review\Review;
+use EasyFormly\Settings\Admin\Page;
+use EasyFormly\Settings\Settings;
+use EasyFormly\Submissions\Endpoint;
+use EasyFormly\Submissions\Entries;
+use EasyFormly\Submissions\State;
+use EasyFormly\Submissions\Submission;
 
 /**
  * Behaviour visible to visitors, administrators and the external services.

@@ -1,13 +1,13 @@
 <?php
 /**
- * PSR-4 autoloader for the EasyContact namespace, without Composer.
+ * PSR-4 autoloader for the EasyFormly namespace, without Composer.
  *
  * The bundled phone library has its own isolated namespace and loader (Phone::boot()).
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact;
+namespace EasyFormly;
 
 defined( 'ABSPATH' ) || exit;
 

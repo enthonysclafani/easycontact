@@ -2,18 +2,18 @@
 /**
  * Base test case: form fixtures, simulated visitors and intercepted outbound delivery.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\AntiSpam\DisposableDomains;
-use EasyContact\Forms\Forms;
-use EasyContact\Forms\Schema;
-use EasyContact\Plugin;
-use EasyContact\Settings\Settings;
-use EasyContact\Submissions\Endpoint;
-use EasyContact\Submissions\State;
+use EasyFormly\AntiSpam\DisposableDomains;
+use EasyFormly\Forms\Forms;
+use EasyFormly\Forms\Schema;
+use EasyFormly\Plugin;
+use EasyFormly\Settings\Settings;
+use EasyFormly\Submissions\Endpoint;
+use EasyFormly\Submissions\State;
 use WP_Error;
 use WP_UnitTestCase;
 
@@ -173,7 +173,7 @@ abstract class TestCase extends WP_UnitTestCase {
 			array(
 				'post_type'   => Plugin::FORM,
 				'post_status' => 'publish',
-				'post_title'  => 'EasyContact test form',
+				'post_title'  => 'EasyFormly test form',
 			)
 		);
 		update_post_meta( $id, '_easycontact_definition', wp_slash( $definition ) );

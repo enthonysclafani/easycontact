@@ -2,15 +2,15 @@
 /**
  * Requests to external services, answered by simulated responses.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\AntiSpam\DisposableDomains;
-use EasyContact\Delivery\Delivery;
-use EasyContact\Forms\Renderer;
-use EasyContact\Settings\Settings;
+use EasyFormly\AntiSpam\DisposableDomains;
+use EasyFormly\Delivery\Delivery;
+use EasyFormly\Forms\Renderer;
+use EasyFormly\Settings\Settings;
 use WP_Error;
 
 /**

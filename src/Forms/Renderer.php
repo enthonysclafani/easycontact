@@ -2,14 +2,14 @@
 /**
  * Public form rendering: shortcode, accessible fields and the frontend assets, loaded only with a form.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Forms;
+namespace EasyFormly\Forms;
 
-use EasyContact\Phone\Phone;
-use EasyContact\Settings\Settings;
-use EasyContact\Submissions\Endpoint;
+use EasyFormly\Phone\Phone;
+use EasyFormly\Settings\Settings;
+use EasyFormly\Submissions\Endpoint;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,6 +23,8 @@ final class Renderer {
 	 * @return void
 	 */
 	public static function boot(): void {
+		add_shortcode( 'easyformly', array( self::class, 'shortcode' ) );
+		// The 1.0.0 name, still in the content of existing pages (D10).
 		add_shortcode( 'easycontact', array( self::class, 'shortcode' ) );
 	}
 
@@ -30,14 +32,17 @@ final class Renderer {
 	 * Manage plugin-specific native WordPress data.
 	 *
 	 * @param array<string, string>|string $attributes Supported attributes; an empty string when there are none.
+	 * @param string|null                  $content    Enclosed content, unused.
+	 * @param string                       $tag        Shortcode name, so each name keeps its own `shortcode_atts_` filter.
 	 * @return string Result of this operation.
 	 */
-	public static function shortcode( $attributes ): string {
-		$attributes = shortcode_atts( array( 'id' => 0 ), is_array( $attributes ) ? $attributes : array(), 'easycontact' );
+	public static function shortcode( $attributes, $content = null, $tag = 'easyformly' ): string {
+		unset( $content );
+		$attributes = shortcode_atts( array( 'id' => 0 ), is_array( $attributes ) ? $attributes : array(), is_string( $tag ) ? $tag : 'easyformly' );
 		$id         = absint( $attributes['id'] );
 		$definition = Endpoint::available( $id ) ? Forms::definition( $id ) : null;
 		if ( null === $definition ) {
-			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'Publish a valid form before using the shortcode.', 'easycontact' ) . '</p>' : '';
+			return current_user_can( 'manage_options' ) ? '<p>' . esc_html__( 'Publish a valid form before using the shortcode.', 'easyformly' ) . '</p>' : '';
 		}
 		return self::render( $id, $definition );
 	}
@@ -53,8 +58,8 @@ final class Renderer {
 	public static function render( int $id, array $definition, bool $preview = false ): string {
 		$config   = $definition['config'];
 		$settings = Settings::get();
-		wp_enqueue_style( 'easycontact-frontend', plugins_url( 'assets/frontend.css', EASYCONTACT_FILE ), array(), EASYCONTACT_VERSION );
-		wp_enqueue_script( 'easycontact-frontend', plugins_url( 'assets/frontend.js', EASYCONTACT_FILE ), array(), EASYCONTACT_VERSION, true );
+		wp_enqueue_style( 'easycontact-frontend', plugins_url( 'assets/frontend.css', EASYFORMLY_FILE ), array(), EASYFORMLY_VERSION );
+		wp_enqueue_script( 'easycontact-frontend', plugins_url( 'assets/frontend.js', EASYFORMLY_FILE ), array(), EASYFORMLY_VERSION, true );
 		if ( $config['captcha'] && ! $preview ) {
 			// phpcs:ignore PluginCheck.CodeAnalysis.EnqueuedResourceOffloading.OffloadedContent,WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Turnstile requires its documented vendor-hosted, unversioned widget, explicitly enabled per form.
 			wp_enqueue_script(
@@ -77,13 +82,13 @@ final class Renderer {
 			'mode'       => $config['conditions_match'],
 			'preview'    => $preview,
 			'messages'   => array(
-				'sending'            => __( 'Sending…', 'easycontact' ),
-				'error'              => __( 'Sending failed. Try again.', 'easycontact' ),
-				'network'            => __( 'Connection lost. Try again without reloading the page to verify this submission.', 'easycontact' ),
-				'expired'            => __( 'The session has expired. Your entries were kept: try again.', 'easycontact' ),
-				'captcha'            => __( 'Complete the CAPTCHA.', 'easycontact' ),
-				'captchaUnavailable' => __( 'The CAPTCHA is not available. Try again later.', 'easycontact' ),
-				'uncertain'          => __( 'The submission could not be confirmed. Contact the site before sending the message again.', 'easycontact' ),
+				'sending'            => __( 'Sending…', 'easyformly' ),
+				'error'              => __( 'Sending failed. Try again.', 'easyformly' ),
+				'network'            => __( 'Connection lost. Try again without reloading the page to verify this submission.', 'easyformly' ),
+				'expired'            => __( 'The session has expired. Your entries were kept: try again.', 'easyformly' ),
+				'captcha'            => __( 'Complete the CAPTCHA.', 'easyformly' ),
+				'captchaUnavailable' => __( 'The CAPTCHA is not available. Try again later.', 'easyformly' ),
+				'uncertain'          => __( 'The submission could not be confirmed. Contact the site before sending the message again.', 'easyformly' ),
 			),
 		);
 		$tokens   = Endpoint::issue( $id );
@@ -121,7 +126,7 @@ final class Renderer {
 				)
 			) . '>';
 		}
-		$html .= '<div class="easycontact-honeypot" aria-hidden="true"><label>' . esc_html__( 'Leave this field empty', 'easycontact' ) . '<input type="text" name="honeypot[' . esc_attr( $tokens['honeypot'] ) . ']" data-easycontact-trap="' . esc_attr( $tokens['honeypot'] ) . '" tabindex="-1" autocomplete="off" maxlength="512"></label></div>';
+		$html .= '<div class="easycontact-honeypot" aria-hidden="true"><label>' . esc_html__( 'Leave this field empty', 'easyformly' ) . '<input type="text" name="honeypot[' . esc_attr( $tokens['honeypot'] ) . ']" data-easycontact-trap="' . esc_attr( $tokens['honeypot'] ) . '" tabindex="-1" autocomplete="off" maxlength="512"></label></div>';
 		foreach ( $definition['schema']['items'] as $item ) {
 			if ( 'row' === $item['type'] ) {
 				$html .= '<div class="easycontact-row">';
@@ -140,7 +145,7 @@ final class Renderer {
 					'data-sitekey'             => $settings['turnstile_site_key'],
 					'data-action'              => 'easycontact_form_' . $id,
 				)
-			) . '></div><input type="hidden" name="captcha" value=""><noscript><p>' . esc_html__( 'Turn on JavaScript to complete the CAPTCHA and send the form.', 'easycontact' ) . '</p></noscript>';
+			) . '></div><input type="hidden" name="captcha" value=""><noscript><p>' . esc_html__( 'Turn on JavaScript to complete the CAPTCHA and send the form.', 'easyformly' ) . '</p></noscript>';
 		}
 		$html   .= '<button ' . self::attributes(
 			array(
@@ -154,7 +159,7 @@ final class Renderer {
 			$message = $config['success_message'];
 		}
 		if ( ! $preview && isset( $_GET['easycontact_held'] ) && is_scalar( $_GET['easycontact_held'] ) && absint( $_GET['easycontact_held'] ) === $id ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Display-only confirmation.
-			$message = __( 'Your message has been received and is awaiting review.', 'easycontact' );
+			$message = __( 'Your message has been received and is awaiting review.', 'easyformly' );
 		}
 		return $html . '<p class="easycontact-result" role="status" aria-live="polite" tabindex="-1">' . esc_html( $message ) . '</p></form>';
 	}
@@ -193,7 +198,7 @@ final class Renderer {
 				)
 			) . '></textarea>';
 		} elseif ( 'select' === $field['type'] ) {
-			$html .= '<select ' . self::attributes( $attributes ) . '><option value="">' . esc_html__( 'Select…', 'easycontact' ) . '</option>';
+			$html .= '<select ' . self::attributes( $attributes ) . '><option value="">' . esc_html__( 'Select…', 'easyformly' ) . '</option>';
 			foreach ( $field['options'] as $option ) {
 				$html .= '<option ' . self::attributes( array( 'value' => $option ) ) . '>' . esc_html( $option ) . '</option>';
 			}
@@ -201,8 +206,8 @@ final class Renderer {
 		} elseif ( 'tel' === $field['type'] ) {
 			$country = Phone::default_country( $config, $field );
 			/* translators: %s: telephone field label. */
-			$country_label = sprintf( __( 'Country for %s', 'easycontact' ), $field['label'] );
-			$html         .= '<div class="easycontact-phone"><div class="easycontact-phone-country"><input type="search" class="easycontact-country-search" data-easycontact-country-search placeholder="' . esc_attr__( 'Search country…', 'easycontact' ) . '" aria-label="' . esc_attr__( 'Search for a country', 'easycontact' ) . '" autocomplete="off" hidden><select id="' . esc_attr( $id . '-country' ) . '" name="countries[' . esc_attr( $field['name'] ) . ']" data-easycontact-country aria-label="' . esc_attr( $country_label ) . '" aria-describedby="' . esc_attr( $id . '-error' ) . '"><option value="">' . esc_html__( 'Select country', 'easycontact' ) . '</option>';
+			$country_label = sprintf( __( 'Country for %s', 'easyformly' ), $field['label'] );
+			$html         .= '<div class="easycontact-phone"><div class="easycontact-phone-country"><input type="search" class="easycontact-country-search" data-easycontact-country-search placeholder="' . esc_attr__( 'Search country…', 'easyformly' ) . '" aria-label="' . esc_attr__( 'Search for a country', 'easyformly' ) . '" autocomplete="off" hidden><select id="' . esc_attr( $id . '-country' ) . '" name="countries[' . esc_attr( $field['name'] ) . ']" data-easycontact-country aria-label="' . esc_attr( $country_label ) . '" aria-describedby="' . esc_attr( $id . '-error' ) . '"><option value="">' . esc_html__( 'Select country', 'easyformly' ) . '</option>';
 			$countries     = Phone::countries();
 			uasort( $countries, static fn( $first, $second ) => strcasecmp( $first['name'], $second['name'] ) );
 			foreach ( $countries as $region => $data ) {
@@ -236,7 +241,7 @@ final class Renderer {
 		if ( $check ) {
 			$html .= $label;
 			if ( 'acceptance' === $field['type'] && get_privacy_policy_url() ) {
-				$html .= ' <a href="' . esc_url( get_privacy_policy_url() ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr__( 'Privacy policy (opens in a new window)', 'easycontact' ) . '">' . esc_html__( 'Privacy policy', 'easycontact' ) . '</a>';
+				$html .= ' <a href="' . esc_url( get_privacy_policy_url() ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr__( 'Privacy policy (opens in a new window)', 'easyformly' ) . '">' . esc_html__( 'Privacy policy', 'easyformly' ) . '</a>';
 			}
 		}
 		return $html . '<span class="easycontact-error" id="' . esc_attr( $id . '-error' ) . '"></span></div>';
@@ -269,9 +274,9 @@ final class Renderer {
 		$html = self::render( $id, Forms::editor_definition( $id ), true );
 		echo '<!doctype html><html ';
 		language_attributes();
-		echo '><head><meta charset="' . esc_attr( get_option( 'blog_charset' ) ) . '"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . esc_html__( 'Form preview', 'easycontact' ) . '</title>';
+		echo '><head><meta charset="' . esc_attr( get_option( 'blog_charset' ) ) . '"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' . esc_html__( 'Form preview', 'easyformly' ) . '</title>';
 		wp_print_styles( array( 'easycontact-frontend' ) );
-		echo '</head><body class="easycontact-preview-body"><h1>' . esc_html( get_the_title( $id ) ) . '</h1><p>' . esc_html__( 'Preview of the saved version. Sending and integrations are disabled.', 'easycontact' ) . '</p>';
+		echo '</head><body class="easycontact-preview-body"><h1>' . esc_html( get_the_title( $id ) ) . '</h1><p>' . esc_html__( 'Preview of the saved version. Sending and integrations are disabled.', 'easyformly' ) . '</p>';
 		echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped by self::render().
 		wp_print_scripts( array( 'easycontact-frontend' ) );
 		echo '</body></html>';

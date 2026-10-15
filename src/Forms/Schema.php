@@ -2,13 +2,13 @@
 /**
  * Parser, conditional rules and server-side validation.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Forms;
+namespace EasyFormly\Forms;
 
-use EasyContact\AntiSpam\AntiSpam;
-use EasyContact\Phone\Phone;
+use EasyFormly\AntiSpam\AntiSpam;
+use EasyFormly\Phone\Phone;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -28,38 +28,38 @@ final class Schema {
 	 */
 	public static function parse( string $template ) {
 		if ( strlen( $template ) > 20000 ) {
-			return new WP_Error( 'template', __( 'The form is too long.', 'easycontact' ) );
+			return new WP_Error( 'template', __( 'The form is too long.', 'easyformly' ) );
 		}
 		preg_match_all( '/\[([^\[\]]*)\]/u', $template, $matches, PREG_OFFSET_CAPTURE );
 		$offset        = 0;
 		$fields        = array();
 		$items         = array();
-		$submit        = __( 'Send', 'easycontact' );
+		$submit        = __( 'Send', 'easyformly' );
 		$has_submit    = false;
 		$previous_type = '';
 		foreach ( $matches[0] as $index => $match ) {
 			$spacing = substr( $template, $offset, $match[1] - $offset );
 			$joined  = 1 === preg_match( '/^[ \t]*\|[ \t]*$/D', $spacing );
 			if ( '' !== trim( $spacing ) && ! $joined ) {
-				return new WP_Error( 'template', __( 'Use the documented tags and | to place fields on the same line; free text and HTML are not supported.', 'easycontact' ) );
+				return new WP_Error( 'template', __( 'Use the documented tags and | to place fields on the same line; free text and HTML are not supported.', 'easyformly' ) );
 			}
 			$offset = $match[1] + strlen( $match[0] );
 			$tokens = self::tokens( $matches[1][ $index ][0] );
 			if ( is_wp_error( $tokens ) || empty( $tokens ) || $tokens[0]['quoted'] ) {
-				return new WP_Error( 'template', __( 'A tag is not valid. Check the quotes.', 'easycontact' ) );
+				return new WP_Error( 'template', __( 'A tag is not valid. Check the quotes.', 'easyformly' ) );
 			}
 			if ( ! preg_match( '/^([a-z]+)(\*)?$/D', $tokens[0]['value'], $tag ) ) {
-				return new WP_Error( 'template', __( 'The field type is not valid.', 'easycontact' ) );
+				return new WP_Error( 'template', __( 'The field type is not valid.', 'easyformly' ) );
 			}
 			$type     = $tag[1];
 			$required = isset( $tag[2] );
 			if ( $joined && ( ! in_array( $previous_type, self::TYPES, true ) || ! in_array( $type, self::TYPES, true ) ) ) {
-				return new WP_Error( 'template', __( 'Use | only between two fields on the same line. Notes and the button must stay on their own line.', 'easycontact' ) );
+				return new WP_Error( 'template', __( 'Use | only between two fields on the same line. Notes and the button must stay on their own line.', 'easyformly' ) );
 			}
 			$previous_type = $type;
 			if ( in_array( $type, array( 'note', 'submit' ), true ) ) {
 				if ( 2 !== count( $tokens ) || ! $tokens[1]['quoted'] || $required || ( 'submit' === $type && $has_submit ) ) {
-					return new WP_Error( 'template', __( 'Notes and the button need a single label in quotes.', 'easycontact' ) );
+					return new WP_Error( 'template', __( 'Notes and the button need a single label in quotes.', 'easyformly' ) );
 				}
 				$label = sanitize_text_field( $tokens[1]['value'] );
 				if ( 'submit' === $type ) {
@@ -74,11 +74,11 @@ final class Schema {
 				continue;
 			}
 			if ( ! in_array( $type, self::TYPES, true ) || count( $tokens ) < 3 || $tokens[1]['quoted'] || ! $tokens[2]['quoted'] ) {
-				return new WP_Error( 'template', __( 'Syntax: [type name "Label"].', 'easycontact' ) );
+				return new WP_Error( 'template', __( 'Syntax: [type name "Label"].', 'easyformly' ) );
 			}
 			$name = $tokens[1]['value'];
 			if ( ! preg_match( '/^[a-z][a-z0-9_-]{0,49}$/D', $name ) || isset( $fields[ $name ] ) || in_array( $name, array( 'form', 'site', 'fields' ), true ) ) {
-				return new WP_Error( 'template', __( 'Each field needs a unique lowercase name. The names form, site and fields are reserved.', 'easycontact' ) );
+				return new WP_Error( 'template', __( 'Each field needs a unique lowercase name. The names form, site and fields are reserved.', 'easyformly' ) );
 			}
 			$field = array(
 				'name'     => $name,
@@ -89,7 +89,7 @@ final class Schema {
 				'limits'   => array(),
 			);
 			if ( '' === $field['label'] || strlen( $field['label'] ) > 500 ) {
-				return new WP_Error( 'template', __( 'Enter a short label for each field.', 'easycontact' ) );
+				return new WP_Error( 'template', __( 'Enter a short label for each field.', 'easyformly' ) );
 			}
 			foreach ( array_slice( $tokens, 3 ) as $token ) {
 				if ( 'select' === $type && $token['quoted'] ) {
@@ -97,12 +97,12 @@ final class Schema {
 					if ( '' !== $option && strlen( $option ) <= 500 ) {
 						$field['options'][] = $option;
 					} else {
-						return new WP_Error( 'template', __( 'Select options must have a short text.', 'easycontact' ) );
+						return new WP_Error( 'template', __( 'Select options must have a short text.', 'easyformly' ) );
 					}
 				} elseif ( 'number' === $type && ! $token['quoted'] && preg_match( '/^(min|max|step):(-?[0-9]+(?:\.[0-9]+)?)$/D', $token['value'], $limit ) ) {
 					$number = (float) $limit[2];
 					if ( ! is_finite( $number ) || ( 'step' === $limit[1] && $number <= 0 ) ) {
-						return new WP_Error( 'template', __( 'The number limits are not valid.', 'easycontact' ) );
+						return new WP_Error( 'template', __( 'The number limits are not valid.', 'easyformly' ) );
 					}
 					$field['limits'][ $limit[1] ] = $number;
 				} elseif ( 'tel' === $type && ! $token['quoted'] && preg_match( '/^country:([A-Za-z]{2})$/D', $token['value'], $country ) && Phone::valid_country( strtoupper( $country[1] ) ) ) {
@@ -110,12 +110,12 @@ final class Schema {
 				} elseif ( 'tel' === $type && ! $token['quoted'] && in_array( $token['value'], array( 'mobile', 'allow-repeated' ), true ) ) {
 					$field[ 'mobile' === $token['value'] ? 'phone_mobile_only' : 'phone_allow_repeated' ] = true;
 				} else {
-					return new WP_Error( 'template', __( 'This tag contains an unsupported option.', 'easycontact' ) );
+					return new WP_Error( 'template', __( 'This tag contains an unsupported option.', 'easyformly' ) );
 				}
 			}
 			$field['options'] = array_values( array_unique( $field['options'] ) );
 			if ( ( 'select' === $type && ( empty( $field['options'] ) || count( $field['options'] ) > 40 ) ) || ( isset( $field['limits']['min'], $field['limits']['max'] ) && $field['limits']['min'] > $field['limits']['max'] ) ) {
-				return new WP_Error( 'template', __( 'Check the select options or the number limits.', 'easycontact' ) );
+				return new WP_Error( 'template', __( 'Check the select options or the number limits.', 'easyformly' ) );
 			}
 			$fields[ $name ] = $field;
 			// A joined field always follows a field or a row, checked above with the previous type.
@@ -136,7 +136,7 @@ final class Schema {
 			}
 		}
 		if ( '' !== trim( substr( $template, $offset ) ) || empty( $fields ) || count( $fields ) > 40 ) {
-			return new WP_Error( 'template', __( 'Enter 1 to 40 valid fields, using only the documented tags.', 'easycontact' ) );
+			return new WP_Error( 'template', __( 'Enter 1 to 40 valid fields, using only the documented tags.', 'easyformly' ) );
 		}
 		return array(
 			'fields' => $fields,
@@ -179,12 +179,12 @@ final class Schema {
 	 */
 	public static function rules( array $fields, array $input ) {
 		if ( count( $input ) > 80 ) {
-			return new WP_Error( 'rules', __( 'At most 80 rules are allowed.', 'easycontact' ) );
+			return new WP_Error( 'rules', __( 'At most 80 rules are allowed.', 'easyformly' ) );
 		}
 		$rules = array();
 		foreach ( $input as $rule ) {
 			if ( ! is_array( $rule ) ) {
-				return new WP_Error( 'rules', __( 'A rule is not valid.', 'easycontact' ) );
+				return new WP_Error( 'rules', __( 'A rule is not valid.', 'easyformly' ) );
 			}
 			$target = isset( $rule['target'] ) && is_string( $rule['target'] ) ? $rule['target'] : '';
 			$source = isset( $rule['source'] ) && is_string( $rule['source'] ) ? $rule['source'] : '';
@@ -194,7 +194,7 @@ final class Schema {
 			$operator = isset( $rule['operator'] ) && is_string( $rule['operator'] ) ? $rule['operator'] : '';
 			$value    = isset( $rule['value'] ) && is_string( $rule['value'] ) ? sanitize_text_field( $rule['value'] ) : '';
 			if ( ! isset( $fields[ $target ], $fields[ $source ] ) || $target === $source || ! in_array( $operator, self::OPERATORS, true ) || strlen( $value ) > 500 || ( in_array( $operator, array( 'greater', 'less' ), true ) && ( ! self::numeric( $value ) ) ) ) {
-				return new WP_Error( 'rules', __( 'Rules need existing fields and consistent values. A field cannot depend on itself.', 'easycontact' ) );
+				return new WP_Error( 'rules', __( 'Rules need existing fields and consistent values. A field cannot depend on itself.', 'easyformly' ) );
 			}
 			$rules[] = compact( 'target', 'source', 'operator', 'value' );
 		}
@@ -211,7 +211,7 @@ final class Schema {
 				}
 			}
 			if ( ! $progress ) {
-				return new WP_Error( 'rules', __( 'The rules form a loop. Remove one of the dependencies.', 'easycontact' ) );
+				return new WP_Error( 'rules', __( 'The rules form a loop. Remove one of the dependencies.', 'easyformly' ) );
 			}
 		}
 		return array(
@@ -298,7 +298,7 @@ final class Schema {
 			}
 			$value = $values[ $name ];
 			if ( isset( $invalid[ $name ] ) || ( $field['required'] && '' === $value ) ) {
-				$errors[ $name ] = __( 'Check this field.', 'easycontact' );
+				$errors[ $name ] = __( 'Check this field.', 'easyformly' );
 				continue;
 			}
 			if ( '' === $value ) {
@@ -307,9 +307,9 @@ final class Schema {
 			if ( 'email' === $field['type'] ) {
 				$email = AntiSpam::email( $comparison[ $name ] );
 				if ( false === $email ) {
-					$errors[ $name ] = __( 'Enter a valid email address.', 'easycontact' );
+					$errors[ $name ] = __( 'Enter a valid email address.', 'easyformly' );
 				} elseif ( AntiSpam::enabled( $definition['config'], 'email_dns_check' ) && 'invalid' === AntiSpam::mail_domain( explode( '@', $email, 2 )[1] ) ) {
-					$errors[ $name ] = __( 'The email domain does not seem able to receive mail. Check the address.', 'easycontact' );
+					$errors[ $name ] = __( 'The email domain does not seem able to receive mail. Check the address.', 'easyformly' );
 				} else {
 					$values[ $name ] = $email;
 				}
@@ -319,9 +319,9 @@ final class Schema {
 				$country = $countries[ $name ] ?? Phone::default_country( $definition['config'], $field );
 				$phone   = is_string( $country ) ? Phone::normalize( $comparison[ $name ], $country, ! empty( $field['phone_mobile_only'] ) ) : new \WP_Error( 'phone' );
 				if ( is_wp_error( $phone ) ) {
-					$errors[ $name ] = __( 'Check the number and the selected country.', 'easycontact' );
+					$errors[ $name ] = __( 'Check the number and the selected country.', 'easyformly' );
 				} elseif ( ! $archived && AntiSpam::level( $definition['config'] ) >= 2 && ! AntiSpam::enabled( $definition['config'], 'antispam_observe' ) && empty( $field['phone_allow_repeated'] ) && Phone::repetitive( $phone ) ) {
-					$errors[ $name ] = __( 'The number is a fully repetitive sequence. Check the contact details.', 'easycontact' );
+					$errors[ $name ] = __( 'The number is a fully repetitive sequence. Check the contact details.', 'easyformly' );
 				} else {
 					$values[ $name ] = $phone;
 				}
@@ -335,7 +335,7 @@ final class Schema {
 				default => true,
 			};
 			if ( ! $valid ) {
-				$errors[ $name ] = __( 'Enter a valid value.', 'easycontact' );
+				$errors[ $name ] = __( 'Enter a valid value.', 'easyformly' );
 			}
 		}
 		return compact( 'values', 'visible', 'errors' );

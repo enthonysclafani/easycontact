@@ -2,10 +2,10 @@
 /**
  * Lazy maintenance without WP-Cron (D1): retention, expired locks and states, retries left after an update.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Submissions;
+namespace EasyFormly\Submissions;
 
 defined( 'ABSPATH' ) || exit;
 

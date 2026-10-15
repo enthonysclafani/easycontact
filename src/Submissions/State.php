@@ -2,10 +2,10 @@
 /**
  * Short-lived submission state and atomic ownership in the core options table.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Submissions;
+namespace EasyFormly\Submissions;
 
 defined( 'ABSPATH' ) || exit;
 

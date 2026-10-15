@@ -2,22 +2,22 @@
 /**
  * Form editor: native metaboxes, validated saving, saved preview and the form list columns.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Forms\Admin;
+namespace EasyFormly\Forms\Admin;
 
-use EasyContact\AntiSpam\AntiSpam;
-use EasyContact\Delivery\Admin\Outcomes;
-use EasyContact\Delivery\Delivery;
-use EasyContact\Forms\Forms;
-use EasyContact\Forms\Renderer;
-use EasyContact\Forms\Schema;
-use EasyContact\Phone\Admin\CountrySelect;
-use EasyContact\Phone\Phone;
-use EasyContact\Plugin;
-use EasyContact\Settings\Settings;
-use EasyContact\Submissions\Entries;
+use EasyFormly\AntiSpam\AntiSpam;
+use EasyFormly\Delivery\Admin\Outcomes;
+use EasyFormly\Delivery\Delivery;
+use EasyFormly\Forms\Forms;
+use EasyFormly\Forms\Renderer;
+use EasyFormly\Forms\Schema;
+use EasyFormly\Phone\Admin\CountrySelect;
+use EasyFormly\Phone\Phone;
+use EasyFormly\Plugin;
+use EasyFormly\Settings\Settings;
+use EasyFormly\Submissions\Entries;
 use WP_Error;
 use WP_Post;
 
@@ -47,12 +47,12 @@ final class Editor {
 	 * @return void
 	 */
 	public static function boxes(): void {
-		add_meta_box( 'easycontact-module', __( 'Form', 'easycontact' ), array( self::class, 'module_box' ), Plugin::FORM, 'normal', 'high' );
-		add_meta_box( 'easycontact-conditions', __( 'Conditional fields', 'easycontact' ), array( self::class, 'conditions_box' ), Plugin::FORM, 'normal' );
-		add_meta_box( 'easycontact-email', __( 'Email', 'easycontact' ), array( self::class, 'email_box' ), Plugin::FORM, 'normal' );
-		add_meta_box( 'easycontact-integrations', __( 'Integrations', 'easycontact' ), array( self::class, 'integrations_box' ), Plugin::FORM, 'normal' );
-		add_meta_box( 'easycontact-antispam', __( 'Anti-spam and international phone', 'easycontact' ), array( self::class, 'antispam_box' ), Plugin::FORM, 'normal' );
-		add_meta_box( 'easycontact-options', __( 'Options', 'easycontact' ), array( self::class, 'options_box' ), Plugin::FORM, 'side' );
+		add_meta_box( 'easycontact-module', __( 'Form', 'easyformly' ), array( self::class, 'module_box' ), Plugin::FORM, 'normal', 'high' );
+		add_meta_box( 'easycontact-conditions', __( 'Conditional fields', 'easyformly' ), array( self::class, 'conditions_box' ), Plugin::FORM, 'normal' );
+		add_meta_box( 'easycontact-email', __( 'Email', 'easyformly' ), array( self::class, 'email_box' ), Plugin::FORM, 'normal' );
+		add_meta_box( 'easycontact-integrations', __( 'Integrations', 'easyformly' ), array( self::class, 'integrations_box' ), Plugin::FORM, 'normal' );
+		add_meta_box( 'easycontact-antispam', __( 'Anti-spam and international phone', 'easyformly' ), array( self::class, 'antispam_box' ), Plugin::FORM, 'normal' );
+		add_meta_box( 'easycontact-options', __( 'Options', 'easyformly' ), array( self::class, 'options_box' ), Plugin::FORM, 'side' );
 	}
 
 	/**
@@ -63,7 +63,7 @@ final class Editor {
 	 */
 	public static function columns( array $columns ): array {
 		$columns['easycontact-shortcode'] = 'Shortcode';
-		$columns['easycontact-delivery']  = __( 'Submission outcome', 'easycontact' );
+		$columns['easycontact-delivery']  = __( 'Submission outcome', 'easyformly' );
 		return $columns;
 	}
 
@@ -76,7 +76,7 @@ final class Editor {
 	 */
 	public static function column( string $column, int $id ): void {
 		if ( 'easycontact-shortcode' === $column ) {
-			echo '<code>' . esc_html( '[easycontact id="' . $id . '"]' ) . '</code>';
+			echo '<code>' . esc_html( '[easyformly id="' . $id . '"]' ) . '</code>';
 		}
 		if ( 'easycontact-delivery' === $column ) {
 			$status = get_post_meta( $id, '_easycontact_last_delivery', true );
@@ -99,23 +99,23 @@ final class Editor {
 		<p class="easycontact-toolbar">
 		<?php
 		foreach ( array(
-			'text'       => __( 'Text', 'easycontact' ),
+			'text'       => __( 'Text', 'easyformly' ),
 			'email'      => 'Email',
-			'textarea'   => __( 'Message', 'easycontact' ),
-			'select'     => __( 'Select', 'easycontact' ),
-			'number'     => __( 'Number', 'easycontact' ),
-			'tel'        => __( 'Phone', 'easycontact' ),
-			'checkbox'   => __( 'Checkbox', 'easycontact' ),
-			'acceptance' => __( 'Consent', 'easycontact' ),
+			'textarea'   => __( 'Message', 'easyformly' ),
+			'select'     => __( 'Select', 'easyformly' ),
+			'number'     => __( 'Number', 'easyformly' ),
+			'tel'        => __( 'Phone', 'easyformly' ),
+			'checkbox'   => __( 'Checkbox', 'easyformly' ),
+			'acceptance' => __( 'Consent', 'easyformly' ),
 		) as $type => $label ) :
 			?>
 	<button type="button" class="button" data-easycontact-insert="<?php echo esc_attr( $type ); ?>"><?php echo esc_html( $label ); ?></button> <?php endforeach; ?></p>
-		<label class="screen-reader-text" for="easycontact-template"><?php esc_html_e( 'Form definition', 'easycontact' ); ?></label>
+		<label class="screen-reader-text" for="easycontact-template"><?php esc_html_e( 'Form definition', 'easyformly' ); ?></label>
 		<textarea class="large-text code" id="easycontact-template" name="easycontact_template" rows="13" maxlength="20000" spellcheck="false"><?php echo esc_textarea( $definition['template'] ); ?></textarea>
 		<?php
 		if ( 'auto-draft' !== $post->post_status ) :
 			?>
-			<p><a class="button" target="_blank" rel="noopener" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=easycontact_preview&id=' . $post->ID ), 'easycontact_preview_' . $post->ID ) ); ?>"><?php esc_html_e( 'Saved preview', 'easycontact' ); ?></a></p><?php endif; ?>
+			<p><a class="button" target="_blank" rel="noopener" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=easycontact_preview&id=' . $post->ID ), 'easycontact_preview_' . $post->ID ) ); ?>"><?php esc_html_e( 'Saved preview', 'easyformly' ); ?></a></p><?php endif; ?>
 		<?php
 	}
 
@@ -133,7 +133,7 @@ final class Editor {
 		$value = $definition['config'][ $key ];
 		echo '<p><label for="easycontact-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label><br><select id="easycontact-' . esc_attr( $key ) . '" name="easycontact_config[' . esc_attr( $key ) . ']">';
 		if ( $allow_empty ) {
-			echo '<option value="">' . esc_html__( 'None', 'easycontact' ) . '</option>';
+			echo '<option value="">' . esc_html__( 'None', 'easyformly' ) . '</option>';
 		}
 		foreach ( $definition['schema']['fields'] as $name => $field ) {
 			if ( ! $types || in_array( $field['type'], $types, true ) ) {
@@ -155,7 +155,7 @@ final class Editor {
 	 */
 	private static function input( string $key, string $label, array $config, string $type = 'text', string $help = '' ): void {
 		$is_secret = 'password' === $type;
-		echo '<p><label for="easycontact-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label><br><input class="large-text" type="' . esc_attr( $type ) . '" id="easycontact-' . esc_attr( $key ) . '" name="easycontact_config[' . esc_attr( $key ) . ']" value="' . esc_attr( $is_secret ? '' : $config[ $key ] ) . '"' . ( $is_secret ? ' autocomplete="new-password" placeholder="' . esc_attr( $config[ $key ] ? __( 'Configured; leave empty to keep it', 'easycontact' ) : '' ) . '"' : '' ) . '></p>';
+		echo '<p><label for="easycontact-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label><br><input class="large-text" type="' . esc_attr( $type ) . '" id="easycontact-' . esc_attr( $key ) . '" name="easycontact_config[' . esc_attr( $key ) . ']" value="' . esc_attr( $is_secret ? '' : $config[ $key ] ) . '"' . ( $is_secret ? ' autocomplete="new-password" placeholder="' . esc_attr( $config[ $key ] ? __( 'Configured; leave empty to keep it', 'easyformly' ) : '' ) . '"' : '' ) . '></p>';
 		if ( $help ) {
 			echo '<p class="description">' . esc_html( $help ) . '</p>';
 		}
@@ -182,11 +182,11 @@ final class Editor {
 	public static function email_box( WP_Post $post ): void {
 		$definition = Forms::editor_definition( $post->ID );
 		$config     = $definition['config'];
-		self::checkbox( 'mail_enabled', __( 'Send an email notification', 'easycontact' ), $config );
-		self::input( 'mail_to', __( 'Recipients', 'easycontact' ), $config, 'text', __( 'Comma-separated email addresses.', 'easycontact' ) );
-		self::input( 'mail_subject', __( 'Subject', 'easycontact' ), $config );
-		self::field_select( 'mail_reply_to', __( 'Reply to the address in the field', 'easycontact' ), $definition, array( 'email' ) );
-		echo '<p><label for="easycontact-mail-body">' . esc_html__( 'Message', 'easycontact' ) . '</label><textarea class="large-text code" id="easycontact-mail-body" name="easycontact_config[mail_body]" rows="6">' . esc_textarea( $config['mail_body'] ) . '</textarea></p><p class="description">' . esc_html__( '[fields] includes the visible fields; [form] the form title; [site] the site name. You can also use [field_name].', 'easycontact' ) . '</p>';
+		self::checkbox( 'mail_enabled', __( 'Send an email notification', 'easyformly' ), $config );
+		self::input( 'mail_to', __( 'Recipients', 'easyformly' ), $config, 'text', __( 'Comma-separated email addresses.', 'easyformly' ) );
+		self::input( 'mail_subject', __( 'Subject', 'easyformly' ), $config );
+		self::field_select( 'mail_reply_to', __( 'Reply to the address in the field', 'easyformly' ), $definition, array( 'email' ) );
+		echo '<p><label for="easycontact-mail-body">' . esc_html__( 'Message', 'easyformly' ) . '</label><textarea class="large-text code" id="easycontact-mail-body" name="easycontact_config[mail_body]" rows="6">' . esc_textarea( $config['mail_body'] ) . '</textarea></p><p class="description">' . esc_html__( '[fields] includes the visible fields; [form] the form title; [site] the site name. You can also use [field_name].', 'easyformly' ) . '</p>';
 	}
 
 	/**
@@ -199,17 +199,17 @@ final class Editor {
 		$definition = Forms::editor_definition( $post->ID );
 		$config     = $definition['config'];
 		echo '<h3>MailerLite</h3>';
-		self::checkbox( 'mailerlite_enabled', __( 'Enable MailerLite for this form', 'easycontact' ), $config );
+		self::checkbox( 'mailerlite_enabled', __( 'Enable MailerLite for this form', 'easyformly' ), $config );
 		self::field_select( 'mailerlite_email', 'Email', $definition, array( 'email' ) );
-		self::field_select( 'mailerlite_name', __( 'Name', 'easycontact' ), $definition );
-		self::field_select( 'mailerlite_consent', __( 'Newsletter consent field', 'easycontact' ), $definition, array( 'checkbox', 'acceptance' ) );
-		self::input( 'mailerlite_groups', __( 'MailerLite group IDs', 'easycontact' ), $config, 'text', __( 'One or more comma-separated IDs. Subscription happens only when consent is selected. Double opt-in is configured in MailerLite, in the API and integrations settings.', 'easycontact' ) );
+		self::field_select( 'mailerlite_name', __( 'Name', 'easyformly' ), $definition );
+		self::field_select( 'mailerlite_consent', __( 'Newsletter consent field', 'easyformly' ), $definition, array( 'checkbox', 'acceptance' ) );
+		self::input( 'mailerlite_groups', __( 'MailerLite group IDs', 'easyformly' ), $config, 'text', __( 'One or more comma-separated IDs. Subscription happens only when consent is selected. Double opt-in is configured in MailerLite, in the API and integrations settings.', 'easyformly' ) );
 		echo '<h3>Slack</h3>';
-		self::checkbox( 'slack_enabled', __( 'Send a Slack notification', 'easycontact' ), $config );
-		self::input( 'slack_webhook', __( 'Channel webhook', 'easycontact' ), $config, 'password' );
-		echo '<p><label><input type="checkbox" name="easycontact_config[clear_slack_webhook]" value="1"> ' . esc_html__( 'Remove the saved webhook', 'easycontact' ) . '</label></p>';
-		self::input( 'slack_fields', __( 'Fields to include in the notification', 'easycontact' ), $config, 'text', __( 'Comma-separated field names. Only the visible fields chosen here are sent to Slack.', 'easycontact' ) );
-		echo '<p><a href="' . esc_url( admin_url( 'edit.php?post_type=' . Plugin::FORM . '&page=easycontact-settings' ) ) . '">' . esc_html__( 'Configure the MailerLite token and the CAPTCHA in the settings', 'easycontact' ) . '</a></p>';
+		self::checkbox( 'slack_enabled', __( 'Send a Slack notification', 'easyformly' ), $config );
+		self::input( 'slack_webhook', __( 'Channel webhook', 'easyformly' ), $config, 'password' );
+		echo '<p><label><input type="checkbox" name="easycontact_config[clear_slack_webhook]" value="1"> ' . esc_html__( 'Remove the saved webhook', 'easyformly' ) . '</label></p>';
+		self::input( 'slack_fields', __( 'Fields to include in the notification', 'easyformly' ), $config, 'text', __( 'Comma-separated field names. Only the visible fields chosen here are sent to Slack.', 'easyformly' ) );
+		echo '<p><a href="' . esc_url( admin_url( 'edit.php?post_type=' . Plugin::FORM . '&page=easycontact-settings' ) ) . '">' . esc_html__( 'Configure the MailerLite token and the CAPTCHA in the settings', 'easyformly' ) . '</a></p>';
 	}
 
 	/**
@@ -220,20 +220,20 @@ final class Editor {
 	 */
 	public static function options_box( WP_Post $post ): void {
 		$config = Forms::editor_definition( $post->ID )['config'];
-		self::checkbox( 'captcha', __( 'Verify with Cloudflare Turnstile', 'easycontact' ), $config );
-		echo '<p><label for="easycontact-archive">' . esc_html__( 'Submission archive', 'easycontact' ) . '</label><br><select id="easycontact-archive" name="easycontact_config[store_entries]">';
+		self::checkbox( 'captcha', __( 'Verify with Cloudflare Turnstile', 'easyformly' ), $config );
+		echo '<p><label for="easycontact-archive">' . esc_html__( 'Submission archive', 'easyformly' ) . '</label><br><select id="easycontact-archive" name="easycontact_config[store_entries]">';
 		foreach ( array(
-			'inherit' => __( 'Use the general settings', 'easycontact' ),
-			'no'      => __( 'Off', 'easycontact' ),
-			'yes'     => __( 'On', 'easycontact' ),
+			'inherit' => __( 'Use the general settings', 'easyformly' ),
+			'no'      => __( 'Off', 'easyformly' ),
+			'yes'     => __( 'On', 'easyformly' ),
 		) as $value => $label ) {
 			echo '<option value="' . esc_attr( $value ) . '" ' . selected( $config['store_entries'], $value, false ) . '>' . esc_html( $label ) . '</option>';
 		}
 		echo '</select></p>';
-		self::input( 'success_message', __( 'Confirmation message', 'easycontact' ), $config );
+		self::input( 'success_message', __( 'Confirmation message', 'easyformly' ), $config );
 		$status = get_post_meta( $post->ID, '_easycontact_last_delivery', true );
 		if ( is_array( $status ) ) {
-			echo '<hr><p><strong>' . esc_html__( 'Last outcome', 'easycontact' ) . '</strong><br>' . esc_html( $status['time'] ) . '</p>';
+			echo '<hr><p><strong>' . esc_html__( 'Last outcome', 'easyformly' ) . '</strong><br>' . esc_html( $status['time'] ) . '</p>';
 			Outcomes::render( $status['outcomes'] );
 		}
 	}
@@ -249,9 +249,9 @@ final class Editor {
 	private static function inherited_select( string $key, string $label, array $config, string $help ): void {
 		echo '<p><label for="easycontact-' . esc_attr( $key ) . '">' . esc_html( $label ) . '</label><br><select id="easycontact-' . esc_attr( $key ) . '" name="easycontact_config[' . esc_attr( $key ) . ']">';
 		foreach ( array(
-			'inherit' => __( 'Use the general settings', 'easycontact' ),
-			'yes'     => __( 'On', 'easycontact' ),
-			'no'      => __( 'Off', 'easycontact' ),
+			'inherit' => __( 'Use the general settings', 'easyformly' ),
+			'yes'     => __( 'On', 'easyformly' ),
+			'no'      => __( 'Off', 'easyformly' ),
 		) as $value => $text ) {
 			echo '<option value="' . esc_attr( $value ) . '" ' . selected( $config[ $key ], $value, false ) . '>' . esc_html( $text ) . '</option>';
 		}
@@ -265,25 +265,25 @@ final class Editor {
 	 */
 	public static function antispam_box( WP_Post $post ): void {
 		$config = Forms::editor_definition( $post->ID )['config'];
-		echo '<p><label for="easycontact-antispam-level">' . esc_html__( 'Anti-spam level', 'easycontact' ) . '</label><br><select id="easycontact-antispam-level" name="easycontact_config[antispam_level]">';
+		echo '<p><label for="easycontact-antispam-level">' . esc_html__( 'Anti-spam level', 'easyformly' ) . '</label><br><select id="easycontact-antispam-level" name="easycontact_config[antispam_level]">';
 		foreach ( array(
-			'inherit' => __( 'Use the general settings', 'easycontact' ),
-			'1'       => __( '1 — Basic', 'easycontact' ),
-			'2'       => __( '2 — Balanced', 'easycontact' ),
-			'3'       => __( '3 — Strict', 'easycontact' ),
+			'inherit' => __( 'Use the general settings', 'easyformly' ),
+			'1'       => __( '1 — Basic', 'easyformly' ),
+			'2'       => __( '2 — Balanced', 'easyformly' ),
+			'3'       => __( '3 — Strict', 'easyformly' ),
 		) as $value => $label ) {
 			echo '<option value="' . esc_attr( (string) $value ) . '" ' . selected( $config['antispam_level'], (string) $value, false ) . '>' . esc_html( $label ) . '</option>';
 		}
-		echo '</select></p><p class="description">' . esc_html__( 'Validity checks and the honeypot are always on. Levels 2 and 3 add checks on content, disposable domains, repetitions and frequency. Level 3 is more sensitive and may need more reviews.', 'easycontact' ) . '</p>';
-		self::inherited_select( 'quarantine_entries', __( 'Quarantine with the archive off', 'easycontact' ), $config, __( 'Keep spam and suspicious submissions even when the normal archive is off. With the archive on, suspicious submissions are always saved with delivery held. Without storage, they are rejected.', 'easycontact' ) );
-		self::inherited_select( 'antispam_observe', __( 'Observation mode', 'easycontact' ), $config, __( 'Calculate the score without stopping submissions for heuristic signals. The honeypot stays on. To review the results, turn on the archive.', 'easycontact' ) );
-		self::inherited_select( 'email_dns_check', __( 'Email domain DNS check', 'easycontact' ), $config, __( 'Check that the domain can receive mail. It does not check that the mailbox exists. Temporary resolver errors do not block the submission.', 'easycontact' ) );
-		echo '<p><label for="easycontact-phone-country">' . esc_html__( 'Initial phone country', 'easycontact' ) . '</label><br>';
-		CountrySelect::render( 'easycontact_config[phone_country]', $config['phone_country'], 'easycontact-phone-country', __( 'Use the general settings or the site language', 'easycontact' ) );
-		echo '</p><p class="description">' . esc_html__( 'Visitors can choose any country. For languages without a recognizable country, set an initial value or leave the choice to the visitor.', 'easycontact' ) . '</p>';
-		echo '<p>' . esc_html__( 'Disposable domains are recognized through the public lists shared by all forms at levels 2 and 3.', 'easycontact' ) . ' <a href="' . esc_url( admin_url( 'edit.php?post_type=' . Plugin::FORM . '&page=easycontact-settings#easycontact-disposable-domains' ) ) . '">' . esc_html__( 'Manage the list in the settings', 'easycontact' ) . '</a></p>';
-		echo '<p><label for="easycontact-spam_phrases">' . esc_html__( 'Suspicious phrases for this form', 'easycontact' ) . '</label><textarea rows="3" class="large-text" id="easycontact-spam_phrases" name="easycontact_config[spam_phrases]">' . esc_textarea( $config['spam_phrases'] ) . '</textarea></p>';
-		echo '<p class="description">' . esc_html__( 'One phrase per line. Form phrases add to the general ones and raise the score at levels 2 and 3; on their own they do not prove that a message is spam.', 'easycontact' ) . '</p>';
+		echo '</select></p><p class="description">' . esc_html__( 'Validity checks and the honeypot are always on. Levels 2 and 3 add checks on content, disposable domains, repetitions and frequency. Level 3 is more sensitive and may need more reviews.', 'easyformly' ) . '</p>';
+		self::inherited_select( 'quarantine_entries', __( 'Quarantine with the archive off', 'easyformly' ), $config, __( 'Keep spam and suspicious submissions even when the normal archive is off. With the archive on, suspicious submissions are always saved with delivery held. Without storage, they are rejected.', 'easyformly' ) );
+		self::inherited_select( 'antispam_observe', __( 'Observation mode', 'easyformly' ), $config, __( 'Calculate the score without stopping submissions for heuristic signals. The honeypot stays on. To review the results, turn on the archive.', 'easyformly' ) );
+		self::inherited_select( 'email_dns_check', __( 'Email domain DNS check', 'easyformly' ), $config, __( 'Check that the domain can receive mail. It does not check that the mailbox exists. Temporary resolver errors do not block the submission.', 'easyformly' ) );
+		echo '<p><label for="easycontact-phone-country">' . esc_html__( 'Initial phone country', 'easyformly' ) . '</label><br>';
+		CountrySelect::render( 'easycontact_config[phone_country]', $config['phone_country'], 'easycontact-phone-country', __( 'Use the general settings or the site language', 'easyformly' ) );
+		echo '</p><p class="description">' . esc_html__( 'Visitors can choose any country. For languages without a recognizable country, set an initial value or leave the choice to the visitor.', 'easyformly' ) . '</p>';
+		echo '<p>' . esc_html__( 'Disposable domains are recognized through the public lists shared by all forms at levels 2 and 3.', 'easyformly' ) . ' <a href="' . esc_url( admin_url( 'edit.php?post_type=' . Plugin::FORM . '&page=easycontact-settings#easycontact-disposable-domains' ) ) . '">' . esc_html__( 'Manage the list in the settings', 'easyformly' ) . '</a></p>';
+		echo '<p><label for="easycontact-spam_phrases">' . esc_html__( 'Suspicious phrases for this form', 'easyformly' ) . '</label><textarea rows="3" class="large-text" id="easycontact-spam_phrases" name="easycontact_config[spam_phrases]">' . esc_textarea( $config['spam_phrases'] ) . '</textarea></p>';
+		echo '<p class="description">' . esc_html__( 'One phrase per line. Form phrases add to the general ones and raise the score at levels 2 and 3; on their own they do not prove that a message is spam.', 'easyformly' ) . '</p>';
 	}
 
 	/**
@@ -293,13 +293,13 @@ final class Editor {
 	 */
 	private static function operators(): array {
 		return array(
-			'equals'     => __( 'Is equal to', 'easycontact' ),
-			'not_equals' => __( 'Is not equal to', 'easycontact' ),
-			'contains'   => __( 'Contains', 'easycontact' ),
-			'empty'      => __( 'Is empty', 'easycontact' ),
-			'not_empty'  => __( 'Is not empty', 'easycontact' ),
-			'greater'    => __( 'Is greater than', 'easycontact' ),
-			'less'       => __( 'Is less than', 'easycontact' ),
+			'equals'     => __( 'Is equal to', 'easyformly' ),
+			'not_equals' => __( 'Is not equal to', 'easyformly' ),
+			'contains'   => __( 'Contains', 'easyformly' ),
+			'empty'      => __( 'Is empty', 'easyformly' ),
+			'not_empty'  => __( 'Is not empty', 'easyformly' ),
+			'greater'    => __( 'Is greater than', 'easyformly' ),
+			'less'       => __( 'Is less than', 'easyformly' ),
 		);
 	}
 
@@ -314,8 +314,8 @@ final class Editor {
 	private static function rule_row( $index, array $rule, array $fields ): void {
 		echo '<tr>';
 		foreach ( array(
-			'target' => __( 'Field to show', 'easycontact' ),
-			'source' => __( 'Field to compare', 'easycontact' ),
+			'target' => __( 'Field to show', 'easyformly' ),
+			'source' => __( 'Field to compare', 'easyformly' ),
 		) as $key => $label ) {
 			echo '<td><select aria-label="' . esc_attr( $label ) . '" name="easycontact_rules[' . esc_attr( (string) $index ) . '][' . esc_attr( $key ) . ']"><option value="">—</option>';
 			foreach ( $fields as $name => $field ) {
@@ -323,11 +323,11 @@ final class Editor {
 			}
 			echo '</select></td>';
 		}
-		echo '<td><select aria-label="' . esc_attr__( 'Comparison', 'easycontact' ) . '" name="easycontact_rules[' . esc_attr( (string) $index ) . '][operator]">';
+		echo '<td><select aria-label="' . esc_attr__( 'Comparison', 'easyformly' ) . '" name="easycontact_rules[' . esc_attr( (string) $index ) . '][operator]">';
 		foreach ( self::operators() as $operator => $label ) {
 			echo '<option value="' . esc_attr( $operator ) . '" ' . selected( $rule['operator'] ?? 'equals', $operator, false ) . '>' . esc_html( $label ) . '</option>';
 		}
-		echo '</select></td><td><input aria-label="' . esc_attr__( 'Value', 'easycontact' ) . '" type="text" name="easycontact_rules[' . esc_attr( (string) $index ) . '][value]" value="' . esc_attr( $rule['value'] ?? '' ) . '" maxlength="500"></td><td><button type="button" class="button-link-delete" data-easycontact-remove>' . esc_html__( 'Remove', 'easycontact' ) . '</button></td></tr>';
+		echo '</select></td><td><input aria-label="' . esc_attr__( 'Value', 'easyformly' ) . '" type="text" name="easycontact_rules[' . esc_attr( (string) $index ) . '][value]" value="' . esc_attr( $rule['value'] ?? '' ) . '" maxlength="500"></td><td><button type="button" class="button-link-delete" data-easycontact-remove>' . esc_html__( 'Remove', 'easyformly' ) . '</button></td></tr>';
 	}
 
 	/**
@@ -338,12 +338,12 @@ final class Editor {
 	 */
 	public static function conditions_box( WP_Post $post ): void {
 		$definition = Forms::editor_definition( $post->ID );
-		echo '<p>' . esc_html__( 'Show a field when the comparison is met. Hidden fields are neither validated nor sent. For a checkbox use the value 1 when checked.', 'easycontact' ) . '</p><p><label>' . esc_html__( 'For rules on the same field require', 'easycontact' ) . ' <select name="easycontact_config[conditions_match]"><option value="all" ' . selected( $definition['config']['conditions_match'], 'all', false ) . '>' . esc_html__( 'all conditions (AND)', 'easycontact' ) . '</option><option value="any" ' . selected( $definition['config']['conditions_match'], 'any', false ) . '>' . esc_html__( 'at least one condition (OR)', 'easycontact' ) . '</option></select></label></p>';
-		echo '<div class="easycontact-rule-scroll"><table class="widefat easycontact-rules"><thead><tr><th>' . esc_html__( 'Show', 'easycontact' ) . '</th><th>' . esc_html__( 'When', 'easycontact' ) . '</th><th>' . esc_html__( 'Comparison', 'easycontact' ) . '</th><th>' . esc_html__( 'Value', 'easycontact' ) . '</th><th></th></tr></thead><tbody id="easycontact-rules">';
+		echo '<p>' . esc_html__( 'Show a field when the comparison is met. Hidden fields are neither validated nor sent. For a checkbox use the value 1 when checked.', 'easyformly' ) . '</p><p><label>' . esc_html__( 'For rules on the same field require', 'easyformly' ) . ' <select name="easycontact_config[conditions_match]"><option value="all" ' . selected( $definition['config']['conditions_match'], 'all', false ) . '>' . esc_html__( 'all conditions (AND)', 'easyformly' ) . '</option><option value="any" ' . selected( $definition['config']['conditions_match'], 'any', false ) . '>' . esc_html__( 'at least one condition (OR)', 'easyformly' ) . '</option></select></label></p>';
+		echo '<div class="easycontact-rule-scroll"><table class="widefat easycontact-rules"><thead><tr><th>' . esc_html__( 'Show', 'easyformly' ) . '</th><th>' . esc_html__( 'When', 'easyformly' ) . '</th><th>' . esc_html__( 'Comparison', 'easyformly' ) . '</th><th>' . esc_html__( 'Value', 'easyformly' ) . '</th><th></th></tr></thead><tbody id="easycontact-rules">';
 		foreach ( $definition['conditions']['rules'] as $index => $rule ) {
 			self::rule_row( $index, $rule, $definition['schema']['fields'] );
 		}
-		echo '</tbody></table></div><p><button class="button" type="button" id="easycontact-add-rule">' . esc_html__( 'Add rule', 'easycontact' ) . '</button></p><template id="easycontact-rule-template">';
+		echo '</tbody></table></div><p><button class="button" type="button" id="easycontact-add-rule">' . esc_html__( 'Add rule', 'easyformly' ) . '</button></p><template id="easycontact-rule-template">';
 		self::rule_row( '__INDEX__', array(), $definition['schema']['fields'] );
 		echo '</template>';
 	}
@@ -384,7 +384,7 @@ final class Editor {
 		$definition = compact( 'template', 'schema', 'conditions', 'config' );
 		update_post_meta( $id, '_easycontact_definition', wp_slash( $definition ) );
 		if ( get_post_meta( $id, '_easycontact_definition', true ) !== $definition ) {
-			self::error( $id, new WP_Error( 'save', __( 'The form could not be saved. Try again.', 'easycontact' ) ) );
+			self::error( $id, new WP_Error( 'save', __( 'The form could not be saved. Try again.', 'easyformly' ) ) );
 		}
 	}
 
@@ -404,7 +404,7 @@ final class Editor {
 		foreach ( array( 'mail_to', 'mail_subject', 'mail_reply_to', 'mailerlite_email', 'mailerlite_name', 'mailerlite_consent', 'mailerlite_groups', 'slack_fields', 'success_message' ) as $key ) {
 			$config[ $key ] = isset( $input[ $key ] ) && is_string( $input[ $key ] ) ? sanitize_text_field( $input[ $key ] ) : '';
 			if ( strlen( $config[ $key ] ) > 2000 ) {
-				return new WP_Error( 'config', __( 'An option is too long.', 'easycontact' ) );
+				return new WP_Error( 'config', __( 'An option is too long.', 'easyformly' ) );
 			}
 		}
 		$config['mail_body']        = isset( $input['mail_body'] ) && is_string( $input['mail_body'] ) ? sanitize_textarea_field( $input['mail_body'] ) : '[fields]';
@@ -412,24 +412,24 @@ final class Editor {
 		$config['store_entries']    = in_array( $input['store_entries'] ?? '', array( 'inherit', 'yes', 'no' ), true ) ? $input['store_entries'] : 'inherit';
 		$level                      = $input['antispam_level'] ?? ( $previous['antispam_level'] ?? 'inherit' );
 		if ( ! is_scalar( $level ) || ! in_array( (string) $level, array( 'inherit', '1', '2', '3' ), true ) ) {
-			return new WP_Error( 'config', __( 'Select an anti-spam level from 1 to 3.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'Select an anti-spam level from 1 to 3.', 'easyformly' ) );
 		}
 		$config['antispam_level'] = (string) $level;
 		foreach ( array( 'antispam_observe', 'quarantine_entries', 'email_dns_check' ) as $key ) {
 			$value = $input[ $key ] ?? ( $previous[ $key ] ?? 'inherit' );
 			if ( ! in_array( $value, array( 'inherit', 'yes', 'no' ), true ) ) {
-				return new WP_Error( 'config', __( 'An anti-spam preference is not valid.', 'easycontact' ) );
+				return new WP_Error( 'config', __( 'An anti-spam preference is not valid.', 'easyformly' ) );
 			}
 			$config[ $key ] = $value;
 		}
 		$country = $input['phone_country'] ?? ( $previous['phone_country'] ?? '' );
 		if ( ! is_string( $country ) || ( '' !== $country && ! Phone::valid_country( $country ) ) ) {
-			return new WP_Error( 'config', __( 'Select a valid initial country.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'Select a valid initial country.', 'easyformly' ) );
 		}
 		$config['phone_country'] = $country;
 		$phrases                 = $input['spam_phrases'] ?? ( $previous['spam_phrases'] ?? '' );
 		if ( ! is_string( $phrases ) ) {
-			return new WP_Error( 'config', __( 'Anti-spam rules must be text.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'Anti-spam rules must be text.', 'easyformly' ) );
 		}
 		$config['spam_phrases'] = AntiSpam::phrase_list( $phrases );
 		if ( is_wp_error( $config['spam_phrases'] ) ) {
@@ -437,35 +437,35 @@ final class Editor {
 		}
 		$config['slack_webhook'] = ! empty( $input['clear_slack_webhook'] ) ? '' : ( isset( $input['slack_webhook'] ) && is_string( $input['slack_webhook'] ) && '' !== trim( $input['slack_webhook'] ) ? trim( $input['slack_webhook'] ) : $previous['slack_webhook'] );
 		if ( strlen( $config['slack_webhook'] ) > 512 ) {
-			return new WP_Error( 'config', __( 'The Slack webhook is too long.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'The Slack webhook is too long.', 'easyformly' ) );
 		}
 		if ( strlen( $config['mail_body'] ) > 20000 || strlen( $config['mail_subject'] ) > 300 || '' === $config['success_message'] || strlen( $config['success_message'] ) > 500 ) {
-			return new WP_Error( 'config', __( 'Check the length of the messages and enter a confirmation for the visitor.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'Check the length of the messages and enter a confirmation for the visitor.', 'easyformly' ) );
 		}
 		if ( $config['mail_enabled'] ) {
 			$addresses = array_map( 'trim', explode( ',', $config['mail_to'] ) );
 			if ( ! $addresses || count( $addresses ) > 10 || count( array_filter( $addresses, static fn( $address ) => false !== is_email( $address ) ) ) !== count( $addresses ) || '' === $config['mail_subject'] || '' === $config['mail_body'] || ( '' !== $config['mail_reply_to'] && 'email' !== ( $fields[ $config['mail_reply_to'] ]['type'] ?? '' ) ) ) {
-				return new WP_Error( 'config', __( 'Check the recipients, subject, message and Reply-To field of the email notification.', 'easycontact' ) );
+				return new WP_Error( 'config', __( 'Check the recipients, subject, message and Reply-To field of the email notification.', 'easyformly' ) );
 			}
 			$config['mail_to'] = implode( ',', $addresses );
 		}
 		if ( $config['mailerlite_enabled'] && ( '' === Settings::get()['mailerlite_token'] || 'email' !== ( $fields[ $config['mailerlite_email'] ]['type'] ?? '' ) || ( '' !== $config['mailerlite_name'] && ! isset( $fields[ $config['mailerlite_name'] ] ) ) || ! in_array( $fields[ $config['mailerlite_consent'] ]['type'] ?? '', array( 'checkbox', 'acceptance' ), true ) || ! preg_match( '/^\d{1,30}(?:\s*,\s*\d{1,30}){0,9}$/D', $config['mailerlite_groups'] ) ) ) {
-			return new WP_Error( 'config', __( 'MailerLite needs a token, an email field, a newsletter consent field and at least one group ID.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'MailerLite needs a token, an email field, a newsletter consent field and at least one group ID.', 'easyformly' ) );
 		}
 		if ( ( $config['slack_webhook'] && ! Delivery::valid_slack_url( $config['slack_webhook'] ) ) || ( $config['slack_enabled'] && ! $config['slack_webhook'] ) ) {
-			return new WP_Error( 'config', __( 'Enter a valid HTTPS webhook from hooks.slack.com.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'Enter a valid HTTPS webhook from hooks.slack.com.', 'easyformly' ) );
 		}
 		$slack_fields = array_filter( array_map( 'trim', explode( ',', $config['slack_fields'] ) ) );
 		if ( $config['slack_enabled'] && ( ! $slack_fields || array_diff( $slack_fields, array_keys( $fields ) ) ) ) {
-			return new WP_Error( 'config', __( 'Slack needs at least one existing field to include.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'Slack needs at least one existing field to include.', 'easyformly' ) );
 		}
 		$config['slack_fields'] = implode( ',', array_unique( $slack_fields ) );
 		$settings               = Settings::get();
 		if ( $config['captcha'] && ( ! $settings['turnstile_site_key'] || ! $settings['turnstile_secret'] ) ) {
-			return new WP_Error( 'config', __( 'Configure both Turnstile keys before turning on the CAPTCHA.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'Configure both Turnstile keys before turning on the CAPTCHA.', 'easyformly' ) );
 		}
 		if ( ! $config['mail_enabled'] && ! $config['mailerlite_enabled'] && ! $config['slack_enabled'] && ! Entries::stores_entries( $config ) ) {
-			return new WP_Error( 'config', __( 'Turn on at least one destination or the submission archive.', 'easycontact' ) );
+			return new WP_Error( 'config', __( 'Turn on at least one destination or the submission archive.', 'easyformly' ) );
 		}
 		return $config;
 	}
@@ -492,7 +492,7 @@ final class Editor {
 		$key   = 'easycontact_admin_error_' . get_current_user_id() . '_' . $id;
 		$error = get_transient( $key );
 		if ( $error && current_user_can( 'manage_options' ) ) {
-			echo '<div class="notice notice-error"><p>' . esc_html__( 'The form definition was not updated: ', 'easycontact' ) . esc_html( $error ) . '</p></div>';
+			echo '<div class="notice notice-error"><p>' . esc_html__( 'The form definition was not updated: ', 'easyformly' ) . esc_html( $error ) . '</p></div>';
 			delete_transient( $key );
 		}
 	}
@@ -505,7 +505,7 @@ final class Editor {
 	public static function preview(): void {
 		$id = isset( $_GET['id'] ) && is_scalar( $_GET['id'] ) ? absint( $_GET['id'] ) : 0;
 		if ( ! current_user_can( 'manage_options' ) || ! $id || Plugin::FORM !== get_post_type( $id ) ) {
-			wp_die( esc_html__( 'Preview not available.', 'easycontact' ), '', array( 'response' => 403 ) );
+			wp_die( esc_html__( 'Preview not available.', 'easyformly' ), '', array( 'response' => 403 ) );
 		}
 		check_admin_referer( 'easycontact_preview_' . $id );
 		nocache_headers();

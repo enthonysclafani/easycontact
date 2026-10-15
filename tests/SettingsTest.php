@@ -2,14 +2,14 @@
 /**
  * Registered schema of the settings and of the form meta.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Plugin;
-use EasyContact\Settings\Admin\Page;
-use EasyContact\Settings\Settings;
+use EasyFormly\Plugin;
+use EasyFormly\Settings\Admin\Page;
+use EasyFormly\Settings\Settings;
 
 /**
  * The schema describes what is saved; the secrets it covers never reach REST.

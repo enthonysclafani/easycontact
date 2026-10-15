@@ -11,7 +11,7 @@ upstream files below retain their own copyright and license notices.
 | [disposable/disposable](https://github.com/disposable/disposable), [generated dataset](https://github.com/disposable/disposable-email-domains) | snapshot `60708bec04eec0865ca2c7e950cd26476ad83a80`, 2026-10-08, 96,306 domains, normal list | MIT | Combined in `includes/data/disposable-domains.txt`; `disposable-aggregate-LICENSE.txt` |
 
 The phone library contains Google's numbering metadata and works locally. Its
-namespace has been changed to `EasyContact\Vendor\Phone` to avoid conflicts
+namespace has been changed to `EasyFormly\Vendor\Phone` to avoid conflicts
 with other plugins. The polyfill's classes are similarly isolated. It provides
 missing mbstring functions only on installations without the extension.
 `countries.json` is generated from the library's supported regions and calling

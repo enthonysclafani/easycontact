@@ -9,7 +9,7 @@
 
 declare(strict_types=1);
 
-namespace EasyContact\Vendor\Phone;
+namespace EasyFormly\Vendor\Phone;
 
 /**
  * @internal

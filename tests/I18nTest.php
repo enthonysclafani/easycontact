@@ -2,15 +2,15 @@
 /**
  * English source strings with the bundled Italian translation.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Forms\Forms;
-use EasyContact\Forms\Renderer;
-use EasyContact\Forms\Schema;
-use EasyContact\Plugin;
+use EasyFormly\Forms\Forms;
+use EasyFormly\Forms\Renderer;
+use EasyFormly\Forms\Schema;
+use EasyFormly\Plugin;
 
 /**
  * Italian sites keep today's interface; other sites read English (D9).
@@ -21,7 +21,7 @@ class I18nTest extends TestCase {
 	 * Forget the Italian strings, so the next test reads English again.
 	 */
 	public function tear_down(): void {
-		unload_textdomain( 'easycontact' );
+		unload_textdomain( 'easyformly' );
 		parent::tear_down();
 	}
 
@@ -29,14 +29,14 @@ class I18nTest extends TestCase {
 	 * The bundled translation covers every source string, so nothing on an Italian site falls back to English.
 	 */
 	public function test_the_italian_translation_covers_every_string(): void {
-		$pot = $this->entries( dirname( __DIR__ ) . '/languages/easycontact.pot' );
-		$po  = $this->entries( dirname( __DIR__ ) . '/languages/easycontact-it_IT.po' );
+		$pot = $this->entries( dirname( __DIR__ ) . '/languages/easyformly.pot' );
+		$po  = $this->entries( dirname( __DIR__ ) . '/languages/easyformly-it_IT.po' );
 
 		$this->assertSame( array_keys( $pot ), array_keys( $po ), 'The translation has exactly the strings of the template' );
 		foreach ( $po as $msgid => $msgstr ) {
 			$this->assertNotSame( '', $msgstr, 'Translated: ' . $msgid );
 		}
-		$this->assertFileExists( dirname( __DIR__ ) . '/languages/easycontact-it_IT.mo', 'The compiled translation ships with the plugin' );
+		$this->assertFileExists( dirname( __DIR__ ) . '/languages/easyformly-it_IT.mo', 'The compiled translation ships with the plugin' );
 	}
 
 	/**
@@ -46,13 +46,13 @@ class I18nTest extends TestCase {
 		// The test site has no Italian core files, so the locale is set directly; the plugin runs from outside
 		// wp-content/plugins, so its translation file is found where the checkout keeps it.
 		add_filter( 'locale', static fn() => 'it_IT' );
-		add_filter( 'load_textdomain_mofile', static fn( $mofile, $domain ) => 'easycontact' === $domain ? EASYCONTACT_DIR . 'languages/' . basename( $mofile ) : $mofile, 10, 2 );
+		add_filter( 'load_textdomain_mofile', static fn( $mofile, $domain ) => 'easyformly' === $domain ? EASYFORMLY_DIR . 'languages/' . basename( $mofile ) : $mofile, 10, 2 );
 		Plugin::init();
 
-		$this->assertSame( 'Impostazioni', __( 'Settings', 'easycontact' ) );
-		$this->assertSame( 'Grazie, il messaggio è stato acquisito.', __( 'Thank you, your message has been received.', 'easycontact' ) );
+		$this->assertSame( 'Impostazioni', __( 'Settings', 'easyformly' ) );
+		$this->assertSame( 'Grazie, il messaggio è stato acquisito.', __( 'Thank you, your message has been received.', 'easyformly' ) );
 		/* translators: 1: anti-spam score, 2: anti-spam level. */
-		$this->assertSame( 'Punteggio: 40/100 · Livello 2', sprintf( __( 'Score: %1$d/100 · Level %2$d', 'easycontact' ), 40, 2 ) );
+		$this->assertSame( 'Punteggio: 40/100 · Livello 2', sprintf( __( 'Score: %1$d/100 · Level %2$d', 'easyformly' ), 40, 2 ) );
 
 		$definition = $this->definition();
 		$html       = Renderer::render( $this->form( $definition ), $definition );

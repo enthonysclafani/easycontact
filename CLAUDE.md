@@ -1,11 +1,11 @@
-# EasyContact
+# EasyFormly
 
 Plugin di moduli di contatto per WordPress: anti-spam locale, telefono internazionale, campi condizionali,
 MailerLite, Slack e Cloudflare Turnstile, solo su dati nativi di WordPress.
 
 Queste regole valgono per ogni modifica, anche minima. Se una richiesta le viola, fermati e spiega quale regola viene
 violata e quale alternativa nativa esiste. Non aggirarle. Sono prese dagli standard di EasyRankly (branch `Refactory`
-di `enthonysclafani/easyrankly`): dove EasyContact ha bisogno di un'eccezione, la decide Enthony.
+di `enthonysclafani/easyrankly`): dove EasyFormly ha bisogno di un'eccezione, la decide Enthony.
 
 Documenti di riferimento (tutti in questo branch):
 - `docs/piano-standard.md`: fasi con le caselle per portare qui gli standard di EasyRankly. È la fonte di verità su
@@ -128,9 +128,9 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
 
 ## PHP: stile e struttura
 
-- PHP minimo 8.1, WordPress minimo 6.4 (D7). Namespace `EasyContact`, classi `final` con metodi statici in
+- PHP minimo 8.1, WordPress minimo 6.4 (D7). Namespace `EasyFormly`, classi `final` con metodi statici in
   `src/`, una cartella per funzionalità e un file per classe con nome PSR-4 (`src/AntiSpam/AntiSpam.php` per
-  `EasyContact\AntiSpam\AntiSpam`), caricate da `src/autoload.php`. `easycontact.php` registra solo l'autoload,
+  `EasyFormly\AntiSpam\AntiSpam`), caricate da `src/autoload.php`. `easyformly.php` registra solo l'autoload,
   attivazione e disattivazione e chiama `Plugin::register()`. `includes/` contiene solo librerie (`vendor/`) e dati
   (`data/`) inclusi. Le classi non ancora spostate nelle cartelle seguono la Fase 3.2 del piano, un PR per
   funzionalità.
@@ -138,15 +138,18 @@ pubblico): la PR di correzione descrive il rinforzo, non la ricetta d'attacco.
   con `szepeviktor/phpstan-wordpress`. Zero errori PHPCS e zero errori PHPStan, senza baseline: un errore si
   corregge nel codice, mai con una baseline o un `@phpstan-ignore`.
 - Gli hook si agganciano dentro `boot()` o `register()` delle classi, o in un callback agganciato da lì; mai a
-  livello di file (A), tranne attivazione e disattivazione in `easycontact.php`. Niente stato statico condiviso
+  livello di file (A), tranne attivazione e disattivazione in `easyformly.php`. Niente stato statico condiviso
   tra classi: l'unica proprietà statica è la copia in memoria della lista dei domini usa e getta, per richiesta.
 - **Callback degli hook**: WordPress passa spesso stringhe dove ti aspetti interi. Nei callback converti
   esplicitamente; i tipi rigidi vanno nei metodi interni.
-- Prefissi: option e transient `easycontact_`, meta `_easycontact_`, post type e tassonomie `easycontact_`, hook
-  `easycontact_`. Nessuna rinomina dei nomi esistenti (D8).
+- Nome: il plugin si chiama EasyFormly dalla rinomina del 15 ottobre 2026 (D10). Namespace `EasyFormly`, costanti
+  `EASYFORMLY_`, text domain `easyformly`. I nomi che WordPress salva o che escono dal PHP restano `easycontact`:
+  option e transient `easycontact_`, meta `_easycontact_`, post type e tassonomie `easycontact_`, hook, azioni,
+  route REST, classi CSS e oggetti JS `easycontact`. Nessuna rinomina dei nomi esistenti (D8); i nomi nuovi seguono
+  lo stesso prefisso `easycontact` per restare coerenti con i dati.
 - Ogni hook pubblico (`apply_filters`/`do_action`) è una promessa di compatibilità: aggiungerne uno si chiede.
 - Codice, commenti e stringhe sorgente in inglese (D9), brevi e con le parole del core. La traduzione italiana è in
-  `languages/easycontact-it_IT.po` e `.mo`: ogni stringa nuova o cambiata si aggiunge lì, poi si rigenerano `.pot` e
+  `languages/easyformly-it_IT.po` e `.mo`: ogni stringa nuova o cambiata si aggiunge lì, poi si rigenerano `.pot` e
   `.mo` con WP-CLI (`wp i18n make-pot`, `wp i18n make-mo`); `tests/I18nTest.php` fallisce se manca una traduzione.
 
 ## Dati e ciclo di vita

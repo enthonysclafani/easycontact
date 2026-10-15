@@ -6,7 +6,7 @@ parameters:
 	# The declared minimum: the same result on every PHP version CI runs.
 	phpVersion: 80100
 	paths:
-		- easycontact.php
+		- easyformly.php
 		- uninstall.php
 		- src
 		- includes

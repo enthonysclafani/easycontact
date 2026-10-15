@@ -2,15 +2,15 @@
 /**
  * Lazy maintenance without WP-Cron (D1).
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Plugin;
-use EasyContact\Submissions\Entries;
-use EasyContact\Submissions\Maintenance;
-use EasyContact\Submissions\State;
+use EasyFormly\Plugin;
+use EasyFormly\Submissions\Entries;
+use EasyFormly\Submissions\Maintenance;
+use EasyFormly\Submissions\State;
 
 /**
  * Retention, expired locks and resumed retries run in batches on admin_init and after a submission.

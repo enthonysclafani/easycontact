@@ -2,12 +2,12 @@
 /**
  * Outbound adapters use only WordPress HTTP and mail APIs.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Delivery;
+namespace EasyFormly\Delivery;
 
-use EasyContact\Settings\Settings;
+use EasyFormly\Settings\Settings;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -27,7 +27,7 @@ final class Delivery {
 	public static function captcha( int $form_id, string $token, string $idempotency_key = '' ) {
 		$settings = Settings::get();
 		if ( '' === $settings['turnstile_secret'] || '' === $token || strlen( $token ) > 2048 ) {
-			return new WP_Error( 'captcha', __( 'Complete the CAPTCHA.', 'easycontact' ), array( 'status' => 422 ) );
+			return new WP_Error( 'captcha', __( 'Complete the CAPTCHA.', 'easyformly' ), array( 'status' => 422 ) );
 		}
 		// phpcs:ignore PluginCheck.CodeAnalysis.Offloading.OffloadedContent -- Documented CAPTCHA verification API; receives JSON and never loads executable content.
 		$response = wp_safe_remote_post(
@@ -47,7 +47,7 @@ final class Delivery {
 		$body     = ! is_wp_error( $response ) ? json_decode( wp_remote_retrieve_body( $response ), true ) : null;
 		$hostname = strtolower( (string) wp_parse_url( home_url(), PHP_URL_HOST ) );
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) || ! is_array( $body ) || true !== ( $body['success'] ?? false ) || ! is_string( $body['hostname'] ?? null ) || strtolower( $body['hostname'] ) !== $hostname || ( $body['action'] ?? '' ) !== 'easycontact_form_' . $form_id ) {
-			return new WP_Error( 'captcha', __( 'The CAPTCHA check failed. Try again.', 'easycontact' ), array( 'status' => 422 ) );
+			return new WP_Error( 'captcha', __( 'The CAPTCHA check failed. Try again.', 'easyformly' ), array( 'status' => 422 ) );
 		}
 		return true;
 	}
@@ -105,7 +105,7 @@ final class Delivery {
 		foreach ( $definition['schema']['fields'] as $name => $field ) {
 			$value = $values[ $name ] ?? '';
 			if ( in_array( $field['type'], array( 'checkbox', 'acceptance' ), true ) ) {
-				$value = '1' === $value ? __( 'Yes', 'easycontact' ) : __( 'No', 'easycontact' );
+				$value = '1' === $value ? __( 'Yes', 'easyformly' ) : __( 'No', 'easyformly' );
 			}
 			$replacements[ '[' . $name . ']' ] = isset( $values[ $name ] ) ? $value : '';
 			if ( isset( $values[ $name ] ) ) {
@@ -196,7 +196,7 @@ final class Delivery {
 		if ( ! self::valid_slack_url( $config['slack_webhook'] ) ) {
 			return new WP_Error( 'slack_configuration', 'slack_configuration' );
 		}
-		$title  = mb_substr( __( 'New message: ', 'easycontact' ) . sanitize_text_field( get_the_title( $form_id ) ), 0, 140 );
+		$title  = mb_substr( __( 'New message: ', 'easyformly' ) . sanitize_text_field( get_the_title( $form_id ) ), 0, 140 );
 		$blocks = array(
 			array(
 				'type' => 'header',
@@ -213,7 +213,7 @@ final class Delivery {
 			$field = $definition['schema']['fields'][ $name ];
 			$value = $values[ $name ];
 			if ( in_array( $field['type'], array( 'checkbox', 'acceptance' ), true ) ) {
-				$value = '1' === $value ? __( 'Yes', 'easycontact' ) : __( 'No', 'easycontact' );
+				$value = '1' === $value ? __( 'Yes', 'easyformly' ) : __( 'No', 'easyformly' );
 			}
 			$blocks[] = array(
 				'type' => 'section',

@@ -2,13 +2,13 @@
 /**
  * Resuming interrupted delivery retries after an update.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Plugin;
-use EasyContact\Submissions\Submission;
+use EasyFormly\Plugin;
+use EasyFormly\Submissions\Submission;
 
 /**
  * Submission::resume() walks pending retry jobs in batches and schedules each one once.

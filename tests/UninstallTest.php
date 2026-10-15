@@ -2,18 +2,18 @@
 /**
  * Uninstall: technical data always goes, forms and entries only on explicit opt-in.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\AntiSpam\DisposableDomains;
-use EasyContact\Plugin;
-use EasyContact\Review\Review;
-use EasyContact\Settings\Settings;
-use EasyContact\Submissions\Entries;
-use EasyContact\Submissions\Maintenance;
-use EasyContact\Submissions\State;
+use EasyFormly\AntiSpam\DisposableDomains;
+use EasyFormly\Plugin;
+use EasyFormly\Review\Review;
+use EasyFormly\Settings\Settings;
+use EasyFormly\Submissions\Entries;
+use EasyFormly\Submissions\Maintenance;
+use EasyFormly\Submissions\State;
 
 /**
  * Every datum listed in docs/data-model.md is covered here, on every site of a network too.
@@ -38,6 +38,21 @@ class UninstallTest extends TestCase {
 
 		$this->assertTechnicalDataRemoved();
 		$this->assertEverythingRemoved( $site );
+	}
+
+	/**
+	 * Deleting EasyContact 1.0.0 after the switch to EasyFormly keeps the data both use, even with the opt-in (D10).
+	 */
+	public function test_deleting_easycontact_keeps_the_data_of_easyformly(): void {
+		$site = $this->seed( true );
+
+		do_action( 'pre_uninstall_plugin', Plugin::LEGACY_PLUGIN, array() );
+		$this->uninstall();
+		remove_filter( 'option_' . Settings::OPTION, array( Plugin::class, 'keep_data' ) );
+
+		$this->assertNotNull( get_post( $site['form'] ), 'Forms are kept' );
+		$this->assertNotNull( get_post( $site['entry'] ), 'Entries are kept' );
+		$this->assertTrue( Settings::get()['delete_on_uninstall'], 'The opt-in still applies to EasyFormly' );
 	}
 
 	/**
@@ -94,10 +109,10 @@ class UninstallTest extends TestCase {
 	 */
 	private function uninstall(): void {
 		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-			define( 'WP_UNINSTALL_PLUGIN', 'easycontact/easycontact.php' );
+			define( 'WP_UNINSTALL_PLUGIN', 'easyformly/easyformly.php' );
 		}
-		if ( function_exists( 'EasyContact\uninstall_all' ) ) {
-			\EasyContact\uninstall_all();
+		if ( function_exists( 'EasyFormly\uninstall_all' ) ) {
+			\EasyFormly\uninstall_all();
 			return;
 		}
 		require dirname( __DIR__ ) . '/uninstall.php';

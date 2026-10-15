@@ -9,11 +9,11 @@
 
 declare(strict_types=1);
 
-namespace EasyContact\Vendor\Phone\data;
+namespace EasyFormly\Vendor\Phone\data;
 
-use EasyContact\Vendor\Phone\NumberFormat;
-use EasyContact\Vendor\Phone\PhoneMetadata;
-use EasyContact\Vendor\Phone\PhoneNumberDesc;
+use EasyFormly\Vendor\Phone\NumberFormat;
+use EasyFormly\Vendor\Phone\PhoneMetadata;
+use EasyFormly\Vendor\Phone\PhoneNumberDesc;
 
 /**
  * @internal

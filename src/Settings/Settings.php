@@ -2,10 +2,10 @@
 /**
  * Site settings: one non-autoloaded option with conservative defaults.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Settings;
+namespace EasyFormly\Settings;
 
 defined( 'ABSPATH' ) || exit;
 

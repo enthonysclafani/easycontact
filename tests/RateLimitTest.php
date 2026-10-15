@@ -2,12 +2,12 @@
 /**
  * Rate counters, with and without a persistent object cache.
  *
- * @package EasyContact
+ * @package EasyFormly
  */
 
-namespace EasyContact\Tests;
+namespace EasyFormly\Tests;
 
-use EasyContact\Submissions\State;
+use EasyFormly\Submissions\State;
 
 /**
  * Counters are bounded, keyed and never store the raw identity.
